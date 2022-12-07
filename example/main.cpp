@@ -9,6 +9,7 @@
 #include <iostream>
 #include <GLUT/glut.h>
 #include "colour.h"
+#include "font.h"
 #include "image.h"
 #include "palette.h"
 #include "screen.h"
@@ -23,6 +24,7 @@ palette the_palette;
 
 //image im; // TEST
 sprite spr;
+font my_font;
 
 void draw()
 {
@@ -31,7 +33,9 @@ void draw()
   the_screen.clear(0); // black
   //im.blit(the_screen, 2, 60, 0);
   spr.draw(the_screen, 2, 2);
+  my_font.draw(the_screen, 5, 5, "HELLO");
 
+  // Draw screen array to actual GL surface
   the_screen.draw_on_gl_thread(the_palette);
 
   glutSwapBuffers();
@@ -67,7 +71,8 @@ int main(int argc, char** argv)
   the_palette.add_colour(colour(0, 0, 0));
 
   spr.load("assets/test2.png", the_palette);
-
+  my_font.load("assets/font1.png", the_palette);
+  my_font.set_num_cells(16, 4);
   glutMainLoop();
 }
 

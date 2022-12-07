@@ -19,11 +19,13 @@ CFLAGS=-c $(WARNINGS) $(INCLUDES) -std=c++11   -DMACOSX
 LDFLAGS=-framework OpenGL -framework GLUT
 
 SOURCES=main.cpp \
+../font.cpp \
 ../image.cpp \
 ../lodepng.cpp \
 ../palette.cpp \
 ../screen.cpp \
-../sprite.cpp
+../sprite.cpp \
+../sprite_sheet.cpp
 
 OBJECTS=$(SOURCES:.cpp=.o)
 EXECUTABLE=lores_example
