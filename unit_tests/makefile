@@ -21,11 +21,13 @@ LDFLAGS=-framework OpenGL -framework GLUT
 SOURCES=blit_region_tests.cpp \
 blit_tests.cpp \
 catch_test_main.cpp \
+pixel_intersect_tests.cpp \
 ../image.cpp \
 ../lodepng.cpp \
 ../palette.cpp \
 ../screen.cpp \
-../sprite.cpp
+../sprite.cpp \
+../sprite_sheet.cpp
 
 OBJECTS=$(SOURCES:.cpp=.o)
 EXECUTABLE=lores_tests
