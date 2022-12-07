@@ -54,7 +54,7 @@ public:
   // Blit this image to the given destination image, at the given (x, y)
   //  coord in the destination.
   // Pixels with the same colour index as 'transparent' are not copied.
-  void blit(image& dest, int dest_x, int dest_y, char transparent);
+  void blit(image& dest, int dest_x, int dest_y, char transparent = 0);
 
 protected:
   int m_width = 0;
