@@ -81,6 +81,7 @@ bool image::load(const std::string& png_file_name, palette& pal)
   unsigned nError = lodepng::decode(data, w, h, png_file_name);
   if (nError != 0)
   {
+    std::cout << "Failed to load " << png_file_name << "\n";
     assert(0);
     return false;
   }

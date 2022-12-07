@@ -10,9 +10,11 @@
 class screen : public image
 {
 public:
-  // Size of virtual screen in pretend pixels
-  static const int WIDTH = 128; 
-  static const int HEIGHT = 128; 
+  // Size of virtual screen in pretend pixels. 
+  // Set this in game-specific main function, but then can conveniently 
+  //  get the size here.
+  static int WIDTH; 
+  static int HEIGHT; 
 
   // * draw_on_gl_thread *
   // Execute OpenGL calls to draw this image onto the current render

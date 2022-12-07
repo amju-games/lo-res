@@ -5,6 +5,9 @@
 #include "palette.h"
 #include "screen.h"
 
+int screen::WIDTH = 64; 
+int screen::HEIGHT = 64;
+
 void screen::draw_on_gl_thread(const palette& pal)
 {
   // Draw array as coloured blocks
