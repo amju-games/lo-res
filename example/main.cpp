@@ -33,7 +33,7 @@ void draw()
   the_screen.clear(0); // black
   //im.blit(the_screen, 2, 60, 0);
   spr.draw(the_screen, 2, 2);
-  my_font.draw(the_screen, 5, 5, "HELLO");
+  my_font.draw(the_screen, 5, 5, "HELLO\n1234567890!@^&*()_+-=<>,.?/\"':;");
 
   // Draw screen array to actual GL surface
   the_screen.draw_on_gl_thread(the_palette);
@@ -63,9 +63,9 @@ int main(int argc, char** argv)
   glutCreateWindow("Hello");
   glutDisplayFunc(draw_and_update);
 
-  gluOrtho2D(0, W, 0, H);
+  gluOrtho2D(0, screen::WIDTH, 0, screen::HEIGHT);
 
-  the_screen.set_size(W, H);
+  the_screen.set_size(screen::WIDTH, screen::HEIGHT);
   the_screen.clear(0);
 
   the_palette.add_colour(colour(0, 0, 0));

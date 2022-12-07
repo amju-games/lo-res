@@ -2,6 +2,7 @@
 // (c) Jason Colman 2017
 
 #include "font.h"
+#include "screen.h"
 
 void font::draw(image& dest, int dest_x, int dest_y, const std::string& text)
 {
@@ -12,10 +13,10 @@ void font::draw(image& dest, int dest_x, int dest_y, const std::string& text)
   int y = dest_y; 
   for (char ch : text)
   {
-    if (ch == '\n')
+    if (ch == '\n' || x >= screen::WIDTH)
     {
       x = dest_x;
-      y += cell_h;
+      y += cell_h + 1;
     }
     else
     {

@@ -3,21 +3,23 @@
 
 #pragma once
 
+#include <cassert>
 #include <string>
 #include <vector>
 #include "palette.h"
 
 // * image *
-// Base class for screen, sprites
+// Base class for screen, sprites.
+// Stores image as a rectangular array of 8-bit indices into a palette of
+//  colours. 
 class image
 {
 public:
-  void set_size(int w, int h)
-  {
-    m_width = w;
-    m_height = h;
-    m_data.resize(w * h);
-  }
+  // Pixels with this colour index are transparent, i.e. not copied in
+  //  blit operations.
+  static const char TRANSPARENT = 0;
+
+  void set_size(int w, int h);
 
   // * load *
   // Load an RGB 24-bit png image.
@@ -38,29 +40,30 @@ public:
 
   // * index *
   // Convert (x, y) coord into index into data
-  int index(int x, int y) const;
+  int index(int x, int y) const
+  {
+    assert(x >= 0); 
+    assert(y >= 0); 
+    assert(x < m_width); 
+    assert(y < m_height); 
+    return y * m_width + x;
+  }
 
   // * clear *
   // Clear image to the given colour (palette index)
-  void clear(char c = 0)
-  {
-    for (char& ch : m_data)
-    {
-      ch = c;
-    }
-  }
+  void clear(char c = 0);
 
   // * blit *
   // Blit this image to the given destination image, at the given (x, y)
   //  coord in the destination.
-  // Pixels with the same colour index as 'transparent' are not copied.
-  void blit(image& dest, int dest_x, int dest_y, char transparent = 0);
+  // Pixels with colour index TRANSPARENT are not copied.
+  void blit(image& dest, int dest_x, int dest_y);
 	
   // * blit_region *
   // Blit a rectangular region of this source image to the destination.
+  // Pixels with colour index TRANSPARENT are not copied.
   void blit_region(image& dest, int dest_x, int dest_y, 
-    int src_x, int src_y, int src_w, int src_h,
-    char transparent = 0);
+    int src_x, int src_y, int src_w, int src_h);
 
 protected:
   int m_width = 0;

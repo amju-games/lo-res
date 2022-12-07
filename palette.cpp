@@ -3,7 +3,15 @@
 
 #include <iostream>
 #include <cassert>
+#include "image.h"
 #include "palette.h"
+
+palette::palette()
+{
+  m_colours.reserve(256);
+  // Colour zero is for TRANSPARENT index
+  m_colours.push_back(colour());
+}
 
 int palette::add_colour(const colour& col)
 {

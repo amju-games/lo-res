@@ -18,7 +18,6 @@ void sprite_sheet::draw_cell(image& dest, int cell, int dest_x, int dest_y)
   int cell_y = cell / m_cells_x * cell_h;
 
   blit_region(dest, dest_x, dest_y,
-    cell_x, cell_y, cell_w, cell_h,
-    0 /* m_transparent_key */);
+    cell_x, cell_y, cell_w, cell_h);
 }
 

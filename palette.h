@@ -9,6 +9,7 @@
 class palette
 {
 public:
+  palette();
   int add_colour(const colour& col);
   const colour& get_colour(int c) const;
 
