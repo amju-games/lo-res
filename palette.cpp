@@ -6,6 +6,8 @@
 #include "image.h"
 #include "palette.h"
 
+//#define PALETTE_DEBUG
+
 palette::palette()
 {
   m_colours.reserve(256);
@@ -22,10 +24,12 @@ int palette::add_colour(const colour& col)
   }
   m_colours.push_back(col);
 
+#ifdef PALETTE_DEBUG
   std::cout << "Adding colour to palette: " 
     << (unsigned int)col.r << ", " 
     << (unsigned int)col.g << ", " 
     << (unsigned int)col.b << "\n";
+#endif
 
   return m_colours.size() - 1;
 }
