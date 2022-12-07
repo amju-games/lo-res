@@ -17,12 +17,7 @@ public:
     m_cell_max_time = t;
   }
 
-  void set_cell_range(int min_cell, int max_cell, int dir = 1)
-  {
-    m_min_cell = min_cell;
-    m_max_cell = max_cell;
-    m_cell_dir = dir;
-  }
+  void set_cell_range(int min_cell, int max_cell, int dir = 1);
 
 protected:
   int m_cell = 0;

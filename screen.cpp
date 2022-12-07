@@ -12,7 +12,7 @@ void screen::draw_on_gl_thread(const palette& pal)
   {
     for (int y = 0; y < m_height; y++)
     {   
-      char ch = get_colour(index(x, y));
+      COLOUR_INDEX ch = get_colour(index(x, y));
       colour col = pal.get_colour(ch);
       glColor3ub(col.r, col.g, col.b);
 

@@ -6,18 +6,22 @@
 #include <cassert>
 #include <string>
 #include <vector>
+#include "colour_index.h"
 #include "palette.h"
 
 // * image *
 // Base class for screen, sprites.
 // Stores image as a rectangular array of 8-bit indices into a palette of
 //  colours. 
+
+using COLOUR_INDEX = unsigned char;
+
 class image
 {
 public:
   // Pixels with this colour index are transparent, i.e. not copied in
   //  blit operations.
-  static const char TRANSPARENT; 
+  static const COLOUR_INDEX TRANSPARENT; 
 
   void set_size(int w, int h);
 
@@ -28,12 +32,12 @@ public:
   bool load(const std::string& png_file_name, palette& pal);
 
   // Set the colour (really a palette index) at the given position index.
-  void set_colour(int index, char ch)
+  void set_colour(int index, COLOUR_INDEX ch)
   {
     m_data[index] = ch;
   }
 
-  char get_colour(int index) const
+  COLOUR_INDEX get_colour(int index) const
   {
     return m_data[index];
   }
@@ -51,7 +55,7 @@ public:
 
   // * clear *
   // Clear image to the given colour (palette index)
-  void clear(char c = 0);
+  void clear(COLOUR_INDEX c = 0);
 
   // * blit *
   // Blit this image to the given destination image, at the given (x, y)
@@ -72,6 +76,6 @@ protected:
   int m_width = 0;
   int m_height = 0;
 
-  std::vector<char> m_data;
+  std::vector<COLOUR_INDEX> m_data;
 };
 

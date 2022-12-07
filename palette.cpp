@@ -30,7 +30,7 @@ int palette::add_colour(const colour& col)
   return m_colours.size() - 1;
 }
 
-const colour& palette::get_colour(int c) const
+const colour& palette::get_colour(COLOUR_INDEX c) const
 {
   assert(c < m_colours.size());
   return m_colours[c];

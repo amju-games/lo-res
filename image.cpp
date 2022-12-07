@@ -7,7 +7,7 @@
 #include "lodepng.h"
 #include "image.h"
 
-const char image::TRANSPARENT = 0;
+const COLOUR_INDEX image::TRANSPARENT = 0;
 
 void image::set_size(int w, int h)
 {
@@ -16,9 +16,9 @@ void image::set_size(int w, int h)
   m_data.resize(w * h); 
 }
 
-void image::clear(char c)
+void image::clear(COLOUR_INDEX c)
 {
-  for (char& ch : m_data)
+  for (COLOUR_INDEX& ch : m_data)
   {
     ch = c;
   }
@@ -63,7 +63,7 @@ void image::blit_region(image& dest, int dest_x, int dest_y,
     for (int y = y_min; y < y_max; y++)
     {
       int dest_index = dest.index(x + dest_x, y + dest_y);
-      char col = get_colour(index(x + src_x, y + src_y));
+      COLOUR_INDEX col = get_colour(index(x + src_x, y + src_y));
       // Don't blit if the source colour is the transparent colour key.
       if (col != TRANSPARENT)
       {
