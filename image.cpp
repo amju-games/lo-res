@@ -7,6 +7,8 @@
 #include "lodepng.h"
 #include "image.h"
 
+const char image::TRANSPARENT = 0;
+
 void image::set_size(int w, int h)
 {
   m_width = w;
@@ -90,12 +92,23 @@ bool image::load(const std::string& png_file_name, palette& pal)
   int rgb_size = w * h * 4;
   for (int i = 0; i < rgb_size; i += 4)
   {
+    int alpha = data[i + 3];
     colour col(data[i], data[i + 1], data[i + 2]);
-   
-    int pal_index = pal.add_colour(col); 
-    assert(pal_index < 0x100);
-    char ch = pal_index & 0xff;
-    m_data.push_back(ch);
+
+    const int TRANSPARENT_LIMIT = 128;
+    const colour MAGENTA(255, 0, 255);
+
+    if (alpha < TRANSPARENT_LIMIT || col == MAGENTA)
+    {
+      m_data.push_back(TRANSPARENT);
+    }
+    else
+    {
+      int pal_index = pal.add_colour(col); 
+      assert(pal_index < 0x100);
+      char ch = pal_index & 0xff;
+      m_data.push_back(ch);
+    }
   }
 
   m_width = w;

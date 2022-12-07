@@ -11,8 +11,8 @@ class screen : public image
 {
 public:
   // Size of virtual screen in pretend pixels
-  static const int WIDTH = 64; 
-  static const int HEIGHT = 64; 
+  static const int WIDTH = 128; 
+  static const int HEIGHT = 128; 
 
   // * draw_on_gl_thread *
   // Execute OpenGL calls to draw this image onto the current render

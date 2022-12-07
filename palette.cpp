@@ -9,8 +9,8 @@
 palette::palette()
 {
   m_colours.reserve(256);
-  // Colour zero is for TRANSPARENT index
-  m_colours.push_back(colour());
+  // Colour zero is for TRANSPARENT index - using MAGENTA
+  m_colours.push_back(colour(255, 0, 255));
 }
 
 int palette::add_colour(const colour& col)

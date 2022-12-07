@@ -17,7 +17,7 @@ class image
 public:
   // Pixels with this colour index are transparent, i.e. not copied in
   //  blit operations.
-  static const char TRANSPARENT = 0;
+  static const char TRANSPARENT; 
 
   void set_size(int w, int h);
 
