@@ -19,6 +19,8 @@ public:
 
   void set_cell_range(int min_cell, int max_cell, int dir = 1);
 
+  int get_cell() const { return m_cell; }
+
 protected:
   int m_cell = 0;
   float m_cell_max_time = .1f;
