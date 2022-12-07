@@ -18,6 +18,13 @@ int image::index(int x, int y) const
 
 void image::blit(image& dest, int dest_x, int dest_y, char transparent)
 {
+  blit_region(dest, dest_x, dest_y, 0, 0, m_width, m_height, transparent);
+}
+
+void image::blit_region(image& dest, int dest_x, int dest_y, 
+  int src_x, int src_y, int src_w, int src_h,
+  char transparent)
+{
   // Blit this image onto dest.
   
   // Don't blit pixels which are off the left hand edge of dest.
@@ -36,11 +43,11 @@ void image::blit(image& dest, int dest_x, int dest_y, char transparent)
   // {
   //   x_max = dest.m_width - dest_x;
   // }
-  int x_max = std::min(m_width, dest.m_width - dest_x);
+  int x_max = std::min(src_w, dest.m_width - dest_x);
 
   // Same for top and bottom
   int y_min = std::max(0, -dest_y);
-  int y_max = std::min(m_height, dest.m_height - dest_y);
+  int y_max = std::min(src_h, dest.m_height - dest_y);
 
   // Blit the region of this image which intersects the destination
   //  image.
@@ -49,7 +56,7 @@ void image::blit(image& dest, int dest_x, int dest_y, char transparent)
     for (int y = y_min; y < y_max; y++)
     {
       int dest_index = dest.index(x + dest_x, y + dest_y);
-      char col = get_colour(index(x, y));
+      char col = get_colour(index(x + src_x, y + src_y));
       // Don't blit if the source colour is the transparent colour key.
       if (col != transparent)
       {
