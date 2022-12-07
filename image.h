@@ -57,13 +57,16 @@ public:
   // Blit this image to the given destination image, at the given (x, y)
   //  coord in the destination.
   // Pixels with colour index TRANSPARENT are not copied.
-  void blit(image& dest, int dest_x, int dest_y);
+  void blit(image& dest, int dest_x, int dest_y) const;
 	
   // * blit_region *
   // Blit a rectangular region of this source image to the destination.
   // Pixels with colour index TRANSPARENT are not copied.
   void blit_region(image& dest, int dest_x, int dest_y, 
-    int src_x, int src_y, int src_w, int src_h);
+    int src_x, int src_y, int src_w, int src_h) const;
+
+  int get_width() const { return m_width; }
+  int get_height() const { return m_height; }
 
 protected:
   int m_width = 0;

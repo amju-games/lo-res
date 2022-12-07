@@ -24,13 +24,13 @@ void image::clear(char c)
   }
 }
 
-void image::blit(image& dest, int dest_x, int dest_y)
+void image::blit(image& dest, int dest_x, int dest_y) const
 {
   blit_region(dest, dest_x, dest_y, 0, 0, m_width, m_height);
 }
 
 void image::blit_region(image& dest, int dest_x, int dest_y, 
-  int src_x, int src_y, int src_w, int src_h)
+  int src_x, int src_y, int src_w, int src_h) const
 {
   // Blit this image onto dest.
   
