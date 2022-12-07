@@ -16,9 +16,11 @@ pix_int_result pixel_intersect(
   int w2 = ss2.m_width / ss2.m_cells_x;
   int h2 = ss2.m_height / ss2.m_cells_y;
 
+#ifdef PIX_DEBUG
 std::cout 
   << "Sprite 1: cell w: "  << w1 << " h: " << h1 
   << " Sprite 2: cell w: " << w2 << " h: " << h2 << "\n";
+#endif
 
   // Overlapping range of coords
   int xmin = std::max(x1, x2);
@@ -26,14 +28,18 @@ std::cout
   int ymin = std::max(y1, y2);
   int ymax = std::min(y1 + h1, y2 + h2);
 
+#ifdef PIX_DEBUG
 std::cout
   << "Overlap: xmin: " << xmin << " xmax: " << xmax
   << " ymin: " << ymin << " ymax: " << ymax << "\n";
+#endif
 
   // Bail if no overlapping region
   if (xmin >= xmax || ymin >= ymax)
   {
+#ifdef PIX_DEBUG
 std::cout << "NO OVERLAP\n";
+#endif
     return pix_int_result::NO_AND_DISJOINT;
   }
 
@@ -44,9 +50,11 @@ std::cout << "NO OVERLAP\n";
   int cell_x2 = cell2 % ss2.m_cells_x * w2;
   int cell_y2 = cell2 / ss2.m_cells_x * h2;
 
+#ifdef PIX_DEBUG
 std::cout << "Top left cell coord: "
   << "cell_x1: " << cell_x1 << " cell_y1: " << cell_y1 
   << " cell_x2: " << cell_x2 << " cell_y2: " << cell_y2 << "\n";
+#endif
 
   // Check correspondong pixels for non-transparent colour index
   int nx = xmax - xmin;
@@ -60,22 +68,27 @@ std::cout << "Top left cell coord: "
       int px2 = cell_x2 + x + xmin - x2;
       int py2 = cell_y2 + y + ymin - y2;
 
+#ifdef PIX_DEBUG
 std::cout << "Testing pixel pairs: "
   << "(" << px1 << ", " << py1 << ") and "
   << "(" << px2 << ", " << py2 << ")\n";
+#endif
 
       COLOUR_INDEX c1 = ss1.get_colour(ss1.index(px1, py1));
       COLOUR_INDEX c2 = ss2.get_colour(ss2.index(px2, py2));
 
       if (c1 != image::TRANSPARENT && c2 != image::TRANSPARENT)
       {
+#ifdef PIX_DEBUG
 std::cout << "Both non-transparent, HIT!\n";
+#endif
         return pix_int_result::YES_COLLIDE;
       } 
     }
   }
+#ifdef PIX_DEBUG
 std::cout << "No overlapping opaque pixels.\n";
-
+#endif
   return pix_int_result::NO_AND_NOT_DISJOINT;
 }
 
