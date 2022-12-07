@@ -1,9 +1,10 @@
 // "LO RES" Game Prototype
 // (c) Jason Colman 2017
 
+#include <cassert>
 #include "sprite.h"
 
-void sprite::draw(image& dest)
+void sprite::draw(image& dest, int dest_x, int dest_y)
 {
   // Draw cell at pos on screen
   // Calc cell x, y, w, h
@@ -16,17 +17,13 @@ void sprite::draw(image& dest)
   int cell_x = m_cell % m_cells_x * cell_w;
   int cell_y = m_cell / m_cells_x * cell_h;
 
-  blit_region(dest, (int)m_pos.x, (int)m_pos.y,
+  blit_region(dest, dest_x, dest_y,
     cell_x, cell_y, cell_w, cell_h,
     0 /* m_transparent_key */);
 }
 
 void sprite::update(float dt)
 {
-  vec2 old_vel = m_vel;
-  m_vel += m_acc * dt;
-  m_pos += (old_vel + m_vel) * (.5f * dt);
-
   m_cell_time += dt;
   if (m_cell_time > m_cell_max_time)
   {

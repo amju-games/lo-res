@@ -4,12 +4,11 @@
 #pragma once
 
 #include "image.h"
-#include "vec2.h"
 
 class sprite : public image
 {
 public:
-  void draw(image& dest);
+  void draw(image& dest, int dest_x, int dest_y);
 
   void update(float dt);
 
@@ -31,14 +30,7 @@ public:
     m_cell_dir = dir;
   }
 
-  void set_pos(const vec2& pos) { m_pos = pos; }
-  void set_vel(const vec2& vel) { m_vel = vel; }
-  void set_acc(const vec2& acc) { m_acc = acc; }
- 
 protected:
-  vec2 m_pos;
-  vec2 m_vel;
-  vec2 m_acc;   
   int m_cell = 0;
   int m_cells_x = 1;
   int m_cells_y = 1;
