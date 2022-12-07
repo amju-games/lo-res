@@ -8,7 +8,17 @@ void sprite::draw(image& dest)
   // Draw cell at pos on screen
   // Calc cell x, y, w, h
 
-  blit(dest, (int)m_pos.x, (int)m_pos.y, 0);
+  int cell_w = m_width / m_cells_x;
+  int cell_h = m_height / m_cells_y;
+
+  // Get top left of current cell (m_cell)
+  assert(m_cell < m_cells_x * m_cells_y);
+  int cell_x = m_cell % m_cells_x * cell_w;
+  int cell_y = m_cell / m_cells_x * cell_h;
+
+  blit_region(dest, (int)m_pos.x, (int)m_pos.y,
+    cell_x, cell_y, cell_w, cell_h,
+    0 /* m_transparent_key */);
 }
 
 void sprite::update(float dt)
