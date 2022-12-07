@@ -1,11 +1,10 @@
 all:lores_tests_exe
 
 clean:
-	rm lores_tests *.o ../*.o geom/*.o ../geom/*.o ../macosx/*.o utils/*.o ../md3/*.o
+	rm lores_tests *.o ../*.o 
 
 run:
-	cp lores_tests ../../assets/; cd ../../assets/; ./lores_tests; cd -
-# NB run tests from assets/ dir, so we can load assets within the tests
+	./lores_tests
 
 
 CC=clang++
@@ -26,8 +25,7 @@ catch_test_main.cpp \
 ../lodepng.cpp \
 ../palette.cpp \
 ../screen.cpp \
-../sprite.cpp \
-../timer.cpp
+../sprite.cpp
 
 OBJECTS=$(SOURCES:.cpp=.o)
 EXECUTABLE=lores_tests
