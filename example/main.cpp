@@ -13,7 +13,6 @@
 #include "palette.h"
 #include "screen.h"
 #include "sprite.h"
-#include "timer.h"
 
 // Size of window in actual device pixels
 const int WINDOW_W = 500;
@@ -21,7 +20,6 @@ const int WINDOW_H = 500;
 
 screen the_screen;
 palette the_palette;
-timer the_timer;
 
 //image im; // TEST
 sprite spr;
@@ -32,7 +30,7 @@ void draw()
 
   the_screen.clear(0); // black
   //im.blit(the_screen, 2, 60, 0);
-  spr.draw(the_screen);
+  spr.draw(the_screen, 2, 2);
 
   the_screen.draw_on_gl_thread(the_palette);
 
@@ -42,9 +40,7 @@ void draw()
 
 void update()
 {
-  the_timer.update();
-
-  spr.update(the_timer.get_dt());
+  spr.update(0);
 }
 
 // * draw_and_update *
@@ -71,7 +67,6 @@ int main(int argc, char** argv)
   the_palette.add_colour(colour(0, 0, 0));
 
   spr.load("assets/test2.png", the_palette);
-  spr.set_vel(vec2(2.f, 0));
 
   glutMainLoop();
 }
