@@ -71,7 +71,7 @@ int main(int argc, char** argv)
   the_palette.add_colour(colour(0, 0, 0));
 
   spr.load("assets/test2.png", the_palette);
-  spr.set_vel(vec2(64.f, 0));
+  spr.set_vel(vec2(2.f, 0));
 
   glutMainLoop();
 }
