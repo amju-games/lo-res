@@ -1,5 +1,5 @@
 // "LO RES" Game Prototype
-// (c) Jason Colman 2017
+// (c) Juliet Colman 2017-2022
 
 // clang++ *.cpp ../*.cpp -I.. -framework GLUT -framework OpenGL 
 //   -std=c++11 -Wno-deprecated-declarations -DMACOSX

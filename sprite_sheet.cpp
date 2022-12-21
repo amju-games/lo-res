@@ -1,5 +1,5 @@
 // "LO RES" Game Prototype
-// (c) Jason Colman 2017
+// (c) Juliet Colman 2017-2022
 
 #include <algorithm>
 #include <cassert>
