@@ -8,7 +8,7 @@
 class sprite : public sprite_sheet
 {
 public:
-  void draw(image& dest, int dest_x, int dest_y);
+  void draw(image& dest, int dest_x, int dest_y) const;
 
   void update(float dt);
 
@@ -17,9 +17,14 @@ public:
     m_cell_max_time = t;
   }
 
-  void set_cell_range(int min_cell, int max_cell, int dir = 1);
+  void set_cell_range(int min_cell, int max_cell);
+
+  void set_cell_dir(int dir) { m_cell_dir = dir; }
 
   int get_cell() const { return m_cell; }
+  
+  // In bounce mode, the cell dir flips when we reach the end of the range.
+  void set_bounce_mode(bool bm) { m_bounce_mode = bm; }
 
 protected:
   int m_cell = 0;
@@ -27,6 +32,7 @@ protected:
   float m_cell_time = 0.f;
   int m_min_cell = 0;
   int m_max_cell = 0;
-  int m_cell_dir = 0;
+  int m_cell_dir = 1;
+  bool m_bounce_mode = false;
 };
 

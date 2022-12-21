@@ -16,7 +16,7 @@ enum class pix_int_result
 class sprite_sheet : public image
 {
 public:
-  void draw_cell(image& dest, int cell, int dest_x, int dest_y);
+  void draw_cell(image& dest, int cell, int dest_x, int dest_y) const;
 
   void set_num_cells(int x, int y)
   {

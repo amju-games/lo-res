@@ -92,7 +92,7 @@ std::cout << "No overlapping opaque pixels.\n";
   return pix_int_result::NO_AND_NOT_DISJOINT;
 }
 
-void sprite_sheet::draw_cell(image& dest, int cell, int dest_x, int dest_y)
+void sprite_sheet::draw_cell(image& dest, int cell, int dest_x, int dest_y) const
 {
   // Draw cell at pos on screen
   // Calc cell x, y, w, h
