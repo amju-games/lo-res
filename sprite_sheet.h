@@ -24,6 +24,9 @@ public:
     m_cells_y = y;
   }
 
+  int get_cell_w() const { return m_width / m_cells_x; }
+  int get_cell_h() const { return m_height / m_cells_y; }
+
   friend pix_int_result pixel_intersect(
     const sprite_sheet& ss1, int cell1, int x1, int y1,
     const sprite_sheet& ss2, int cell2, int x2, int y2);
