@@ -20,7 +20,9 @@ void font::draw(image& dest, int dest_x, int dest_y, const std::string& text)
     }
     else
     {
-      draw_cell(dest, ch - ' ', x, y);
+      int cell = ch - ' ';
+      cell = (cell >= 0 && cell < (m_cells_x * m_cells_y)) ? cell : 0;
+      draw_cell(dest, cell, x, y);
       x += cell_w;
     }
   }
