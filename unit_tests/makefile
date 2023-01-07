@@ -14,7 +14,7 @@ WARNINGS=-Wall -Wno-deprecated-declarations
 INCLUDES=\
   -I..
 
-CFLAGS=-c $(WARNINGS) $(INCLUDES) -std=c++11   -DMACOSX
+CFLAGS=-c $(WARNINGS) $(INCLUDES) -std=c++2a   -DMACOSX
 
 LDFLAGS=-framework OpenGL -framework GLUT
 
