@@ -10,11 +10,11 @@ pix_int_result pixel_intersect(
   const sprite_sheet& ss1, int cell1, int x1, int y1, 
   const sprite_sheet& ss2, int cell2, int x2, int y2)
 {
-  // Cell sizes for both sprites - TODO member vars
-  int w1 = ss1.m_width / ss1.m_cells_x;
-  int h1 = ss1.m_height / ss1.m_cells_y;
-  int w2 = ss2.m_width / ss2.m_cells_x;
-  int h2 = ss2.m_height / ss2.m_cells_y;
+  // Cell sizes for both sprites 
+  int w1 = ss1.get_cell_w();
+  int h1 = ss1.get_cell_h();
+  int w2 = ss2.get_cell_w();
+  int h2 = ss2.get_cell_h();
 
 #ifdef PIX_DEBUG
 std::cout 
@@ -56,7 +56,10 @@ std::cout << "Top left cell coord: "
   << " cell_x2: " << cell_x2 << " cell_y2: " << cell_y2 << "\n";
 #endif
 
-  // Check correspondong pixels for non-transparent colour index
+  const p_image& image1 = ss1.get_image();
+  const p_image& image2 = ss2.get_image();
+
+  // Check corresponding pixels for non-transparent colour index
   int nx = xmax - xmin;
   int ny = ymax - ymin;
   for (int x = 0; x <nx; x++)
@@ -74,8 +77,8 @@ std::cout << "Testing pixel pairs: "
   << "(" << px2 << ", " << py2 << ")\n";
 #endif
 
-      COLOUR_INDEX c1 = ss1.get_colour(ss1.index(px1, py1));
-      COLOUR_INDEX c2 = ss2.get_colour(ss2.index(px2, py2));
+      COLOUR_INDEX c1 = image1->get_colour(image1->index(px1, py1));
+      COLOUR_INDEX c2 = image2->get_colour(image2->index(px2, py2));
 
       if (c1 != image::TRANSPARENT && c2 != image::TRANSPARENT)
       {
@@ -97,15 +100,12 @@ void sprite_sheet::draw_cell(image& dest, int cell, int dest_x, int dest_y) cons
   // Draw cell at pos on screen
   // Calc cell x, y, w, h
 
-  int cell_w = m_width / m_cells_x;
-  int cell_h = m_height / m_cells_y;
-
   // Get top left of current cell (m_cell)
   assert(cell < m_cells_x * m_cells_y);
-  int cell_x = cell % m_cells_x * cell_w;
-  int cell_y = cell / m_cells_x * cell_h;
+  int cell_x = cell % m_cells_x * m_cell_w;
+  int cell_y = cell / m_cells_x * m_cell_h;
 
-  blit_region(dest, dest_x, dest_y,
-    cell_x, cell_y, cell_w, cell_h);
+  m_image->blit_region(dest, dest_x, dest_y,
+    cell_x, cell_y, m_cell_w, m_cell_h);
 }
 
