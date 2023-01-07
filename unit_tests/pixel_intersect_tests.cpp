@@ -4,46 +4,66 @@
 #include "catch.hpp"
 #include "sprite_sheet.h"
 
-// Test pixel intersection
+// Test pixel-perfect intersection between two sprite sheets.
 
-const int W = 4;
-const int H = 2;
-const int OPAQUE = 1;
-
-void setup_transparent(sprite_sheet& ss1, sprite_sheet& ss2)
+class pixel_fixture
 {
-  ss1.set_size(W, H);
-  ss2.set_size(W, H);
+public:
+  pixel_fixture()
+  {
+    image1 = std::make_shared<image>();
+    image2 = std::make_shared<image>();
+    image1->set_size(W, H);
+    image2->set_size(W, H);
+    ss1.set_image(image1);
+    ss2.set_image(image2);
+    
+    set_all_cells_transparent();
+  }
+
+protected:
+  void set_all_cells_transparent();
+  void test_overlap_transparent(int c1, int c2) const;
+
+  static void set_cell_opaque(sprite_sheet& ss, int cell);
+
+  static constexpr int W = 4;
+  static constexpr int H = 2;
+  static constexpr int OPAQUE = 1;
+
+  sprite_sheet ss1, ss2;
+  p_image image1, image2;
+};
+
+void pixel_fixture::set_all_cells_transparent()
+{
   // Set all pixels to transparent to start
   for (int x = 0; x < W; x++)
   {
     for (int y = 0; y < H; y++)
     { 
-      ss1.set_colour(ss1.index(x, y), image::TRANSPARENT);
-      ss2.set_colour(ss2.index(x, y), image::TRANSPARENT);
+      ss1.get_image()->set_colour(ss1.get_image()->index(x, y), image::TRANSPARENT);
+      ss2.get_image()->set_colour(ss2.get_image()->index(x, y), image::TRANSPARENT);
     }
   }
   ss1.set_num_cells(2, 1);
   ss2.set_num_cells(2, 1);
 }
 
-void set_cell_opaque(sprite_sheet& ss, int cell)
+void pixel_fixture::set_cell_opaque(sprite_sheet& ss, int cell)
 {
   int CELL_W = 2, CELL_H = 2;
   for (int x = 0; x < CELL_W; x++)
   {
     for (int y = 0; y < CELL_H; y++)
     {
-      ss.set_colour(ss.index(x + cell * CELL_W, y), OPAQUE);
+      ss.get_image()->set_colour(ss.get_image()->index(x + cell * CELL_W, y), OPAQUE);
     }
   }
 }
 
-TEST_CASE("pixel test - disjoint in x", "[sprite_sheet]")
+TEST_CASE_METHOD(pixel_fixture, "pixel test - disjoint in x", "[sprite_sheet]")
 {
-  sprite_sheet ss1, ss2;
-  setup_transparent(ss1, ss2);
-
   int x = 13, y = 17; // some arbitrary position
   
   REQUIRE(pixel_intersect(ss1, 0, x, y, ss2, 0, x + 2, y) == 
@@ -59,11 +79,8 @@ TEST_CASE("pixel test - disjoint in x", "[sprite_sheet]")
     pix_int_result::NO_AND_DISJOINT);
 }
 
-TEST_CASE("pixel test - disjoint in y", "[sprite_sheet]")
+TEST_CASE_METHOD(pixel_fixture, "pixel test - disjoint in y", "[sprite_sheet]")
 {
-  sprite_sheet ss1, ss2;
-  setup_transparent(ss1, ss2);
-
   int x = -13, y = 17; // some arbitrary position
   
   REQUIRE(pixel_intersect(ss1, 0, x, y, ss2, 0, x, y + 2) == 
@@ -79,11 +96,8 @@ TEST_CASE("pixel test - disjoint in y", "[sprite_sheet]")
     pix_int_result::NO_AND_DISJOINT);
 }
 
-void test_overlap_transparent(int c1, int c2)
+void pixel_fixture::test_overlap_transparent(int c1, int c2) const
 {
-  sprite_sheet ss1, ss2;
-  setup_transparent(ss1, ss2);
-
   int x = 13, y = -17; // some arbitrary position
   
   REQUIRE(pixel_intersect(ss1, c1, x, y, ss2, c2, x + 1, y) == 
@@ -114,7 +128,7 @@ void test_overlap_transparent(int c1, int c2)
     pix_int_result::NO_AND_NOT_DISJOINT);
 }
 
-TEST_CASE("pixel test - overlap transparent", "[sprite_sheet]")
+TEST_CASE_METHOD(pixel_fixture, "pixel test - overlap transparent", "[sprite_sheet]")
 {
   test_overlap_transparent(0, 0); // cells in sprite 1 and 2
   test_overlap_transparent(1, 0);
