@@ -32,7 +32,7 @@ public:
   // Load an RGB 24-bit png image.
   // Adds the colours found in the image to the given palette.
   // Stores the image as indices into the palette.
-  bool load(const std::string& png_file_name, palette& pal);
+  bool load(const std::string& png_file_name);
 
   // Set the colour (really a palette index) at the given position index.
   void set_colour(int index, COLOUR_INDEX ch)
@@ -80,6 +80,8 @@ protected:
   int m_height = 0;
 
   std::vector<COLOUR_INDEX> m_data;
+
+  static palette m_pal;
 };
 
 using p_image = std::shared_ptr<image>;

@@ -9,6 +9,8 @@
 
 const COLOUR_INDEX image::TRANSPARENT = 0;
 
+palette image::m_pal;
+
 void image::set_size(int w, int h)
 {
   m_width = w;
@@ -73,7 +75,7 @@ void image::blit_region(image& dest, int dest_x, int dest_y,
   }
 }
 
-bool image::load(const std::string& png_file_name, palette& pal)
+bool image::load(const std::string& png_file_name)
 {
   std::vector<unsigned char> data;
   unsigned int w = 0;
@@ -82,7 +84,6 @@ bool image::load(const std::string& png_file_name, palette& pal)
   if (nError != 0)
   {
     std::cout << "Failed to load " << png_file_name << "\n";
-    assert(0);
     return false;
   }
 
@@ -105,7 +106,7 @@ bool image::load(const std::string& png_file_name, palette& pal)
     }
     else
     {
-      int pal_index = pal.add_colour(col); 
+      int pal_index = m_pal.add_colour(col); 
       assert(pal_index < 0x100);
       char ch = pal_index & 0xff;
       m_data.push_back(ch);
