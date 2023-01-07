@@ -4,13 +4,13 @@
 #pragma once
 
 #include <cassert>
+#include <memory>
 #include <string>
 #include <vector>
 #include "colour_index.h"
 #include "palette.h"
 
 // * image *
-// Base class for screen, sprites.
 // Stores image as a rectangular array of 8-bit indices into a palette of
 //  colours. 
 
@@ -23,6 +23,9 @@ public:
   //  blit operations.
   static const COLOUR_INDEX TRANSPARENT; 
 
+  // * set_size *
+  // As an alternative to loading an image from a file, set the size
+  //  and set pixel colours.
   void set_size(int w, int h);
 
   // * load *
@@ -78,4 +81,6 @@ protected:
 
   std::vector<COLOUR_INDEX> m_data;
 };
+
+using p_image = std::shared_ptr<image>;
 
