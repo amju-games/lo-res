@@ -20,7 +20,6 @@ const int WINDOW_W = 500;
 const int WINDOW_H = 500;
 
 screen the_screen;
-palette the_palette;
 
 //image im; // TEST
 sprite spr;
@@ -36,7 +35,7 @@ void draw()
   my_font.draw(the_screen, 5, 5, "HELLO\n1234567890!@^&*()_+-=<>,.?/\"':;");
 
   // Draw screen array to actual GL surface
-  the_screen.draw_on_gl_thread(the_palette);
+  the_screen.draw_on_gl_thread(image::get_palette());
 
   glutSwapBuffers();
   glutPostRedisplay();
@@ -68,10 +67,15 @@ int main(int argc, char** argv)
   the_screen.set_size(screen::WIDTH, screen::HEIGHT);
   the_screen.clear(0);
 
-  the_palette.add_colour(colour(0, 0, 0));
+  image::get_palette().add_colour(colour(0, 0, 0));
 
-  spr.load("assets/test2.png", the_palette);
-  my_font.load("assets/font1.png", the_palette);
+  p_image im1 = std::make_shared<image>();
+  im1->load("assets/test2.png");
+  spr.set_image(im1);
+
+  p_image im2 = std::make_shared<image>();
+  im2->load("assets/font1.png");
+  my_font.set_image(im2);
   my_font.set_num_cells(16, 4);
   glutMainLoop();
 }

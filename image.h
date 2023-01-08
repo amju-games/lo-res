@@ -75,6 +75,8 @@ public:
   int get_width() const { return m_width; }
   int get_height() const { return m_height; }
 
+  static palette& get_palette();
+
 protected:
   int m_width = 0;
   int m_height = 0;

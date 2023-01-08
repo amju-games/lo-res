@@ -11,6 +11,11 @@ const COLOUR_INDEX image::TRANSPARENT = 0;
 
 palette image::m_pal;
 
+palette& image::get_palette()
+{
+  return m_pal;
+}
+
 void image::set_size(int w, int h)
 {
   m_width = w;
