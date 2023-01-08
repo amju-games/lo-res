@@ -6,9 +6,6 @@
 
 void font::draw(image& dest, int dest_x, int dest_y, const std::string& text)
 {
-  int cell_w = m_width / m_cells_x;
-  int cell_h = m_height / m_cells_y;
-
   int x = dest_x;
   int y = dest_y; 
   for (char ch : text)
@@ -16,14 +13,14 @@ void font::draw(image& dest, int dest_x, int dest_y, const std::string& text)
     if (ch == '\n' || x >= screen::WIDTH)
     {
       x = dest_x;
-      y += cell_h + 1;
+      y += m_cell_h + 1;
     }
     else
     {
       int cell = ch - ' ';
       cell = (cell >= 0 && cell < (m_cells_x * m_cells_y)) ? cell : 0;
       draw_cell(dest, cell, x, y);
-      x += cell_w;
+      x += m_cell_w;
     }
   }
 }
