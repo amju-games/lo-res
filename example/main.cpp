@@ -72,6 +72,7 @@ int main(int argc, char** argv)
   p_image im1 = std::make_shared<image>();
   im1->load("assets/test2.png");
   spr.set_image(im1);
+  spr.set_num_cells(1, 1);
 
   p_image im2 = std::make_shared<image>();
   im2->load("assets/font1.png");
