@@ -20,10 +20,10 @@ LDFLAGS=-framework OpenGL -framework GLUT
 
 SOURCES=anim_tool.cpp \
 ../font.cpp \
-../image.cpp \
+../image_8.cpp \
 ../lodepng.cpp \
 ../palette.cpp \
-../screen.cpp \
+../render_image_opengl.cpp \
 ../sprite.cpp \
 ../sprite_sheet.cpp
 
