@@ -8,7 +8,7 @@
 class sprite : public sprite_sheet
 {
 public:
-  void draw(image& dest, int dest_x, int dest_y) const;
+  void draw(ref_image dest, int dest_x, int dest_y) const;
 
   void update(float dt);
 

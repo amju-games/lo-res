@@ -10,16 +10,18 @@
 #include <GLUT/glut.h>
 #include "colour.h"
 #include "font.h"
-#include "image.h"
+#include "image_8.h"
 #include "palette.h"
-#include "screen.h"
+#include "render_image_opengl.h"
 #include "sprite.h"
 
 // Size of window in actual device pixels
 const int WINDOW_W = 500;
 const int WINDOW_H = 500;
 
-screen the_screen;
+// Size in virtual pixels of pretent lo-res screen
+const int VIRTUAL_W = 128;
+const int VIRTUAL_H = 128;
 
 //image im; // TEST
 sprite spr;
@@ -29,13 +31,20 @@ void draw()
 {
   glClear(GL_COLOR_BUFFER_BIT);
 
-  the_screen.clear(0); // black
+  static p_image the_screen;
+  if (!the_screen)
+  {
+    the_screen = std::make_shared<image_8>();
+    the_screen->set_size(VIRTUAL_W, VIRTUAL_H);
+  }
+
+  the_screen->clear(0); // black
   //im.blit(the_screen, 2, 60, 0);
   spr.draw(the_screen, 2, 2);
   my_font.draw(the_screen, 5, 5, "HELLO\n1234567890!@^&*()_+-=<>,.?/\"':;");
 
   // Draw screen array to actual GL surface
-  the_screen.draw_on_gl_thread(image::get_palette());
+  render_image_opengl(the_screen);
 
   glutSwapBuffers();
   glutPostRedisplay();
@@ -62,19 +71,16 @@ int main(int argc, char** argv)
   glutCreateWindow("Hello");
   glutDisplayFunc(draw_and_update);
 
-  gluOrtho2D(0, screen::WIDTH, 0, screen::HEIGHT);
+  gluOrtho2D(0, VIRTUAL_W, 0, VIRTUAL_H);
 
-  the_screen.set_size(screen::WIDTH, screen::HEIGHT);
-  the_screen.clear(0);
+  image_8::get_palette().add_colour(colour(0, 0, 0));
 
-  image::get_palette().add_colour(colour(0, 0, 0));
-
-  p_image im1 = std::make_shared<image>();
+  p_image im1 = std::make_shared<image_8>();
   im1->load("assets/test2.png");
   spr.set_image(im1);
   spr.set_num_cells(1, 1);
 
-  p_image im2 = std::make_shared<image>();
+  p_image im2 = std::make_shared<image_8>();
   im2->load("assets/font1.png");
   my_font.set_image(im2);
   my_font.set_num_cells(16, 4);

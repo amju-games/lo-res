@@ -5,25 +5,25 @@
 #include <cassert>
 #include <iostream>
 #include "lodepng.h"
-#include "image.h"
+#include "image_8.h"
 
-const COLOUR_INDEX image::TRANSPARENT = 0;
+const COLOUR_INDEX image_8::TRANSPARENT = 0;
 
-palette image::m_pal;
+palette image_8::m_pal;
 
-palette& image::get_palette()
+palette& image_8::get_palette()
 {
   return m_pal;
 }
 
-void image::set_size(int w, int h)
+void image_8::set_size(int w, int h)
 {
   m_width = w;
   m_height = h;
   m_data.resize(w * h); 
 }
 
-void image::clear(COLOUR_INDEX c)
+void image_8::clear(COLOUR_INDEX c)
 {
   for (COLOUR_INDEX& ch : m_data)
   {
@@ -31,12 +31,12 @@ void image::clear(COLOUR_INDEX c)
   }
 }
 
-void image::blit(image& dest, int dest_x, int dest_y) const
+void image_8::blit(ref_image dest, int dest_x, int dest_y) const
 {
   blit_region(dest, dest_x, dest_y, 0, 0, m_width, m_height);
 }
 
-void image::blit_region(image& dest, int dest_x, int dest_y, 
+void image_8::blit_region(ref_image dest, int dest_x, int dest_y, 
   int src_x, int src_y, int src_w, int src_h) const
 {
   // Blit this image onto dest.
@@ -57,11 +57,11 @@ void image::blit_region(image& dest, int dest_x, int dest_y,
   // {
   //   x_max = dest.m_width - dest_x;
   // }
-  int x_max = std::min(src_w, dest.m_width - dest_x);
+  int x_max = std::min(src_w, dest->get_width() - dest_x);
 
   // Same for top and bottom
   int y_min = std::max(0, -dest_y);
-  int y_max = std::min(src_h, dest.m_height - dest_y);
+  int y_max = std::min(src_h, dest->get_height() - dest_y);
 
   // Blit the region of this image which intersects the destination
   //  image.
@@ -73,13 +73,13 @@ void image::blit_region(image& dest, int dest_x, int dest_y,
       // Don't blit if the source colour is the transparent colour key.
       if (col != TRANSPARENT)
       {
-        dest.set_colour(x + dest_x, y + dest_y, col);
+        dest->set_colour(x + dest_x, y + dest_y, col);
       }
     }
   }
 }
 
-bool image::load(const std::string& png_file_name)
+bool image_8::load(const std::string& png_file_name)
 {
   std::vector<unsigned char> data;
   unsigned int w = 0;

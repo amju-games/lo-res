@@ -21,7 +21,7 @@ public:
   p_image get_image() { return m_image; }
   const p_image& get_image() const { return m_image; }
 
-  void draw_cell(image& dest, int cell, int dest_x, int dest_y) const;
+  void draw_cell(ref_image dest, int cell, int dest_x, int dest_y) const;
 
   void set_num_cells(int x, int y)
   {

@@ -7,7 +7,7 @@
 
 //#define SPRITE_DEBUG
 
-void sprite::draw(image& dest, int dest_x, int dest_y) const
+void sprite::draw(ref_image dest, int dest_x, int dest_y) const
 {
   draw_cell(dest, m_cell, dest_x, dest_y);
 }

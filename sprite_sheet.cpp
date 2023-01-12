@@ -77,10 +77,10 @@ std::cout << "Testing pixel pairs: "
   << "(" << px2 << ", " << py2 << ")\n";
 #endif
 
-      COLOUR_INDEX c1 = image1->get_colour(px1, py1);
-      COLOUR_INDEX c2 = image2->get_colour(px2, py2);
+      bool tr1 = image1->is_transparent(px1, py1);
+      bool tr2 = image2->is_transparent(px2, py2);
 
-      if (c1 != image::TRANSPARENT && c2 != image::TRANSPARENT)
+      if (!tr1 && !tr2)
       {
 #ifdef PIX_DEBUG
 std::cout << "Both non-transparent, HIT!\n";
@@ -95,7 +95,7 @@ std::cout << "No overlapping opaque pixels.\n";
   return pix_int_result::NO_AND_NOT_DISJOINT;
 }
 
-void sprite_sheet::draw_cell(image& dest, int cell, int dest_x, int dest_y) const
+void sprite_sheet::draw_cell(ref_image dest, int cell, int dest_x, int dest_y) const
 {
   // Draw cell at pos on screen
   // Calc cell x, y, w, h

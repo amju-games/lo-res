@@ -7,62 +7,67 @@
 #include <memory>
 #include <string>
 #include <vector>
-#include "colour_index.h"
+#include "image.h"
+#include "palette.h"
 
-// * image *
+// * image_8 *
+// Stores image as a rectangular array of 8-bit indices into a palette of
+//  colours. 
 
-class image;
 
-using p_image = std::shared_ptr<image>;
-
-// It's safe to pass p_images around but more efficient to use ref_image when we don't
-//  care about incrementing the ref count, and can be sure that the ref count won't hit
-//  zero while we're doing stuff. 
-using ref_image = p_image&;
-
-class image
+class image_8 : public image
 {
 public:
-  virtual ~image() = default;
+  // Pixels with this colour index are transparent, i.e. not copied in
+  //  blit operations.
+  static const COLOUR_INDEX TRANSPARENT; 
 
   // * set_size *
   // As an alternative to loading an image from a file, set the size
   //  and set pixel colours.
-  virtual void set_size(int w, int h) = 0;
+  void set_size(int w, int h) override;
 
   // * load *
   // Load an RGB 24-bit png image.
   // Adds the colours found in the image to the given palette.
   // Stores the image as indices into the palette.
-  virtual bool load(const std::string& png_file_name) = 0;
+  bool load(const std::string& png_file_name) override;
 
   // Set the colour (really a palette index) at the given position index.
-  virtual void set_colour(int x, int y, COLOUR_INDEX ch) = 0;
+  void set_colour(int x, int y, COLOUR_INDEX ch) override
+  {
+    m_data[index(x, y)] = ch;
+  }
 
-  virtual COLOUR_INDEX get_colour(int x, int y) const = 0;
+  COLOUR_INDEX get_colour(int x, int y) const override
+  {
+    return m_data[index(x, y)];
+  }
 
-  virtual bool is_transparent(int x, int y) const = 0;
+  virtual bool is_transparent(int x, int y) const override
+  {
+    return get_colour(x, y) == TRANSPARENT;
+  }
 
   // * clear *
   // Clear image to the given colour (palette index)
-  virtual void clear(COLOUR_INDEX c = 0) = 0;
+  void clear(COLOUR_INDEX c = 0) override;
 
   // * blit *
   // Blit this image to the given destination image, at the given (x, y)
   //  coord in the destination.
   // Pixels with colour index TRANSPARENT are not copied.
-  virtual void blit(ref_image dest, int dest_x, int dest_y) const = 0;
+  void blit(ref_image dest, int dest_x, int dest_y) const override;
 	
   // * blit_region *
   // Blit a rectangular region of this source image to the destination.
   // Pixels with colour index TRANSPARENT are not copied.
-  virtual void blit_region(ref_image dest, int dest_x, int dest_y, 
-    int src_x, int src_y, int src_w, int src_h) const = 0;
+  void blit_region(ref_image dest, int dest_x, int dest_y, 
+    int src_x, int src_y, int src_w, int src_h) const override;
 
-  int get_width() const { return m_width; }
-  int get_height() const { return m_height; }
+  static palette& get_palette();
 
-protected:
+private:
   // * index *
   // Convert (x, y) coord into index into data
   int index(int x, int y) const
@@ -75,7 +80,8 @@ protected:
   }
 
 protected:
-  int m_width = 0;
-  int m_height = 0;
+  std::vector<uint8_t> m_data;
+
+  static palette m_pal;
 };
 
