@@ -69,12 +69,11 @@ void image::blit_region(image& dest, int dest_x, int dest_y,
   {
     for (int y = y_min; y < y_max; y++)
     {
-      int dest_index = dest.index(x + dest_x, y + dest_y);
-      COLOUR_INDEX col = get_colour(index(x + src_x, y + src_y));
+      COLOUR_INDEX col = get_colour(x + src_x, y + src_y);
       // Don't blit if the source colour is the transparent colour key.
       if (col != TRANSPARENT)
       {
-        dest.set_colour(dest_index, col);
+        dest.set_colour(x + dest_x, y + dest_y, col);
       }
     }
   }

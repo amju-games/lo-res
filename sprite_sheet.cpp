@@ -77,8 +77,8 @@ std::cout << "Testing pixel pairs: "
   << "(" << px2 << ", " << py2 << ")\n";
 #endif
 
-      COLOUR_INDEX c1 = image1->get_colour(image1->index(px1, py1));
-      COLOUR_INDEX c2 = image2->get_colour(image2->index(px2, py2));
+      COLOUR_INDEX c1 = image1->get_colour(px1, py1);
+      COLOUR_INDEX c2 = image2->get_colour(px2, py2);
 
       if (c1 != image::TRANSPARENT && c2 != image::TRANSPARENT)
       {

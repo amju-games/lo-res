@@ -35,25 +35,14 @@ public:
   bool load(const std::string& png_file_name);
 
   // Set the colour (really a palette index) at the given position index.
-  void set_colour(int index, COLOUR_INDEX ch)
+  void set_colour(int x, int y, COLOUR_INDEX ch)
   {
-    m_data[index] = ch;
+    m_data[index(x, y)] = ch;
   }
 
-  COLOUR_INDEX get_colour(int index) const
+  COLOUR_INDEX get_colour(int x, int y) const
   {
-    return m_data[index];
-  }
-
-  // * index *
-  // Convert (x, y) coord into index into data
-  int index(int x, int y) const
-  {
-    assert(x >= 0); 
-    assert(y >= 0); 
-    assert(x < m_width); 
-    assert(y < m_height); 
-    return y * m_width + x;
+    return m_data[index(x, y)];
   }
 
   // * clear *
@@ -77,6 +66,18 @@ public:
 
   static palette& get_palette();
 
+private:
+  // * index *
+  // Convert (x, y) coord into index into data
+  int index(int x, int y) const
+  {
+    assert(x >= 0); 
+    assert(y >= 0); 
+    assert(x < m_width); 
+    assert(y < m_height); 
+    return y * m_width + x;
+  }
+
 protected:
   int m_width = 0;
   int m_height = 0;
@@ -87,4 +88,9 @@ protected:
 };
 
 using p_image = std::shared_ptr<image>;
+
+// It's safe to pass p_images around but more efficient to use ref_image when we don't
+//  care about incrementing the ref count, and can be sure that the ref count won't hit
+//  zero while we're doing stuff. 
+//using ref_image = p_image&;
 
