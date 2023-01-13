@@ -4,7 +4,7 @@ clean:
 	rm anim_tool *.o ../*.o 
 
 run:
-	./anim_tool -i ../example/assets/font1.png -cx 16 -cy 4 -t 0.5
+	./anim_tool -i walk-r-4.png -cx 4 -cy 1 -t 0.3
 
 
 CC=clang++
