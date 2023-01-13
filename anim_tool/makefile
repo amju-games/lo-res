@@ -1,10 +1,10 @@
 all:anim_tool_exe
 
 clean:
-	rm anim_tool *.o ../*.o 
+	rm animtool *.o ../*.o 
 
 run:
-	./anim_tool -i walk-r-4.png -cx 4 -cy 1 -t 0.3
+	./animtool -i walk-r-4.png -cx 4 -cy 1 -t 0.3
 
 
 CC=clang++
@@ -28,7 +28,7 @@ SOURCES=anim_tool.cpp \
 ../sprite_sheet.cpp
 
 OBJECTS=$(SOURCES:.cpp=.o)
-EXECUTABLE=anim_tool
+EXECUTABLE=animtool
 
 anim_tool_exe: $(SOURCES) $(EXECUTABLE)
 
