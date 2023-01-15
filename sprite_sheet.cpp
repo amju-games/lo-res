@@ -4,6 +4,7 @@
 #include <algorithm>
 #include <cassert>
 #include <iostream>
+#include "blit.h"
 #include "sprite_sheet.h"
 
 pix_int_result pixel_intersect(
@@ -105,7 +106,7 @@ void sprite_sheet::draw_cell(ref_image dest, int cell, int dest_x, int dest_y) c
   int cell_x = cell % m_cells_x * m_cell_w;
   int cell_y = cell / m_cells_x * m_cell_h;
 
-  m_image->blit_region(dest, dest_x, dest_y,
+  blit_region(std::const_pointer_cast<const image>(m_image), dest, dest_x, dest_y,
     cell_x, cell_y, m_cell_w, m_cell_h);
 }
 

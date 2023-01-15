@@ -22,10 +22,10 @@ SOURCES=blit_region_tests.cpp \
 blit_tests.cpp \
 catch_test_main.cpp \
 pixel_intersect_tests.cpp \
-../image.cpp \
+../blit.cpp \
+../image_8.cpp \
 ../lodepng.cpp \
 ../palette.cpp \
-../screen.cpp \
 ../sprite.cpp \
 ../sprite_sheet.cpp
 

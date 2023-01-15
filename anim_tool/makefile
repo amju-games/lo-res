@@ -19,6 +19,7 @@ CFLAGS=-c $(WARNINGS) $(INCLUDES) -std=c++2a -DMACOSX
 LDFLAGS=-framework OpenGL -framework GLUT
 
 SOURCES=anim_tool.cpp \
+../blit.cpp \
 ../font.cpp \
 ../image_8.cpp \
 ../lodepng.cpp \
