@@ -28,8 +28,6 @@ bool image_8::load(const std::string& png_file_name)
     return false;
   }
 
-  set_size(m_width, m_height);
-
   // Add each RGB colour to palette. Set palette index in data,
   //  not the actual colour.
   int rgb_size = w * h * 4;
