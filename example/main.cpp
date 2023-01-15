@@ -40,11 +40,11 @@ void draw()
 
   the_screen->clear(0); // black
   //im.blit(the_screen, 2, 60, 0);
-  spr.draw(the_screen, 2, 2);
+  spr.draw(the_screen, 20, 20);
   my_font.draw(the_screen, 5, 5, "HELLO\n1234567890!@^&*()_+-=<>,.?/\"':;");
 
   // Draw screen array to actual GL surface
-  render_image_opengl(the_screen);
+  render_image_8_opengl(the_screen);
 
   glutSwapBuffers();
   glutPostRedisplay();
@@ -71,12 +71,10 @@ int main(int argc, char** argv)
   glutCreateWindow("Hello");
   glutDisplayFunc(draw_and_update);
 
-  gluOrtho2D(0, VIRTUAL_W, 0, VIRTUAL_H);
-
   image_8::get_palette().add_colour(colour(0, 0, 0));
 
   p_image im1 = std::make_shared<image_8>();
-  im1->load("assets/test2.png");
+  im1->load("assets/arrow-in-box.png");
   spr.set_image(im1);
   spr.set_num_cells(1, 1);
 

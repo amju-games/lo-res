@@ -5,7 +5,8 @@
 
 #include "image.h"
 
-// Render ANY image type?
-void render_image_opengl(ref_image i);
+// TODO render any image type, if image exposes data.
+void render_image_8_opengl(ref_image i);
 
+void render_image_8_opengl_multiple_rects(ref_image i);
 

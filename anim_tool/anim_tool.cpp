@@ -19,8 +19,9 @@
 const int WINDOW_W = 800;
 const int WINDOW_H = 600;
 
-const int VIRTUAL_W = 80;
-const int VIRTUAL_H = 60;
+// TODO Currently need these to be powers of 2 for render function
+const int VIRTUAL_W = 64;
+const int VIRTUAL_H = 64;
 
 sprite spr;
 
@@ -39,7 +40,10 @@ void draw()
   spr.draw(the_screen, 2, 2);
 
   // Draw screen array to actual GL surface
-  render_image_opengl(the_screen);
+  render_image_8_opengl(the_screen);
+
+  // Requires: gluOrtho2D(0, VIRTUAL_W, 0, VIRTUAL_H);
+  //render_image_8_opengl_multiple_rects(the_screen);
 
   glutSwapBuffers();
   glutPostRedisplay();
@@ -105,8 +109,6 @@ int main(int argc, char** argv)
   glutInitWindowSize(WINDOW_W, WINDOW_H);
   glutCreateWindow("Hello");
   glutDisplayFunc(draw_and_update);
-
-  gluOrtho2D(0, VIRTUAL_W, 0, VIRTUAL_H);
 
   image_8::get_palette().add_colour(colour(0, 0, 0));
 
