@@ -47,6 +47,9 @@ public:
     std::fill(m_data.begin(), m_data.end(), c);
   }
 
+  int get_width() const override { return m_width; }
+  int get_height() const override { return m_height; }
+
 protected:
   // * index *
   // Convert (x, y) coord into index into data
@@ -59,6 +62,10 @@ protected:
     return N * (y * m_width + x);
   }
 
+protected:
   std::vector<uint8_t> m_data;
+
+  int m_width = 0;
+  int m_height = 0;
 };
 

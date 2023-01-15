@@ -32,9 +32,7 @@ public:
   virtual void set_size(int w, int h) = 0;
 
   // * load *
-  // Load an RGB 24-bit png image.
-  // Adds the colours found in the image to the given palette.
-  // Stores the image as indices into the palette.
+  // Load a png image.
   virtual bool load(const std::string& png_file_name) = 0;
 
   // Set the colour or palette index at the given position index.
@@ -48,11 +46,7 @@ public:
   // Clear image to the given colour (palette index)
   virtual void clear(COLOUR_INDEX c = 0) = 0;
 
-  int get_width() const { return m_width; }
-  int get_height() const { return m_height; }
-
-protected:
-  int m_width = 0;
-  int m_height = 0;
+  virtual int get_width() const = 0; 
+  virtual int get_height() const = 0;
 };
 
