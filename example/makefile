@@ -23,6 +23,7 @@ SOURCES=main.cpp \
 ../font.cpp \
 ../image_8.cpp \
 ../image_32.cpp \
+../image_scale.cpp \
 ../lodepng.cpp \
 ../palette.cpp \
 ../render_image_opengl.cpp \

@@ -11,6 +11,8 @@
 #include "colour.h"
 #include "font.h"
 #include "image_8.h"
+#include "image_32.h"
+#include "image_scale.h"
 #include "palette.h"
 #include "render_image_opengl.h"
 #include "sprite.h"
@@ -25,6 +27,8 @@ const int VIRTUAL_H = 128;
 
 const colour CLEAR_COLOUR = colour(0xff, 0xc0, 0);
 
+using IMAGE_T = image_32;
+
 //image im; // TEST
 sprite spr;
 font my_font;
@@ -36,13 +40,13 @@ void draw()
   static p_image the_screen;
   if (!the_screen)
   {
-    the_screen = std::make_shared<image_8>();
+    the_screen = std::make_shared<IMAGE_T>();
     the_screen->set_size(VIRTUAL_W, VIRTUAL_H);
   }
 
   the_screen->clear(CLEAR_COLOUR); 
   //im.blit(the_screen, 2, 60, 0);
-  spr.draw(the_screen, 20, 20);
+  spr.draw(the_screen, 64, 64);
   my_font.draw(the_screen, 5, 5, "HELLO\n1234567890!@^&*()_+-=<>,.?/\"':;");
 
   // Draw screen array to actual GL surface
@@ -76,14 +80,15 @@ int main(int argc, char** argv)
   image_8::get_palette().add_colour(colour(0, 0, 0));
   image_8::get_palette().add_colour(CLEAR_COLOUR);
 
-  p_image im1 = std::make_shared<image_8>();
+  p_image im1 = std::make_shared<IMAGE_T>();
   im1->load("assets/arrow-in-box.png");
-  spr.set_image(im1);
+  p_image scale_dec = std::make_shared<image_scale>(im1, 2.5f);
+  spr.set_image(scale_dec);
   spr.set_num_cells(1, 1);
 
-  p_image im2 = std::make_shared<image_8>();
+  p_image im2 = std::make_shared<IMAGE_T>();
   im2->load("assets/font1.png");
-  my_font.set_image(im2);
+  my_font.set_image(std::make_shared<image_scale>(im2, 2.f));
   my_font.set_num_cells(16, 4);
   glutMainLoop();
 }
