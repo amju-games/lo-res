@@ -3,7 +3,6 @@
 
 #pragma once
 
-#include <algorithm>
 #include <cassert>
 #include <memory>
 #include <string>
@@ -27,24 +26,6 @@ public:
     m_width = w;
     m_height = h;
     m_data.resize(w * h * N);
-  }
-
-  // Set the colour or palette index at the given position index.
-  void set_colour(int x, int y, COLOUR_INDEX ch) override
-  {
-    m_data[index(x, y)] = ch;
-  }
-
-  COLOUR_INDEX get_colour(int x, int y) const override
-  {
-    return m_data[index(x, y)];
-  }
-
-  // * clear *
-  // Clear image to the given value
-  void clear(COLOUR_INDEX c = 0) override
-  {
-    std::fill(m_data.begin(), m_data.end(), c);
   }
 
   int get_width() const override { return m_width; }

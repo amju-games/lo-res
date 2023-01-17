@@ -23,6 +23,8 @@ const int WINDOW_H = 500;
 const int VIRTUAL_W = 128;
 const int VIRTUAL_H = 128;
 
+const colour CLEAR_COLOUR = colour(0xff, 0xc0, 0);
+
 //image im; // TEST
 sprite spr;
 font my_font;
@@ -38,7 +40,7 @@ void draw()
     the_screen->set_size(VIRTUAL_W, VIRTUAL_H);
   }
 
-  the_screen->clear(0); // black
+  the_screen->clear(CLEAR_COLOUR); 
   //im.blit(the_screen, 2, 60, 0);
   spr.draw(the_screen, 20, 20);
   my_font.draw(the_screen, 5, 5, "HELLO\n1234567890!@^&*()_+-=<>,.?/\"':;");
@@ -72,6 +74,7 @@ int main(int argc, char** argv)
   glutDisplayFunc(draw_and_update);
 
   image_8::get_palette().add_colour(colour(0, 0, 0));
+  image_8::get_palette().add_colour(CLEAR_COLOUR);
 
   p_image im1 = std::make_shared<image_8>();
   im1->load("assets/arrow-in-box.png");

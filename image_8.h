@@ -19,15 +19,19 @@ public:
   static const COLOUR_INDEX TRANSPARENT; 
 
   // * load *
-  // Load an RGB 24-bit png image.
+  // Load a png image.
   // Adds the colours found in the image to the given palette.
   // Stores the image as indices into the palette.
   bool load(const std::string& png_file_name) override;
 
-  virtual bool is_transparent(int x, int y) const override
-  {
-    return get_colour(x, y) == TRANSPARENT;
-  }
+  // Set the colour or palette index at the given position index.
+  void set_colour(int x, int y, colour ch) override;
+
+  colour get_colour(int x, int y) const override;
+
+  void clear(colour c) override;
+
+  bool is_transparent(int x, int y) const override;
 
   static palette& get_palette();
 

@@ -14,7 +14,7 @@ WARNINGS=-Wall -Wno-deprecated-declarations
 INCLUDES=\
   -I..
 
-CFLAGS=-c $(WARNINGS) $(INCLUDES) -std=c++2a -DMACOSX
+CFLAGS=-c $(WARNINGS) $(INCLUDES) -std=c++2a -DMACOSX -O0 -g
 
 LDFLAGS=-framework OpenGL -framework GLUT
 
@@ -22,6 +22,7 @@ SOURCES=main.cpp \
 ../blit.cpp \
 ../font.cpp \
 ../image_8.cpp \
+../image_32.cpp \
 ../lodepng.cpp \
 ../palette.cpp \
 ../render_image_opengl.cpp \

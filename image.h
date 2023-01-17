@@ -5,8 +5,7 @@
 
 #include <memory>
 #include <string>
-#include "colour_index.h"
-#include "uv.h"
+#include "colour.h"
 
 // * image *
 
@@ -36,15 +35,15 @@ public:
   virtual bool load(const std::string& png_file_name) = 0;
 
   // Set the colour or palette index at the given position index.
-  virtual void set_colour(int x, int y, COLOUR_INDEX ch) = 0;
+  virtual void set_colour(int x, int y, colour ch) = 0;
 
-  virtual COLOUR_INDEX get_colour(int x, int y) const = 0;
+  virtual colour get_colour(int x, int y) const = 0;
 
   virtual bool is_transparent(int x, int y) const = 0;
 
   // * clear *
   // Clear image to the given colour (palette index)
-  virtual void clear(COLOUR_INDEX c = 0) = 0;
+  virtual void clear(colour c) = 0;
 
   virtual int get_width() const = 0; 
   virtual int get_height() const = 0;

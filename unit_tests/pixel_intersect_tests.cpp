@@ -30,11 +30,16 @@ protected:
 
   static constexpr int W = 4;
   static constexpr int H = 2;
-  static constexpr int OPAQUE = 1;
+  static colour OPAQUE;
+  static colour TRANSPARENT;
 
   sprite_sheet ss1, ss2;
   p_image image1, image2;
 };
+
+colour pixel_fixture::OPAQUE = colour(1, 1, 1);
+// Alpha zero so transparent
+colour pixel_fixture::TRANSPARENT = colour(0, 0, 0, 0);
 
 void pixel_fixture::set_all_cells_transparent()
 {
@@ -43,8 +48,8 @@ void pixel_fixture::set_all_cells_transparent()
   {
     for (int y = 0; y < H; y++)
     { 
-      ss1.get_image()->set_colour(x, y, image_8::TRANSPARENT);
-      ss2.get_image()->set_colour(x, y, image_8::TRANSPARENT);
+      ss1.get_image()->set_colour(x, y, TRANSPARENT);
+      ss2.get_image()->set_colour(x, y, TRANSPARENT);
     }
   }
   ss1.set_num_cells(2, 1);

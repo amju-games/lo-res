@@ -13,6 +13,7 @@ public:
   palette();
   int add_colour(const colour& col);
   const colour& get_colour(COLOUR_INDEX c) const;
+  COLOUR_INDEX get_index(const colour& col) const;
 
 private:
   std::vector<colour> m_colours;

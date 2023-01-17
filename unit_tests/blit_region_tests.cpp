@@ -7,10 +7,23 @@
 
 // Test blitting regions, especially clipping.
 
+namespace
+{
+colour make_colour(int i)
+{
+  return colour(i, i, i);
+}
+}
+
 static void setup(ref_image dest, ref_image src)
 {
+  for (int i = 0; i <= 16; i++)
+  {
+    image_8::get_palette().add_colour(make_colour(i));
+  }
+
   dest->set_size(4, 4);
-  dest->clear(0);
+  dest->clear(make_colour(0));
 
   src->set_size(4, 4);
 
@@ -19,7 +32,7 @@ static void setup(ref_image dest, ref_image src)
   {
     for (int j = 0; j < 4; j++)
     {
-      src->set_colour(j, i, c);
+      src->set_colour(j, i, make_colour(c));
       c++; 
     }
   }
@@ -30,9 +43,9 @@ static void setup(ref_image dest, ref_image src)
   // 9  10 11 12
   // 13 14 15 16
 
-  REQUIRE(src->get_colour(0, 0) == 1);
-  REQUIRE(src->get_colour(0, 1) == 5);
-  REQUIRE(src->get_colour(0, 2) == 9);
+  REQUIRE(src->get_colour(0, 0) == make_colour(1));
+  REQUIRE(src->get_colour(0, 1) == make_colour(5));
+  REQUIRE(src->get_colour(0, 2) == make_colour(9));
 }
 
 TEST_CASE("blit region test, no clip", "[image]")
@@ -53,16 +66,16 @@ TEST_CASE("blit region test, no clip", "[image]")
   // Outside edge should be zeroes
   for (int i = 0; i < 4; i++)
   {
-    REQUIRE(dest->get_colour(i, 0) == 0);
-    REQUIRE(dest->get_colour(i, 3) == 0);
-    REQUIRE(dest->get_colour(0, i) == 0);
-    REQUIRE(dest->get_colour(3, i) == 0);
+    REQUIRE(dest->get_colour(i, 0) == make_colour(0));
+    REQUIRE(dest->get_colour(i, 3) == make_colour(0));
+    REQUIRE(dest->get_colour(0, i) == make_colour(0));
+    REQUIRE(dest->get_colour(3, i) == make_colour(0));
   }
   // Centre of dest should have copy of src image
-  REQUIRE(dest->get_colour(1, 1) == 6);
-  REQUIRE(dest->get_colour(2, 1) == 7);
-  REQUIRE(dest->get_colour(1, 2) == 10);
-  REQUIRE(dest->get_colour(2, 2) == 11);
+  REQUIRE(dest->get_colour(1, 1) == make_colour(6));
+  REQUIRE(dest->get_colour(2, 1) == make_colour(7));
+  REQUIRE(dest->get_colour(1, 2) == make_colour(10));
+  REQUIRE(dest->get_colour(2, 2) == make_colour(11));
 }
 
 TEST_CASE("blit region test, clip left", "[image]")
@@ -83,16 +96,16 @@ TEST_CASE("blit region test, clip left", "[image]")
   // Rightmost 3 cols should be zeroes
   for (int i = 0; i < 4; i++)
   {
-    REQUIRE(dest->get_colour(1, i) == 0);
-    REQUIRE(dest->get_colour(2, i) == 0);
-    REQUIRE(dest->get_colour(3, i) == 0);
+    REQUIRE(dest->get_colour(1, i) == make_colour(0));
+    REQUIRE(dest->get_colour(2, i) == make_colour(0));
+    REQUIRE(dest->get_colour(3, i) == make_colour(0));
   }
 
   // Left edge
-  REQUIRE(dest->get_colour(0, 0) == 0);
-  REQUIRE(dest->get_colour(0, 1) == 7);
-  REQUIRE(dest->get_colour(0, 2) == 11);
-  REQUIRE(dest->get_colour(0, 3) == 0);
+  REQUIRE(dest->get_colour(0, 0) == make_colour(0));
+  REQUIRE(dest->get_colour(0, 1) == make_colour(7));
+  REQUIRE(dest->get_colour(0, 2) == make_colour(11));
+  REQUIRE(dest->get_colour(0, 3) == make_colour(0));
 }
 
 TEST_CASE("blit region test, clip top", "[image]")
@@ -113,16 +126,16 @@ TEST_CASE("blit region test, clip top", "[image]")
   // Bottom 3 rows should be zeroes
   for (int i = 0; i < 4; i++)
   {
-    REQUIRE(dest->get_colour(i, 1) == 0);
-    REQUIRE(dest->get_colour(i, 2) == 0);
-    REQUIRE(dest->get_colour(i, 3) == 0);
+    REQUIRE(dest->get_colour(i, 1) == make_colour(0));
+    REQUIRE(dest->get_colour(i, 2) == make_colour(0));
+    REQUIRE(dest->get_colour(i, 3) == make_colour(0));
   }
 
   // Top edge
-  REQUIRE(dest->get_colour(0, 0) == 0);
-  REQUIRE(dest->get_colour(1, 0) == 10);
-  REQUIRE(dest->get_colour(2, 0) == 11);
-  REQUIRE(dest->get_colour(3, 0) == 0);
+  REQUIRE(dest->get_colour(0, 0) == make_colour(0));
+  REQUIRE(dest->get_colour(1, 0) == make_colour(10));
+  REQUIRE(dest->get_colour(2, 0) == make_colour(11));
+  REQUIRE(dest->get_colour(3, 0) == make_colour(0));
 }
 
 TEST_CASE("blit region test, clip right", "[image]")
@@ -143,16 +156,16 @@ TEST_CASE("blit region test, clip right", "[image]")
   // Leftmost 3 cols should be zeroes
   for (int i = 0; i < 4; i++)
   {
-    REQUIRE(dest->get_colour(0, i) == 0);
-    REQUIRE(dest->get_colour(1, i) == 0);
-    REQUIRE(dest->get_colour(2, i) == 0);
+    REQUIRE(dest->get_colour(0, i) == make_colour(0));
+    REQUIRE(dest->get_colour(1, i) == make_colour(0));
+    REQUIRE(dest->get_colour(2, i) == make_colour(0));
   }
 
   // Right edge
-  REQUIRE(dest->get_colour(3, 0) == 0);
-  REQUIRE(dest->get_colour(3, 1) == 6);
-  REQUIRE(dest->get_colour(3, 2) == 10);
-  REQUIRE(dest->get_colour(3, 3) == 0);
+  REQUIRE(dest->get_colour(3, 0) == make_colour(0));
+  REQUIRE(dest->get_colour(3, 1) == make_colour(6));
+  REQUIRE(dest->get_colour(3, 2) == make_colour(10));
+  REQUIRE(dest->get_colour(3, 3) == make_colour(0));
 }
 
 TEST_CASE("blit region test, clip bottom", "[image]")
@@ -173,15 +186,15 @@ TEST_CASE("blit region test, clip bottom", "[image]")
   // Top 3 rows should be zeroes
   for (int i = 0; i < 4; i++)
   {
-    REQUIRE(dest->get_colour(i, 0) == 0);
-    REQUIRE(dest->get_colour(i, 1) == 0);
-    REQUIRE(dest->get_colour(i, 2) == 0);
+    REQUIRE(dest->get_colour(i, 0) == make_colour(0));
+    REQUIRE(dest->get_colour(i, 1) == make_colour(0));
+    REQUIRE(dest->get_colour(i, 2) == make_colour(0));
   }
 
   // Bottom edge
-  REQUIRE(dest->get_colour(0, 3) == 0);
-  REQUIRE(dest->get_colour(1, 3) == 6);
-  REQUIRE(dest->get_colour(2, 3) == 7);
-  REQUIRE(dest->get_colour(3, 3) == 0);
+  REQUIRE(dest->get_colour(0, 3) == make_colour(0));
+  REQUIRE(dest->get_colour(1, 3) == make_colour(6));
+  REQUIRE(dest->get_colour(2, 3) == make_colour(7));
+  REQUIRE(dest->get_colour(3, 3) == make_colour(0));
 }
 

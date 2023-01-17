@@ -58,5 +58,25 @@ bool image_8::load(const std::string& png_file_name)
   return true;
 }
 
+bool image_8::is_transparent(int x, int y) const 
+{
+  return m_data[index(x, y)] == TRANSPARENT;
+}
+
+void image_8::set_colour(int x, int y, colour col)
+{
+  m_data[index(x, y)] = m_pal.get_index(col);
+}
+  
+colour image_8::get_colour(int x, int y) const 
+{
+  return m_pal.get_colour(m_data[index(x, y)]);
+}
+
+void image_8::clear(colour col)
+{
+  COLOUR_INDEX ci = m_pal.get_index(col);
+  std::fill(m_data.begin(), m_data.end(), ci);
+}
 
 

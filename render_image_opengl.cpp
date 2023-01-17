@@ -8,7 +8,7 @@
 
 namespace
 {
-void copy_image_8_to_array(ref_image im, uint8_t* data)
+void copy_image_8_to_array(const_ref_image im, uint8_t* data)
 {
   uint8_t* d = data;
   int w = im->get_width();
@@ -17,8 +17,7 @@ void copy_image_8_to_array(ref_image im, uint8_t* data)
   {
     for (int y = 0; y < h; y++)
     {   
-      COLOUR_INDEX ch = im->get_colour(x, y);
-      colour col = image_8::get_palette().get_colour(ch);
+      colour col = im->get_colour(x, y);
       *d++ = col.r;
       *d++ = col.g;
       *d++ = col.b;
@@ -28,7 +27,7 @@ void copy_image_8_to_array(ref_image im, uint8_t* data)
 }
 } // namespace
 
-void render_image_8_opengl(ref_image im)
+void render_image_8_opengl(const_ref_image im)
 {
   int w = im->get_width();
   int h = im->get_height();
@@ -93,7 +92,7 @@ void render_image_8_opengl(ref_image im)
   glEnd();
 }
 
-void render_image_8_opengl_multiple_rects(ref_image im)
+void render_image_8_opengl_multiple_rects(const_ref_image im)
 {
   int w = im->get_width();
   int h = im->get_height();
@@ -103,8 +102,7 @@ void render_image_8_opengl_multiple_rects(ref_image im)
   {
     for (int y = 0; y < h; y++)
     {   
-      COLOUR_INDEX ch = im->get_colour(x, y);
-      colour col = image_8::get_palette().get_colour(ch);
+      colour col = im->get_colour(x, y);
       glColor3ub(col.r, col.g, col.b);
 
       // Flip y: we want y=0 at the top of the screen, not the bottom
