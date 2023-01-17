@@ -25,7 +25,7 @@ public:
 
   bool is_transparent(int x, int y) const override { return m_child->is_transparent(x, y); }
 
-  void clear(colour c = 0) override { m_child->clear(c); }
+  void clear(colour c) override { m_child->clear(c); }
 
   int get_width() const override { return m_child->get_width(); }
   int get_height() const override { return m_child->get_height(); }
