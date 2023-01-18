@@ -3,6 +3,7 @@
 
 #include <GLUT/GLUT.h> // Mac
 #include "image_8.h"
+#include "image_32.h"
 #include "palette.h"
 #include "render_image_opengl.h"
 
@@ -25,7 +26,90 @@ void copy_image_8_to_array(const_ref_image im, uint8_t* data)
     }   
   }
 }
+
+GLuint initialise_gl_texture(int w, int h, int format, uint8_t* data)
+{
+  GLuint tex_id;
+  glGenTextures(1, &tex_id);
+  glBindTexture(GL_TEXTURE_2D, tex_id);
+
+  glTexImage2D(GL_TEXTURE_2D,
+    0,
+    format,
+    w,
+    h,
+    0,
+    format,
+    GL_UNSIGNED_BYTE,
+    data);
+
+  glTexParameterf(
+    GL_TEXTURE_2D,
+    GL_TEXTURE_MAG_FILTER,
+    GL_NEAREST);
+
+  glTexParameterf(
+    GL_TEXTURE_2D,
+    GL_TEXTURE_MIN_FILTER,
+    GL_NEAREST);
+
+  return tex_id;
+}
+
+void update_gl_texture(GLuint tex_id, int w, int h, int format, uint8_t* data)
+{
+  glBindTexture(GL_TEXTURE_2D, tex_id);
+
+  glTexSubImage2D(
+    GL_TEXTURE_2D,
+    0,
+    0, 0,
+    w, h,
+    format,
+    GL_UNSIGNED_BYTE,
+    data);
+}
+
+void draw_gl_textured_quad()
+{
+  glBegin(GL_QUADS);
+    glTexCoord2f(1, 0);
+    glVertex3f(-1, -1, 0);
+    glTexCoord2f(0, 0);
+    glVertex3f(-1, 1, 0);
+    glTexCoord2f(0, 1);
+    glVertex3f(1, 1, 0);
+    glTexCoord2f(1, 1);
+    glVertex3f(1, -1, 0);
+  glEnd();
+}
+
+void render_gl_rgba_data(int w, int h, uint8_t* data)
+{
+  glEnable(GL_TEXTURE_2D);
+  static GLuint tex_id = -1; 
+  const int format = GL_RGBA;
+
+  [[maybe_unused]] static bool do_once = [&]()
+  {
+    tex_id = initialise_gl_texture(w, h, format, data);
+    return true;
+  }();
+
+  update_gl_texture(tex_id, w, h, format, data);
+
+  draw_gl_textured_quad();
+}
+
 } // namespace
+
+void render_image_32_opengl(const_ref_image im)
+{
+  int w = im->get_width();
+  int h = im->get_height();
+  uint8_t* data = const_cast<uint8_t*>(std::dynamic_pointer_cast<const image_32>(im)->get_data());
+  render_gl_rgba_data(w, h, data);
+}
 
 void render_image_8_opengl(const_ref_image im)
 {
@@ -38,58 +122,7 @@ void render_image_8_opengl(const_ref_image im)
   // For image_8, can we use colour index mode?
   copy_image_8_to_array(im, data);
 
-  glEnable(GL_TEXTURE_2D);
-  static GLuint texId = -1; 
-  const int format = GL_RGBA;
-
-  [[maybe_unused]] static bool do_once = [&]()
-  {
-    glGenTextures(1, &texId);
-    glBindTexture(GL_TEXTURE_2D, texId);
-
-    glTexImage2D(GL_TEXTURE_2D,
-      0,
-      format,
-      w,
-      h,
-      0,
-      format,
-      GL_UNSIGNED_BYTE,
-      data);
-
-    glTexParameterf(
-      GL_TEXTURE_2D,
-      GL_TEXTURE_MAG_FILTER,
-      GL_NEAREST);
-    glTexParameterf(
-      GL_TEXTURE_2D,
-      GL_TEXTURE_MIN_FILTER,
-      GL_NEAREST);
-
-    return true;
-  }();
-
-  glBindTexture(GL_TEXTURE_2D, texId);
-
-  glTexSubImage2D(
-    GL_TEXTURE_2D,
-    0,
-    0, 0,
-    w, h,
-    format,
-    GL_UNSIGNED_BYTE,
-    data);
-
-  glBegin(GL_QUADS);
-    glTexCoord2f(1, 0);
-    glVertex3f(-1, -1, 0);
-    glTexCoord2f(0, 0);
-    glVertex3f(-1, 1, 0);
-    glTexCoord2f(0, 1);
-    glVertex3f(1, 1, 0);
-    glTexCoord2f(1, 1);
-    glVertex3f(1, -1, 0);
-  glEnd();
+  render_gl_rgba_data(w, h, data);
 }
 
 void render_image_8_opengl_multiple_rects(const_ref_image im)

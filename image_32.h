@@ -22,5 +22,7 @@ public:
   void set_colour(int x, int y, colour ch) override;
 
   void clear(colour c) override;
+
+  const uint8_t* get_data() const { return m_data.data(); }
 };
 

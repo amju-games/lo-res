@@ -51,7 +51,7 @@ void draw()
   my_font.draw(the_screen, 5, 5, "HELLO\n1234567890!@^&*()_+-=<>,.?/\"':;");
 
   // Draw screen array to actual GL surface
-  render_image_8_opengl(the_screen);
+  render_image_32_opengl(the_screen);
 
   glutSwapBuffers();
   glutPostRedisplay();
