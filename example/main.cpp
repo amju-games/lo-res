@@ -12,6 +12,7 @@
 #include "font.h"
 #include "image_8.h"
 #include "image_32.h"
+#include "image_filter.h"
 #include "image_scale.h"
 #include "palette.h"
 #include "render_image_opengl.h"
@@ -82,8 +83,16 @@ int main(int argc, char** argv)
 
   p_image im1 = std::make_shared<IMAGE_T>();
   im1->load("assets/arrow-in-box.png");
-  p_image scale_dec = std::make_shared<image_scale>(im1, 2.5f);
-  spr.set_image(scale_dec);
+  p_image scale_dec = std::make_shared<image_scale>(im1, 4.f);
+  p_image f = std::make_shared<image_filter>(scale_dec, 
+    std::vector<std::pair<uv, float>>{
+      {{0, 0}, 1},
+      {{1, 0}, 1}, 
+      {{0, 1}, 1}, 
+      {{1, 1}, 1}
+    }
+  );
+  spr.set_image(f); //scale_dec);
   spr.set_num_cells(1, 1);
 
   p_image im2 = std::make_shared<IMAGE_T>();
