@@ -31,9 +31,9 @@ void blit_region(
   {
     for (int y = y_min; y < y_max; y++)
     {
-      if (!src->is_transparent(x + src_x, y + src_y))
+      auto src_col = src->get_colour(x + src_x, y + src_y);
+      if (!src_col.is_transparent())
       {
-        auto src_col = src->get_colour(x + src_x, y + src_y);
         //auto dest_col = get_colour(x + dest_x, y + dest_y);
 
         // TODO Blending here, like

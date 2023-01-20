@@ -31,8 +31,6 @@ public:
 
   void clear(colour c) override;
 
-  bool is_transparent(int x, int y) const override;
-
   static palette& get_palette();
 
 protected:

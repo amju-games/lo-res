@@ -23,8 +23,6 @@ public:
 
   colour get_colour(int x, int y) const override { return m_child->get_colour(x, y); }
 
-  bool is_transparent(int x, int y) const override { return m_child->is_transparent(x, y); }
-
   void clear(colour c) override { m_child->clear(c); }
 
   int get_width() const override { return m_child->get_width(); }

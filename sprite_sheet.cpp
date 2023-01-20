@@ -78,8 +78,8 @@ std::cout << "Testing pixel pairs: "
   << "(" << px2 << ", " << py2 << ")\n";
 #endif
 
-      bool tr1 = image1->is_transparent(px1, py1);
-      bool tr2 = image2->is_transparent(px2, py2);
+      bool tr1 = image1->get_colour(px1, py1).is_transparent();
+      bool tr2 = image2->get_colour(px2, py2).is_transparent();
 
       if (!tr1 && !tr2)
       {

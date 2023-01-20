@@ -30,7 +30,7 @@ palette::palette()
 {
   m_colours.reserve(256);
   // Colour zero is for TRANSPARENT index - using MAGENTA
-  m_colours.push_back(colour(255, 0, 255));
+  m_colours.push_back(colour(255, 0, 255, 0));
 }
 
 COLOUR_INDEX palette::get_index(const colour& col) const

@@ -15,8 +15,6 @@ public:
   // Load a png image.
   bool load(const std::string& png_file_name) override;
 
-  bool is_transparent(int x, int y) const override;
-
   colour get_colour(int x, int y) const override;
 
   void set_colour(int x, int y, colour ch) override;

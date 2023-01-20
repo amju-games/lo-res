@@ -27,11 +27,6 @@ bool image_32::load(const std::string& png_file_name)
   return true;
 }
 
-bool image_32::is_transparent(int x, int y) const
-{
-  return get_colour(x, y).a < 128; // actually we just need index(x, y) + 3
-}
-
 colour image_32::get_colour(int x, int y) const 
 {
   int i = index(x, y);

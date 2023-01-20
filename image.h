@@ -39,8 +39,6 @@ public:
 
   virtual colour get_colour(int x, int y) const = 0;
 
-  virtual bool is_transparent(int x, int y) const = 0;
-
   // * clear *
   // Clear image to the given colour (palette index)
   virtual void clear(colour c) = 0;
