@@ -12,7 +12,8 @@ CC=clang++
 WARNINGS=-Wall -Wno-deprecated-declarations
 
 INCLUDES=\
-  -I..
+  -I..\
+  -I../third_party
 
 CFLAGS=-c $(WARNINGS) $(INCLUDES) -std=c++2a -DMACOSX -O0 -g
 
@@ -24,8 +25,8 @@ SOURCES=main.cpp \
 ../image_8.cpp \
 ../image_32.cpp \
 ../image_filter.cpp \
-../image_scale.cpp \
-../lodepng.cpp \
+../image_uv_xform.cpp \
+../third_party/lodepng.cpp \
 ../palette.cpp \
 ../render_image_opengl.cpp \
 ../sprite.cpp \

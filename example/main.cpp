@@ -8,12 +8,14 @@
 #include <cassert>
 #include <iostream>
 #include <GLUT/glut.h>
+#include "blit.h"
 #include "colour.h"
 #include "font.h"
 #include "image_8.h"
 #include "image_32.h"
 #include "image_filter.h"
 #include "image_scale.h"
+#include "image_uv_xform.h"
 #include "palette.h"
 #include "render_image_opengl.h"
 #include "sprite.h"
@@ -23,14 +25,15 @@ const int WINDOW_W = 500;
 const int WINDOW_H = 500;
 
 // Size in virtual pixels of pretent lo-res screen
-const int VIRTUAL_W = 128;
-const int VIRTUAL_H = 128;
+const int VIRTUAL_W = 256;
+const int VIRTUAL_H = 256;
 
 const colour CLEAR_COLOUR = colour(0xff, 0xc0, 0);
 
 using IMAGE_T = image_32;
 
-//image im; // TEST
+p_image arrow1;
+p_image arrow2;
 sprite spr;
 font my_font;
 
@@ -46,8 +49,14 @@ void draw()
   }
 
   the_screen->clear(CLEAR_COLOUR); 
-  //im.blit(the_screen, 2, 60, 0);
-  spr.draw(the_screen, 64, 64);
+
+  blit(arrow2, the_screen, 1, 64);
+  my_font.draw(the_screen, 1, 130, "BLUR THEN SCALE");
+
+  spr.draw(the_screen, 80, 64);
+  my_font.draw(the_screen, 80, 130, "SCALE THEN BLUR");
+
+
   my_font.draw(the_screen, 5, 5, "HELLO\n1234567890!@^&*()_+-=<>,.?/\"':;");
 
   // Draw screen array to actual GL surface
@@ -81,23 +90,34 @@ int main(int argc, char** argv)
   image_8::get_palette().add_colour(colour(0, 0, 0));
   image_8::get_palette().add_colour(CLEAR_COLOUR);
 
-  p_image im1 = std::make_shared<IMAGE_T>();
-  im1->load("assets/arrow-in-box.png");
-  p_image scale_dec = std::make_shared<image_scale>(im1, 4.f);
-  p_image f = std::make_shared<image_filter>(scale_dec, 
-    std::vector<std::pair<uv, float>>{
+  auto blur_filter = std::vector<std::pair<uv, float>>{
       {{0, 0}, 1},
       {{1, 0}, 1}, 
       {{0, 1}, 1}, 
       {{1, 1}, 1}
-    }
-  );
-  spr.set_image(f); //scale_dec);
+    };
+
+  arrow1 = std::make_shared<IMAGE_T>();
+  arrow1->load("assets/fruit_salad_32.png"); //arrow-in-box.png");
+
+  // Make a sprite, apply scale then blur
+  const float SCALE = 2.f;
+  auto scale_dec = make_scale_xform(SCALE);
+  scale_dec->set_child(arrow1);
+  p_image blur_dec = std::make_shared<image_filter>(scale_dec, blur_filter);
+  spr.set_image(blur_dec);
   spr.set_num_cells(1, 1);
 
+  // Make another image, this time blur then scale
+  auto scale_dec_2 = make_scale_xform(SCALE);
+  p_image blur_dec_2 = std::make_shared<image_filter>(arrow1, blur_filter);
+  scale_dec_2->set_child(blur_dec_2);
+  arrow2 = scale_dec_2;
+
+  // Load a font
   p_image im2 = std::make_shared<IMAGE_T>();
-  im2->load("assets/font1.png");
-  my_font.set_image(std::make_shared<image_scale>(im2, 2.f));
+  im2->load("assets/font_4x4.png");
+  my_font.set_image(im2); //std::make_shared<image_scale>(im2, 2.f));
   my_font.set_num_cells(16, 4);
   glutMainLoop();
 }
