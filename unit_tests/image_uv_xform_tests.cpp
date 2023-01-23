@@ -9,7 +9,7 @@ colour make_colour(int i)
   return colour(i, i, i);
 }
 
-p_image make_image()
+p_image make_sq_image()
 {
   p_image im = std::make_shared<image_8>();
 
@@ -23,9 +23,9 @@ p_image make_image()
 }
 }
 
-TEST_CASE("transform by identity", "[.]")  //image_uv_xform]")
+TEST_CASE("transform by identity", "[image_uv_xform]")
 {
-  p_image im = make_image();
+  p_image im = make_sq_image();
   p_image xf = std::make_shared<image_uv_xform>(im, identity2D());
 
   REQUIRE(xf->get_width() == im->get_width());
@@ -36,13 +36,13 @@ TEST_CASE("transform by identity", "[.]")  //image_uv_xform]")
   REQUIRE(xf->get_colour(1, 1) == make_colour(4));
 }
 
-TEST_CASE("transform by rotation", "[image_uv_xform]")
+TEST_CASE("transform square image by rotation 90 degs", "[image_uv_xform]")
 {
   vec2 centre_of_rot(.5f, .5f); // needs to be (w-1)/2, (h-1)/2?
   float angle_degs = 90.f;
   mat3 m = rotation2D(centre_of_rot, angle_degs);
 
-  p_image im = make_image();
+  p_image im = make_sq_image();
   p_image xf = std::make_shared<image_uv_xform>(im, m);
 
   REQUIRE(im->get_width() == 2);

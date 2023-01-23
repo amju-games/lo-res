@@ -12,19 +12,23 @@ CC=clang++
 WARNINGS=-Wall -Wno-deprecated-declarations
 
 INCLUDES=\
-  -I..
+  -I..\
+  -I../third_party
 
 CFLAGS=-c $(WARNINGS) $(INCLUDES) -std=c++2a -DMACOSX -O0 -g
 
 LDFLAGS=-framework OpenGL -framework GLUT
 
-SOURCES=blit_region_tests.cpp \
+SOURCES=\
+blit_region_tests.cpp \
 blit_tests.cpp \
 catch_test_main.cpp \
+image_uv_xform_tests.cpp \
 pixel_intersect_tests.cpp \
 ../blit.cpp \
 ../image_8.cpp \
-../lodepng.cpp \
+../image_uv_xform.cpp \
+../third_party/lodepng.cpp \
 ../palette.cpp \
 ../sprite.cpp \
 ../sprite_sheet.cpp
