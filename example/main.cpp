@@ -14,7 +14,6 @@
 #include "image_8.h"
 #include "image_32.h"
 #include "image_filter.h"
-#include "image_scale.h"
 #include "image_uv_xform.h"
 #include "palette.h"
 #include "render_image_opengl.h"
@@ -32,8 +31,11 @@ const colour CLEAR_COLOUR = colour(0xff, 0xc0, 0);
 
 using IMAGE_T = image_32;
 
+p_image fruit;
 p_image arrow1;
 p_image arrow2;
+std::shared_ptr<image_uv_xform> rotated_arrow;
+p_image blur_dec;
 sprite spr;
 font my_font;
 
@@ -49,12 +51,22 @@ void draw()
   }
 
   the_screen->clear(CLEAR_COLOUR); 
-
+/*
   blit(arrow2, the_screen, 1, 64);
   my_font.draw(the_screen, 1, 130, "BLUR THEN SCALE");
 
   spr.draw(the_screen, 80, 64);
   my_font.draw(the_screen, 80, 130, "SCALE THEN BLUR");
+*/
+
+  static float angle = 0.f;
+  vec2 centre_of_rot((fruit->get_width() - 1) / 2.f, (fruit->get_height() - 1) / 2.f); 
+  mat3 m = rotation2D(centre_of_rot, angle);
+  angle += 1.0f;
+  rotated_arrow->set_xform(m);
+
+  blit(rotated_arrow, the_screen, 1, 150);
+  my_font.draw(the_screen, 1, 170, "ROTATED");
 
 
   my_font.draw(the_screen, 5, 5, "HELLO\n1234567890!@^&*()_+-=<>,.?/\"':;");
@@ -97,19 +109,31 @@ int main(int argc, char** argv)
       {{1, 1}, 1}
     };
 
+  fruit = std::make_shared<IMAGE_T>();
+  fruit->load("assets/fruit_salad_64.png");
+
   arrow1 = std::make_shared<IMAGE_T>();
-  arrow1->load("assets/fruit_salad_32.png"); //arrow-in-box.png");
+  arrow1->load("assets/arrow-in-box.png");
+//  arrow1->load("assets/fruit_salad_32.png");
+
 
   // Make a sprite, apply scale then blur
-  const float SCALE = 2.f;
-  auto scale_dec = make_scale_xform(SCALE);
+  const float SCALEX = 2.f;
+  const float SCALEY = 4.f;
+  auto scale_dec = make_scale_xform(SCALEX, SCALEY);
   scale_dec->set_child(arrow1);
-  p_image blur_dec = std::make_shared<image_filter>(scale_dec, blur_filter);
+  blur_dec = std::make_shared<image_filter>(scale_dec, blur_filter);
   spr.set_image(blur_dec);
   spr.set_num_cells(1, 1);
 
+
+  // Rotated image
+  rotated_arrow = std::make_shared<image_uv_xform>(); 
+  rotated_arrow->set_child(fruit);
+
+
   // Make another image, this time blur then scale
-  auto scale_dec_2 = make_scale_xform(SCALE);
+  auto scale_dec_2 = make_scale_xform(SCALEX, SCALEY);
   p_image blur_dec_2 = std::make_shared<image_filter>(arrow1, blur_filter);
   scale_dec_2->set_child(blur_dec_2);
   arrow2 = scale_dec_2;
