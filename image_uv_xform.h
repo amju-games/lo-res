@@ -1,3 +1,6 @@
+// "LO RES" Game Prototype
+// (c) Juliet Colman 2017-2022
+
 #pragma once
 
 #include "algebra3.h"

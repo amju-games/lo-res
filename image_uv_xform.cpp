@@ -1,3 +1,8 @@
+// "LO RES" Game Prototype
+// (c) Juliet Colman 2017-2022
+
+//#define XF_DEBUG
+
 #ifdef XF_DEBUG
 #include <iostream>
 #endif
@@ -47,10 +52,12 @@ std::cout << "output uv: " << vec ;
 
   if (u1 < 0 || v1 < 0 || u1 >= w || v1 >= h)
   {
+#ifdef XF_DEBUG
 std::cout << "get_colour: input uv: " << vec3(u, v, Z) << " -> ";
 std::cout << "output uv: " << vec ;
 std::cout << ": get_colour() uv is out of range (" << w << ", " << h << ").\n";
-    return colour(0, 0, 0, 0);
+#endif
+    return colour(1, 1, 1, 1);
   } 
 
   colour c =  m_child->get_colour(u1, v1);
@@ -64,23 +71,28 @@ std::cout << "  colour: " << (int)c.r << "\n";
 
 int image_uv_xform::get_width() const 
 {
-  auto ZERO_TRANSLATION = 0;
-  vec3 v = m_matrix * vec3(m_child->get_width(), m_child->get_height(), ZERO_TRANSLATION);
+  float w = m_child->get_width();
+  float h = m_child->get_height();
+  float w1 = m_matrix[0][0] * w;
+  float w2 = m_matrix[0][1] * h;
+  float ret = fabs(w1) + fabs(w2);
 #ifdef XF_DEBUG
-std::cout << "xformed size: " << v << "\n";
+std::cout << "w: " << w << " h: " << h << " w1: " << w1 << " w2: " << w2 << " ret: " << ret << "\n";
 #endif
-  double d = fabs(round(v[0]));
-  return d;
+
+  return ret;
 }
 
 int image_uv_xform::get_height() const 
 {
-  auto ZERO_TRANSLATION = 0;
-  vec3 v = m_matrix * vec3(m_child->get_width(), m_child->get_height(), ZERO_TRANSLATION);
+  float w = m_child->get_width();
+  float h = m_child->get_height();
+  float h1 = m_matrix[1][0] * w;
+  float h2 = m_matrix[1][1] * h;
+  float ret = fabs(h1) + fabs(h2);
 #ifdef XF_DEBUG
-std::cout << "xformed size: " << v << "\n";
+std::cout << "w: " << w << " h: " << h << " h1: " << h1 << " h2: " << h2 << " ret: " << ret << "\n";
 #endif
-  double d = fabs(round(v[1]));
-  return d;
+  return ret;
 }
 
