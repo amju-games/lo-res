@@ -4,7 +4,7 @@ clean:
 	rm animtool *.o ../*.o 
 
 run:
-	./animtool -i walk-r-4.png -cx 4 -cy 1 -t 0.3
+	./animtool -i walk-2.png -cx 8 -cy 1 -t 0.4
 
 
 CC=clang++
