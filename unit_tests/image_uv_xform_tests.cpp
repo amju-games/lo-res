@@ -26,7 +26,7 @@ p_image make_sq_image()
 TEST_CASE("transform by identity", "[image_uv_xform]")
 {
   p_image im = make_sq_image();
-  p_image xf = std::make_shared<image_uv_xform>(im, identity2D());
+  p_image xf = std::make_shared<image_uv_xform>(im, alg3::identity2D());
 
   REQUIRE(xf->get_width() == im->get_width());
   REQUIRE(xf->get_height() == im->get_height());
@@ -38,9 +38,9 @@ TEST_CASE("transform by identity", "[image_uv_xform]")
 
 TEST_CASE("transform square image by rotation 90 degs", "[image_uv_xform]")
 {
-  vec2 centre_of_rot(.5f, .5f); // needs to be (w-1)/2, (h-1)/2?
+  alg3::vec2 centre_of_rot(.5f, .5f); // needs to be (w-1)/2, (h-1)/2?
   float angle_degs = 90.f;
-  mat3 m = rotation2D(centre_of_rot, angle_degs);
+  alg3::mat3 m = rotation2D(centre_of_rot, angle_degs);
 
   p_image im = make_sq_image();
   p_image xf = std::make_shared<image_uv_xform>(im, m);

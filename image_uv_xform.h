@@ -11,13 +11,13 @@ class image_uv_xform : public image_decorator
 {
 public:
   image_uv_xform() = default;
-  image_uv_xform(p_image child, const mat3& matrix_)
+  image_uv_xform(p_image child, const alg3::mat3& matrix_)
   {
     m_child = child;
     set_xform(matrix_);
   }
 
-  void set_xform(const mat3& matrix_) 
+  void set_xform(const alg3::mat3& matrix_) 
   { 
     m_matrix = matrix_; 
     m_inverse = m_matrix.inverse();
@@ -31,8 +31,8 @@ public:
   int get_height() const override;
 
 protected:
-  mat3 m_matrix;
-  mat3 m_inverse;
+  alg3::mat3 m_matrix;
+  alg3::mat3 m_inverse;
 };
 
 

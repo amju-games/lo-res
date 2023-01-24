@@ -16,7 +16,7 @@ class image_colour_xform : public image_decorator
 {
 public:
   image_colour_xform() = default;
-  image_colour_xform(p_image child, const colour& add, const vec4& mult)
+  image_colour_xform(p_image child, const colour& add, const alg3::vec4& mult)
   {
     m_child = child;
     m_add = add;
@@ -27,6 +27,6 @@ public:
 
 protected:
   colour m_add = { 0, 0, 0, 0 };
-  vec4 m_mult = { 1.f, 1.f, 1.f, 1.f };
+  alg3::vec4 m_mult = { 1.f, 1.f, 1.f, 1.f };
 };
 

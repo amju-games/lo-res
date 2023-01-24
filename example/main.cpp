@@ -51,17 +51,17 @@ void draw()
   }
 
   the_screen->clear(CLEAR_COLOUR); 
-/*
+
   blit(arrow2, the_screen, 1, 64);
   my_font.draw(the_screen, 1, 130, "BLUR THEN SCALE");
 
   spr.draw(the_screen, 80, 64);
   my_font.draw(the_screen, 80, 130, "SCALE THEN BLUR");
-*/
+
 
   static float angle = 0.f;
-  vec2 centre_of_rot((fruit->get_width() - 1) / 2.f, (fruit->get_height() - 1) / 2.f); 
-  mat3 m = rotation2D(centre_of_rot, angle);
+  alg3::vec2 centre_of_rot((fruit->get_width() - 1) / 2.f, (fruit->get_height() - 1) / 2.f); 
+  alg3::mat3 m = rotation2D(centre_of_rot, angle);
   angle += 1.0f;
   rotated_arrow->set_xform(m);
 
@@ -117,11 +117,14 @@ int main(int argc, char** argv)
 //  arrow1->load("assets/fruit_salad_32.png");
 
 
+  // Colour xform
+
+
   // Make a sprite, apply scale then blur
   const float SCALEX = 2.f;
   const float SCALEY = 4.f;
   auto scale_dec = make_scale_xform(SCALEX, SCALEY);
-  scale_dec->set_child(arrow1);
+  scale_dec->set_child(fruit); //arrow1);
   blur_dec = std::make_shared<image_filter>(scale_dec, blur_filter);
   spr.set_image(blur_dec);
   spr.set_num_cells(1, 1);
@@ -134,7 +137,7 @@ int main(int argc, char** argv)
 
   // Make another image, this time blur then scale
   auto scale_dec_2 = make_scale_xform(SCALEX, SCALEY);
-  p_image blur_dec_2 = std::make_shared<image_filter>(arrow1, blur_filter);
+  p_image blur_dec_2 = std::make_shared<image_filter>(fruit, blur_filter);
   scale_dec_2->set_child(blur_dec_2);
   arrow2 = scale_dec_2;
 
