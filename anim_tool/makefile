@@ -12,7 +12,8 @@ CC=clang++
 WARNINGS=-Wall -Wno-deprecated-declarations
 
 INCLUDES=\
-  -I..
+  -I..\
+  -I../third_party
 
 CFLAGS=-c $(WARNINGS) $(INCLUDES) -std=c++2a -DMACOSX
 
@@ -22,11 +23,12 @@ SOURCES=anim_tool.cpp \
 ../blit.cpp \
 ../font.cpp \
 ../image_8.cpp \
-../lodepng.cpp \
+../image_32.cpp \
 ../palette.cpp \
 ../render_image_opengl.cpp \
 ../sprite.cpp \
-../sprite_sheet.cpp
+../sprite_sheet.cpp \
+../third_party/lodepng.cpp
 
 OBJECTS=$(SOURCES:.cpp=.o)
 EXECUTABLE=animtool

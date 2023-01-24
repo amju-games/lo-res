@@ -11,6 +11,7 @@
 #include "colour.h"
 #include "font.h"
 #include "image_8.h"
+#include "image_32.h"
 #include "palette.h"
 #include "render_image_opengl.h"
 #include "sprite.h"
@@ -20,8 +21,8 @@ const int WINDOW_W = 800;
 const int WINDOW_H = 600;
 
 // TODO Currently need these to be powers of 2 for render function
-const int VIRTUAL_W = 64;
-const int VIRTUAL_H = 64;
+const int VIRTUAL_W = 128;
+const int VIRTUAL_H = 96;
 
 sprite spr;
 
@@ -32,15 +33,15 @@ void draw()
   static p_image the_screen;
   if (!the_screen)
   {
-    the_screen = std::make_shared<image_8>();
+    the_screen = std::make_shared<image_32>();
     the_screen->set_size(VIRTUAL_W, VIRTUAL_H);
   }
 
-  the_screen->clear(0); // black
+  the_screen->clear(colour(0, 0, 0x80, 0xff));
   spr.draw(the_screen, 2, 2);
 
   // Draw screen array to actual GL surface
-  render_image_8_opengl(the_screen);
+  render_image_32_opengl(the_screen);
 
   // Requires: gluOrtho2D(0, VIRTUAL_W, 0, VIRTUAL_H);
   //render_image_8_opengl_multiple_rects(the_screen);
