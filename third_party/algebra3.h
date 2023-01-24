@@ -25,9 +25,19 @@
 #include <assert.h>
 #include <math.h>
 
+#define ALGEBRA3IOSTREAMS
+
+#ifdef ALGEBRA3IOSTREAMS
+#include <iostream>
+#endif
+
+namespace alg3 // j.c.
+{
+using REAL = float; // j.c.
+
 // this line defines a new type: pointer to a function which returns a
-// double and takes as argument a double
-typedef double (*V_FCT_PTR)(double);
+// REAL and takes as argument a REAL
+typedef REAL (*V_FCT_PTR)(REAL);
 
 // min-max macros
 #define MIN(A,B) ((A) < (B) ? (A) : (B))
@@ -36,9 +46,6 @@ typedef double (*V_FCT_PTR)(double);
 #undef min					// allow as function names
 #undef max
 
-#define ALGEBRA3IOSTREAMS
-#include <iostream>
-using namespace std;
 
 // error handling macro
 #define ALGEBRA_ERROR(E) { assert(false); }
@@ -57,15 +64,15 @@ enum {KA, KD, KS, ES};		    // phong coefficients
 //	PI
 //
 #ifndef M_PI
-const double M_PI = (double) 3.14159265358979323846;		// per CRC handbook, 14th. ed.
+const REAL M_PI = (REAL) 3.14159265358979323846;		// per CRC handbook, 14th. ed.
 #endif
 
 #ifndef M_PI_2
-const double M_PI_2 = (M_PI/2.0);				// PI/2
+const REAL M_PI_2 = (M_PI/2.0);				// PI/2
 #endif
 
 #ifndef M2_PI
-const double M2_PI = (M_PI*2.0);				// PI*2
+const REAL M2_PI = (M_PI*2.0);				// PI*2
 #endif
 
 /****************************************************************
@@ -78,33 +85,33 @@ class vec2
 {
 protected:
 
- double n[2];
+ REAL n[2];
 
 public:
 
 // Constructors
 
 vec2();
-vec2(const double x, const double y);
-vec2(const double d);
+vec2(const REAL x, const REAL y);
+//j.c.//vec2(const REAL d);
 vec2(const vec2& v);				// copy constructor
 vec2(const vec3& v);				// cast v3 to v2
-vec2(const vec3& v, int dropAxis);	// cast v3 to v2
+//j.c.//vec2(const vec3& v, int dropAxis);	// cast v3 to v2
 
 // Assignment operators
 
 vec2& operator	= ( const vec2& v );	// assignment of a vec2
 vec2& operator += ( const vec2& v );	// incrementation by a vec2
 vec2& operator -= ( const vec2& v );	// decrementation by a vec2
-vec2& operator *= ( const double d );	// multiplication by a constant
-vec2& operator /= ( const double d );	// division by a constant
-double& operator [] ( int i);			// indexing
-double operator [] ( int i) const;// read-only indexing
+vec2& operator *= ( const REAL d );	// multiplication by a constant
+vec2& operator /= ( const REAL d );	// division by a constant
+REAL& operator [] ( int i);			// indexing
+REAL operator [] ( int i) const;// read-only indexing
 
 // special functions
 
-double length() const;			// length of a vec2
-double length2() const;			// squared length of a vec2
+REAL length() const;			// length of a vec2
+REAL length2() const;			// squared length of a vec2
 vec2& normalize() ;				// normalize a vec2 in place
 vec2& apply(V_FCT_PTR fct);		// apply a func. to each component
 
@@ -113,19 +120,19 @@ vec2& apply(V_FCT_PTR fct);		// apply a func. to each component
 friend vec2 operator - (const vec2& v);						// -v1
 friend vec2 operator + (const vec2& a, const vec2& b);	    // v1 + v2
 friend vec2 operator - (const vec2& a, const vec2& b);	    // v1 - v2
-friend vec2 operator * (const vec2& a, const double d);	    // v1 * 3.0
-friend vec2 operator * (const double d, const vec2& a);	    // 3.0 * v1
+friend vec2 operator * (const vec2& a, const REAL d);	    // v1 * 3.0
+friend vec2 operator * (const REAL d, const vec2& a);	    // 3.0 * v1
 friend vec2 operator * (const mat3& a, const vec2& v);	    // M . v
 friend vec2 operator * (const vec2& v, const mat3& a);		// v . M
-friend double operator * (const vec2& a, const vec2& b);    // dot product
-friend vec2 operator / (const vec2& a, const double d);	    // v1 / 3.0
+friend REAL operator * (const vec2& a, const vec2& b);    // dot product
+friend vec2 operator / (const vec2& a, const REAL d);	    // v1 / 3.0
 friend vec3 operator ^ (const vec2& a, const vec2& b);	    // cross product
 friend int operator == (const vec2& a, const vec2& b);	    // v1 == v2 ?
 friend int operator != (const vec2& a, const vec2& b);	    // v1 != v2 ?
 
 #ifdef ALGEBRA3IOSTREAMS
-friend ostream& operator << (ostream& s, const vec2& v);	// output to stream
-friend istream& operator >> (istream& s, vec2& v);	    // input from strm.
+friend std::ostream& operator << (std::ostream& s, const vec2& v);	// output to stream
+friend std::istream& operator >> (std::istream& s, vec2& v);	    // input from strm.
 #endif // ALGEBRA3IOSTREAMS
 
 friend void swap(vec2& a, vec2& b);						// swap v1 & v2
@@ -148,18 +155,18 @@ class vec3
 {
 protected:
 
- double n[3];
+ REAL n[3];
 
 public:
 
 // Constructors
 
 vec3();
-vec3(const double x, const double y, const double z);
-vec3(const double d);
+vec3(const REAL x, const REAL y, const REAL z);
+vec3(const REAL d);
 vec3(const vec3& v);					// copy constructor
 vec3(const vec2& v);					// cast v2 to v3
-vec3(const vec2& v, double d);		    // cast v2 to v3
+vec3(const vec2& v, REAL d);		    // cast v2 to v3
 vec3(const vec4& v);					// cast v4 to v3
 vec3(const vec4& v, int dropAxis);	    // cast v4 to v3
 
@@ -168,15 +175,15 @@ vec3(const vec4& v, int dropAxis);	    // cast v4 to v3
 vec3& operator	= ( const vec3& v );	    // assignment of a vec3
 vec3& operator += ( const vec3& v );	    // incrementation by a vec3
 vec3& operator -= ( const vec3& v );	    // decrementation by a vec3
-vec3& operator *= ( const double d );	    // multiplication by a constant
-vec3& operator /= ( const double d );	    // division by a constant
-double& operator [] ( int i);				// indexing
-double operator[] (int i) const;			// read-only indexing
+vec3& operator *= ( const REAL d );	    // multiplication by a constant
+vec3& operator /= ( const REAL d );	    // division by a constant
+REAL& operator [] ( int i);				// indexing
+REAL operator[] (int i) const;			// read-only indexing
 
 // special functions
 
-double length() const;				// length of a vec3
-double length2() const;				// squared length of a vec3
+REAL length() const;				// length of a vec3
+REAL length2() const;				// squared length of a vec3
 vec3& normalize();					// normalize a vec3 in place
 vec3& apply(V_FCT_PTR fct);		    // apply a func. to each component
 
@@ -185,19 +192,19 @@ vec3& apply(V_FCT_PTR fct);		    // apply a func. to each component
 friend vec3 operator - (const vec3& v);						// -v1
 friend vec3 operator + (const vec3& a, const vec3& b);	    // v1 + v2
 friend vec3 operator - (const vec3& a, const vec3& b);	    // v1 - v2
-friend vec3 operator * (const vec3& a, const double d);	    // v1 * 3.0
-friend vec3 operator * (const double d, const vec3& a);	    // 3.0 * v1
+friend vec3 operator * (const vec3& a, const REAL d);	    // v1 * 3.0
+friend vec3 operator * (const REAL d, const vec3& a);	    // 3.0 * v1
 friend vec3 operator * (const mat4& a, const vec3& v);	    // M . v
 friend vec3 operator * (const vec3& v, const mat4& a);		// v . M
-friend double operator * (const vec3& a, const vec3& b);    // dot product
-friend vec3 operator / (const vec3& a, const double d);	    // v1 / 3.0
+friend REAL operator * (const vec3& a, const vec3& b);    // dot product
+friend vec3 operator / (const vec3& a, const REAL d);	    // v1 / 3.0
 friend vec3 operator ^ (const vec3& a, const vec3& b);	    // cross product
 friend int operator == (const vec3& a, const vec3& b);	    // v1 == v2 ?
 friend int operator != (const vec3& a, const vec3& b);	    // v1 != v2 ?
 
 #ifdef ALGEBRA3IOSTREAMS
-friend ostream& operator << (ostream& s, const vec3& v);	   // output to stream
-friend istream& operator >> (istream& s, vec3& v);	    // input from strm.
+friend std::ostream& operator << (std::ostream& s, const vec3& v);	   // output to stream
+friend std::istream& operator >> (std::istream& s, vec3& v);	    // input from strm.
 #endif // ALGEBRA3IOSTREAMS
 
 friend void swap(vec3& a, vec3& b);						// swap v1 & v2
@@ -225,33 +232,33 @@ class vec4
 {
 protected:
 
- double n[4];
+ REAL n[4];
 
 public:
 
 // Constructors
 
 vec4();
-vec4(const double x, const double y, const double z, const double w);
-vec4(const double d);
+vec4(const REAL x, const REAL y, const REAL z, const REAL w);
+vec4(const REAL d);
 vec4(const vec4& v);			    // copy constructor
 vec4(const vec3& v);			    // cast vec3 to vec4
-vec4(const vec3& v, const double d);	    // cast vec3 to vec4
+vec4(const vec3& v, const REAL d);	    // cast vec3 to vec4
 
 // Assignment operators
 
 vec4& operator	= ( const vec4& v );	    // assignment of a vec4
 vec4& operator += ( const vec4& v );	    // incrementation by a vec4
 vec4& operator -= ( const vec4& v );	    // decrementation by a vec4
-vec4& operator *= ( const double d );	    // multiplication by a constant
-vec4& operator /= ( const double d );	    // division by a constant
-double& operator [] ( int i);				// indexing
-double operator[] (int i) const;			// read-only indexing
+vec4& operator *= ( const REAL d );	    // multiplication by a constant
+vec4& operator /= ( const REAL d );	    // division by a constant
+REAL& operator [] ( int i);				// indexing
+REAL operator[] (int i) const;			// read-only indexing
 
 // special functions
 
-double length() const;			// length of a vec4
-double length2() const;			// squared length of a vec4
+REAL length() const;			// length of a vec4
+REAL length2() const;			// squared length of a vec4
 vec4& normalize();			    // normalize a vec4 in place
 vec4& apply(V_FCT_PTR fct);		// apply a func. to each component
 
@@ -260,18 +267,18 @@ vec4& apply(V_FCT_PTR fct);		// apply a func. to each component
 friend vec4 operator - (const vec4& v);						// -v1
 friend vec4 operator + (const vec4& a, const vec4& b);	    // v1 + v2
 friend vec4 operator - (const vec4& a, const vec4& b);	    // v1 - v2
-friend vec4 operator * (const vec4& a, const double d);	    // v1 * 3.0
-friend vec4 operator * (const double d, const vec4& a);	    // 3.0 * v1
+friend vec4 operator * (const vec4& a, const REAL d);	    // v1 * 3.0
+friend vec4 operator * (const REAL d, const vec4& a);	    // 3.0 * v1
 friend vec4 operator * (const mat4& a, const vec4& v);	    // M . v
 friend vec4 operator * (const vec4& v, const mat4& a);	    // v . M
-friend double operator * (const vec4& a, const vec4& b);    // dot product
-friend vec4 operator / (const vec4& a, const double d);	    // v1 / 3.0
+friend REAL operator * (const vec4& a, const vec4& b);    // dot product
+friend vec4 operator / (const vec4& a, const REAL d);	    // v1 / 3.0
 friend int operator == (const vec4& a, const vec4& b);	    // v1 == v2 ?
 friend int operator != (const vec4& a, const vec4& b);	    // v1 != v2 ?
 
 #ifdef ALGEBRA3IOSTREAMS
-friend ostream& operator << (ostream& s, const vec4& v);	// output to stream
-friend istream& operator >> (istream& s, vec4& v);	    // input from strm.
+friend std::ostream& operator << (std::ostream& s, const vec4& v);	// output to stream
+friend std::istream& operator >> (std::istream& s, vec4& v);	    // input from strm.
 #endif //  ALGEBRA3IOSTREAMS
 
 friend void swap(vec4& a, vec4& b);						// swap v1 & v2
@@ -305,7 +312,7 @@ public:
 
 mat3();
 mat3(const vec3& v0, const vec3& v1, const vec3& v2);
-mat3(const double d);
+mat3(const REAL d);
 mat3(const mat3& m);
 
 // Assignment operators
@@ -313,8 +320,8 @@ mat3(const mat3& m);
 mat3& operator	= ( const mat3& m );	    // assignment of a mat3
 mat3& operator += ( const mat3& m );	    // incrementation by a mat3
 mat3& operator -= ( const mat3& m );	    // decrementation by a mat3
-mat3& operator *= ( const double d );	    // multiplication by a constant
-mat3& operator /= ( const double d );	    // division by a constant
+mat3& operator *= ( const REAL d );	    // multiplication by a constant
+mat3& operator /= ( const REAL d );	    // division by a constant
 vec3& operator [] ( int i);					// indexing
 const vec3& operator [] ( int i) const;		// read-only indexing
 
@@ -330,15 +337,15 @@ friend mat3 operator - (const mat3& a);						// -m1
 friend mat3 operator + (const mat3& a, const mat3& b);	    // m1 + m2
 friend mat3 operator - (const mat3& a, const mat3& b);	    // m1 - m2
 friend mat3 operator * (const mat3& a, const mat3& b);		// m1 * m2
-friend mat3 operator * (const mat3& a, const double d);	    // m1 * 3.0
-friend mat3 operator * (const double d, const mat3& a);	    // 3.0 * m1
-friend mat3 operator / (const mat3& a, const double d);	    // m1 / 3.0
+friend mat3 operator * (const mat3& a, const REAL d);	    // m1 * 3.0
+friend mat3 operator * (const REAL d, const mat3& a);	    // 3.0 * m1
+friend mat3 operator / (const mat3& a, const REAL d);	    // m1 / 3.0
 friend int operator == (const mat3& a, const mat3& b);	    // m1 == m2 ?
 friend int operator != (const mat3& a, const mat3& b);	    // m1 != m2 ?
 
 #ifdef ALGEBRA3IOSTREAMS
-friend ostream& operator << (ostream& s, const mat3& m);	// output to stream
-friend istream& operator >> (istream& s, mat3& m);	    // input from strm.
+friend std::ostream& operator << (std::ostream& s, const mat3& m);	// output to stream
+friend std::istream& operator >> (std::istream& s, mat3& m);	    // input from strm.
 #endif //  ALGEBRA3IOSTREAMS
 
 friend void swap(mat3& a, mat3& b);			    // swap m1 & m2
@@ -367,7 +374,7 @@ public:
 
 mat4();
 mat4(const vec4& v0, const vec4& v1, const vec4& v2, const vec4& v3);
-mat4(const double d);
+mat4(const REAL d);
 mat4(const mat4& m);
 
 // Assignment operators
@@ -375,8 +382,8 @@ mat4(const mat4& m);
 mat4& operator	= ( const mat4& m );	    // assignment of a mat4
 mat4& operator += ( const mat4& m );	    // incrementation by a mat4
 mat4& operator -= ( const mat4& m );	    // decrementation by a mat4
-mat4& operator *= ( const double d );	    // multiplication by a constant
-mat4& operator /= ( const double d );	    // division by a constant
+mat4& operator *= ( const REAL d );	    // multiplication by a constant
+mat4& operator /= ( const REAL d );	    // division by a constant
 vec4& operator [] ( int i);					// indexing
 const vec4& operator [] ( int i) const;		// read-only indexing
 
@@ -392,15 +399,15 @@ friend mat4 operator - (const mat4& a);						// -m1
 friend mat4 operator + (const mat4& a, const mat4& b);	    // m1 + m2
 friend mat4 operator - (const mat4& a, const mat4& b);	    // m1 - m2
 friend mat4 operator * (const mat4& a, const mat4& b);		// m1 * m2
-friend mat4 operator * (const mat4& a, const double d);	    // m1 * 4.0
-friend mat4 operator * (const double d, const mat4& a);	    // 4.0 * m1
-friend mat4 operator / (const mat4& a, const double d);	    // m1 / 3.0
+friend mat4 operator * (const mat4& a, const REAL d);	    // m1 * 4.0
+friend mat4 operator * (const REAL d, const mat4& a);	    // 4.0 * m1
+friend mat4 operator / (const mat4& a, const REAL d);	    // m1 / 3.0
 friend int operator == (const mat4& a, const mat4& b);	    // m1 == m2 ?
 friend int operator != (const mat4& a, const mat4& b);	    // m1 != m2 ?
 
 #ifdef ALGEBRA3IOSTREAMS
-friend ostream& operator << (ostream& s, const mat4& m);	// output to stream
-friend istream& operator >> (istream& s, mat4& m);			// input from strm.
+friend std::ostream& operator << (std::ostream& s, const mat4& m);	// output to stream
+friend std::istream& operator >> (std::istream& s, mat4& m);			// input from strm.
 #endif //  ALGEBRA3IOSTREAMS
 
 friend void swap(mat4& a, mat4& b);							// swap m1 & m2
@@ -419,13 +426,13 @@ friend vec3 operator * (const mat4& a, const vec3& v);	    // linear transform
 
 mat3 identity2D();								// identity 2D
 mat3 translation2D(const vec2& v);				// translation 2D
-mat3 rotation2D(const vec2& Center, const double angleDeg);	// rotation 2D
+mat3 rotation2D(const vec2& Center, const REAL angleDeg);	// rotation 2D
 mat3 scaling2D(const vec2& scaleVector);		// scaling 2D
 mat4 identity3D();								// identity 3D
 mat4 translation3D(const vec3& v);				// translation 3D
-mat4 rotation3D(vec3 Axis, const double angleDeg);// rotation 3D
+mat4 rotation3D(vec3 Axis, const REAL angleDeg);// rotation 3D
 mat4 scaling3D(const vec3& scaleVector);		// scaling 3D
-mat4 perspective3D(const double d);			    // perspective 3D
+mat4 perspective3D(const REAL d);			    // perspective 3D
 
 //
 //	Implementation
@@ -441,11 +448,12 @@ mat4 perspective3D(const double d);			    // perspective 3D
 
 inline vec2::vec2() {}
 
-inline vec2::vec2(const double x, const double y)
+inline vec2::vec2(const REAL x, const REAL y)
 { n[VX] = x; n[VY] = y; }
 
-inline vec2::vec2(const double d)
-{ n[VX] = n[VY] = d; }
+// j.c.
+//inline vec2::vec2(const REAL d)
+//{ n[VX] = n[VY] = d; }
 
 inline vec2::vec2(const vec2& v)
 { n[VX] = v.n[VX]; n[VY] = v.n[VY]; }
@@ -453,13 +461,14 @@ inline vec2::vec2(const vec2& v)
 inline vec2::vec2(const vec3& v) // it is up to caller to avoid divide-by-zero
 { n[VX] = v.n[VX]/v.n[VZ]; n[VY] = v.n[VY]/v.n[VZ]; };
 
-inline vec2::vec2(const vec3& v, int dropAxis) {
-    switch (dropAxis) {
-	case VX: n[VX] = v.n[VY]; n[VY] = v.n[VZ]; break;
-	case VY: n[VX] = v.n[VX]; n[VY] = v.n[VZ]; break;
-	default: n[VX] = v.n[VX]; n[VY] = v.n[VY]; break;
-    }
-}
+// j.c.
+//inline vec2::vec2(const vec3& v, int dropAxis) {
+//    switch (dropAxis) {
+//	case VX: n[VX] = v.n[VY]; n[VY] = v.n[VZ]; break;
+//	case VY: n[VX] = v.n[VX]; n[VY] = v.n[VZ]; break;
+//	default: n[VX] = v.n[VX]; n[VY] = v.n[VY]; break;
+//    }
+//}
 
 
 // ASSIGNMENT OPERATORS
@@ -473,18 +482,18 @@ inline vec2& vec2::operator += ( const vec2& v )
 inline vec2& vec2::operator -= ( const vec2& v )
 { n[VX] -= v.n[VX]; n[VY] -= v.n[VY]; return *this; }
 
-inline vec2& vec2::operator *= ( const double d )
+inline vec2& vec2::operator *= ( const REAL d )
 { n[VX] *= d; n[VY] *= d; return *this; }
 
-inline vec2& vec2::operator /= ( const double d )
-{ double d_inv = 1./d; n[VX] *= d_inv; n[VY] *= d_inv; return *this; }
+inline vec2& vec2::operator /= ( const REAL d )
+{ REAL d_inv = 1./d; n[VX] *= d_inv; n[VY] *= d_inv; return *this; }
 
-inline double& vec2::operator [] ( int i) {
+inline REAL& vec2::operator [] ( int i) {
     assert(!(i < VX || i > VY));		// subscript check
     return n[i];
 }
 
-inline double vec2::operator [] ( int i) const {
+inline REAL vec2::operator [] ( int i) const {
     assert(!(i < VX || i > VY));
     return n[i];
 }
@@ -492,10 +501,10 @@ inline double vec2::operator [] ( int i) const {
 
 // SPECIAL FUNCTIONS
 
-inline double vec2::length() const
+inline REAL vec2::length() const
 { return sqrt(length2()); }
 
-inline double vec2::length2() const
+inline REAL vec2::length2() const
 { return n[VX]*n[VX] + n[VY]*n[VY]; }
 
 inline vec2& vec2::normalize() // it is up to caller to avoid divide-by-zero
@@ -516,10 +525,10 @@ inline vec2 operator + (const vec2& a, const vec2& b)
 inline vec2 operator - (const vec2& a, const vec2& b)
 { return vec2(a.n[VX]-b.n[VX], a.n[VY]-b.n[VY]); }
 
-inline vec2 operator * (const vec2& a, const double d)
+inline vec2 operator * (const vec2& a, const REAL d)
 { return vec2(d*a.n[VX], d*a.n[VY]); }
 
-inline vec2 operator * (const double d, const vec2& a)
+inline vec2 operator * (const REAL d, const vec2& a)
 { return a*d; }
 
 inline vec2 operator * (const mat3& a, const vec2& v) {
@@ -534,11 +543,11 @@ inline vec2 operator * (const mat3& a, const vec2& v) {
 inline vec2 operator * (const vec2& v, const mat3& a)
 { return a.transpose() * v; }
 
-inline double operator * (const vec2& a, const vec2& b)
+inline REAL operator * (const vec2& a, const vec2& b)
 { return (a.n[VX]*b.n[VX] + a.n[VY]*b.n[VY]); }
 
-inline vec2 operator / (const vec2& a, const double d)
-{ double d_inv = 1./d; return vec2(a.n[VX]*d_inv, a.n[VY]*d_inv); }
+inline vec2 operator / (const vec2& a, const REAL d)
+{ REAL d_inv = 1./d; return vec2(a.n[VX]*d_inv, a.n[VY]*d_inv); }
 
 inline vec3 operator ^ (const vec2& a, const vec2& b)
 { return vec3(0.0, 0.0, a.n[VX] * b.n[VY] - b.n[VX] * a.n[VY]); }
@@ -550,9 +559,9 @@ inline int operator != (const vec2& a, const vec2& b)
 { return !(a == b); }
 
 #ifdef ALGEBRA3IOSTREAMS
-inline ostream& operator << (ostream& s, const vec2& v)
+inline std::ostream& operator << (std::ostream& s, const vec2& v)
 { return s << "| " << v.n[VX] << ' ' << v.n[VY] << " |"; }
-inline istream& operator >> (istream& s, vec2& v) {
+inline std::istream& operator >> (std::istream& s, vec2& v) {
     vec2	v_tmp;
     char	c = ' ';
 
@@ -563,7 +572,7 @@ inline istream& operator >> (istream& s, vec2& v) {
 	s >> v_tmp[VX] >> v_tmp[VY];
 	while (s >> c && isspace(c)) ;
 	if (c != '|')
-	    s.setstate(ios::badbit);
+	    s.setstate(std::ios::badbit);
 	}
     else {
 	s.putback(c);
@@ -597,10 +606,10 @@ inline vec2 prod(const vec2& a, const vec2& b)
 
 inline vec3::vec3() {}
 
-inline vec3::vec3(const double x, const double y, const double z)
+inline vec3::vec3(const REAL x, const REAL y, const REAL z)
 { n[VX] = x; n[VY] = y; n[VZ] = z; }
 
-inline vec3::vec3(const double d)
+inline vec3::vec3(const REAL d)
 { n[VX] = n[VY] = n[VZ] = d; }
 
 inline vec3::vec3(const vec3& v)
@@ -609,7 +618,7 @@ inline vec3::vec3(const vec3& v)
 inline vec3::vec3(const vec2& v)
 { n[VX] = v.n[VX]; n[VY] = v.n[VY]; n[VZ] = 1.0; }
 
-inline vec3::vec3(const vec2& v, double d)
+inline vec3::vec3(const vec2& v, REAL d)
 { n[VX] = v.n[VX]; n[VY] = v.n[VY]; n[VZ] = d; }
 
 inline vec3::vec3(const vec4& v) // it is up to caller to avoid divide-by-zero
@@ -637,19 +646,19 @@ inline vec3& vec3::operator += ( const vec3& v )
 inline vec3& vec3::operator -= ( const vec3& v )
 { n[VX] -= v.n[VX]; n[VY] -= v.n[VY]; n[VZ] -= v.n[VZ]; return *this; }
 
-inline vec3& vec3::operator *= ( const double d )
+inline vec3& vec3::operator *= ( const REAL d )
 { n[VX] *= d; n[VY] *= d; n[VZ] *= d; return *this; }
 
-inline vec3& vec3::operator /= ( const double d )
-{ double d_inv = 1./d; n[VX] *= d_inv; n[VY] *= d_inv; n[VZ] *= d_inv;
+inline vec3& vec3::operator /= ( const REAL d )
+{ REAL d_inv = 1./d; n[VX] *= d_inv; n[VY] *= d_inv; n[VZ] *= d_inv;
   return *this; }
 
-inline double& vec3::operator [] ( int i) {
+inline REAL& vec3::operator [] ( int i) {
     assert(! (i < VX || i > VZ));
     return n[i];
 }
 
-inline double vec3::operator [] ( int i) const {
+inline REAL vec3::operator [] ( int i) const {
     assert(! (i < VX || i > VZ));
     return n[i];
 }
@@ -657,10 +666,10 @@ inline double vec3::operator [] ( int i) const {
 
 // SPECIAL FUNCTIONS
 
-inline double vec3::length() const
+inline REAL vec3::length() const
 {  return sqrt(length2()); }
 
-inline double vec3::length2() const
+inline REAL vec3::length2() const
 {  return n[VX]*n[VX] + n[VY]*n[VY] + n[VZ]*n[VZ]; }
 
 inline vec3& vec3::normalize() // it is up to caller to avoid divide-by-zero
@@ -682,10 +691,10 @@ inline vec3 operator + (const vec3& a, const vec3& b)
 inline vec3 operator - (const vec3& a, const vec3& b)
 { return vec3(a.n[VX]-b.n[VX], a.n[VY]-b.n[VY], a.n[VZ]-b.n[VZ]); }
 
-inline vec3 operator * (const vec3& a, const double d)
+inline vec3 operator * (const vec3& a, const REAL d)
 { return vec3(d*a.n[VX], d*a.n[VY], d*a.n[VZ]); }
 
-inline vec3 operator * (const double d, const vec3& a)
+inline vec3 operator * (const REAL d, const vec3& a)
 { return a*d; }
 
 inline vec3 operator * (const mat3& a, const vec3& v) {
@@ -701,11 +710,11 @@ inline vec3 operator * (const mat4& a, const vec3& v)
 inline vec3 operator * (const vec3& v, const mat4& a)
 { return a.transpose() * v; }
 
-inline double operator * (const vec3& a, const vec3& b)
+inline REAL operator * (const vec3& a, const vec3& b)
 { return (a.n[VX]*b.n[VX] + a.n[VY]*b.n[VY] + a.n[VZ]*b.n[VZ]); }
 
-inline vec3 operator / (const vec3& a, const double d)
-{ double d_inv = 1./d; return vec3(a.n[VX]*d_inv, a.n[VY]*d_inv,
+inline vec3 operator / (const vec3& a, const REAL d)
+{ REAL d_inv = 1./d; return vec3(a.n[VX]*d_inv, a.n[VY]*d_inv,
   a.n[VZ]*d_inv); }
 
 inline vec3 operator ^ (const vec3& a, const vec3& b) {
@@ -722,16 +731,16 @@ inline int operator != (const vec3& a, const vec3& b)
 { return !(a == b); }
 
 #ifdef ALGEBRA3IOSTREAMS
-inline double jc_round(double d)
+inline REAL jc_round(REAL d)
 {
 //  return d;
   return (abs(d) < 0.0000001) ? 0 : d;
 }
 
-inline ostream& operator << (ostream& s, const vec3& v)
+inline std::ostream& operator << (std::ostream& s, const vec3& v)
 { return s << "| " << jc_round(v.n[VX]) << ' ' << jc_round(v.n[VY]) << ' ' << jc_round(v.n[VZ]) << " |"; }
 
-inline istream& operator >> (istream& s, vec3& v) {
+inline std::istream& operator >> (std::istream& s, vec3& v) {
     vec3	v_tmp;
     char	c = ' ';
 
@@ -742,7 +751,7 @@ inline istream& operator >> (istream& s, vec3& v) {
 	s >> v_tmp[VX] >> v_tmp[VY] >> v_tmp[VZ];
 	while (s >> c && isspace(c)) ;
 	if (c != '|')
-	    s.setstate(ios::badbit);
+	    s.setstate(std::ios::badbit);
 	}
     else {
 	s.putback(c);
@@ -779,10 +788,10 @@ inline vec3 prod(const vec3& a, const vec3& b)
 
 inline vec4::vec4() {}
 
-inline vec4::vec4(const double x, const double y, const double z, const double w)
+inline vec4::vec4(const REAL x, const REAL y, const REAL z, const REAL w)
 { n[VX] = x; n[VY] = y; n[VZ] = z; n[VW] = w; }
 
-inline vec4::vec4(const double d)
+inline vec4::vec4(const REAL d)
 {  n[VX] = n[VY] = n[VZ] = n[VW] = d; }
 
 inline vec4::vec4(const vec4& v)
@@ -791,7 +800,7 @@ inline vec4::vec4(const vec4& v)
 inline vec4::vec4(const vec3& v)
 { n[VX] = v.n[VX]; n[VY] = v.n[VY]; n[VZ] = v.n[VZ]; n[VW] = 1.0; }
 
-inline vec4::vec4(const vec3& v, const double d)
+inline vec4::vec4(const vec3& v, const REAL d)
 { n[VX] = v.n[VX]; n[VY] = v.n[VY]; n[VZ] = v.n[VZ];  n[VW] = d; }
 
 
@@ -809,29 +818,29 @@ inline vec4& vec4::operator -= ( const vec4& v )
 { n[VX] -= v.n[VX]; n[VY] -= v.n[VY]; n[VZ] -= v.n[VZ]; n[VW] -= v.n[VW];
 return *this; }
 
-inline vec4& vec4::operator *= ( const double d )
+inline vec4& vec4::operator *= ( const REAL d )
 { n[VX] *= d; n[VY] *= d; n[VZ] *= d; n[VW] *= d; return *this; }
 
-inline vec4& vec4::operator /= ( const double d )
-{ double d_inv = 1./d; n[VX] *= d_inv; n[VY] *= d_inv; n[VZ] *= d_inv;
+inline vec4& vec4::operator /= ( const REAL d )
+{ REAL d_inv = 1./d; n[VX] *= d_inv; n[VY] *= d_inv; n[VZ] *= d_inv;
   n[VW] *= d_inv; return *this; }
 
-inline double& vec4::operator [] ( int i) {
+inline REAL& vec4::operator [] ( int i) {
     assert(! (i < VX || i > VW));
     return n[i];
 }
 
-inline double vec4::operator [] ( int i) const {
+inline REAL vec4::operator [] ( int i) const {
     assert(! (i < VX || i > VW));
     return n[i];
 }
 
 // SPECIAL FUNCTIONS
 
-inline double vec4::length() const
+inline REAL vec4::length() const
 { return sqrt(length2()); }
 
-inline double vec4::length2() const
+inline REAL vec4::length2() const
 { return n[VX]*n[VX] + n[VY]*n[VY] + n[VZ]*n[VZ] + n[VW]*n[VW]; }
 
 inline vec4& vec4::normalize() // it is up to caller to avoid divide-by-zero
@@ -855,10 +864,10 @@ inline vec4 operator - (const vec4& a, const vec4& b)
 {  return vec4(a.n[VX] - b.n[VX], a.n[VY] - b.n[VY], a.n[VZ] - b.n[VZ],
    a.n[VW] - b.n[VW]); }
 
-inline vec4 operator * (const vec4& a, const double d)
+inline vec4 operator * (const vec4& a, const REAL d)
 { return vec4(d*a.n[VX], d*a.n[VY], d*a.n[VZ], d*a.n[VW] ); }
 
-inline vec4 operator * (const double d, const vec4& a)
+inline vec4 operator * (const REAL d, const vec4& a)
 { return a*d; }
 
 inline vec4 operator * (const mat4& a, const vec4& v) {
@@ -871,12 +880,12 @@ inline vec4 operator * (const mat4& a, const vec4& v) {
 inline vec4 operator * (const vec4& v, const mat4& a)
 { return a.transpose() * v; }
 
-inline double operator * (const vec4& a, const vec4& b)
+inline REAL operator * (const vec4& a, const vec4& b)
 { return (a.n[VX]*b.n[VX] + a.n[VY]*b.n[VY] + a.n[VZ]*b.n[VZ] +
   a.n[VW]*b.n[VW]); }
 
-inline vec4 operator / (const vec4& a, const double d)
-{ double d_inv = 1./d; return vec4(a.n[VX]*d_inv, a.n[VY]*d_inv, a.n[VZ]*d_inv,
+inline vec4 operator / (const vec4& a, const REAL d)
+{ REAL d_inv = 1./d; return vec4(a.n[VX]*d_inv, a.n[VY]*d_inv, a.n[VZ]*d_inv,
   a.n[VW]*d_inv); }
 
 inline int operator == (const vec4& a, const vec4& b)
@@ -887,11 +896,11 @@ inline int operator != (const vec4& a, const vec4& b)
 { return !(a == b); }
 
 #ifdef ALGEBRA3IOSTREAMS
-inline ostream& operator << (ostream& s, const vec4& v)
+inline std::ostream& operator << (std::ostream& s, const vec4& v)
 { return s << "| " << v.n[VX] << ' ' << v.n[VY] << ' ' << v.n[VZ] << ' '
   << v.n[VW] << " |"; }
 
-inline istream& operator >> (istream& s, vec4& v) {
+inline std::istream& operator >> (std::istream& s, vec4& v) {
     vec4	v_tmp;
     char	c = ' ';
 
@@ -902,7 +911,7 @@ inline istream& operator >> (istream& s, vec4& v) {
 	s >> v_tmp[VX] >> v_tmp[VY] >> v_tmp[VZ] >> v_tmp[VW];
 	while (s >> c && isspace(c)) ;
 	if (c != '|')
-	    s.setstate(ios::badbit);
+	    s.setstate(std::ios::badbit);
 	}
     else {
 	s.putback(c);
@@ -943,7 +952,7 @@ inline mat3::mat3() {}
 inline mat3::mat3(const vec3& v0, const vec3& v1, const vec3& v2)
 { v[0] = v0; v[1] = v1; v[2] = v2; }
 
-inline mat3::mat3(const double d)
+inline mat3::mat3(const REAL d)
 { v[0] = v[1] = v[2] = vec3(d); }
 
 inline mat3::mat3(const mat3& m)
@@ -961,10 +970,10 @@ inline mat3& mat3::operator += ( const mat3& m )
 inline mat3& mat3::operator -= ( const mat3& m )
 { v[0] -= m.v[0]; v[1] -= m.v[1]; v[2] -= m.v[2]; return *this; }
 
-inline mat3& mat3::operator *= ( const double d )
+inline mat3& mat3::operator *= ( const REAL d )
 { v[0] *= d; v[1] *= d; v[2] *= d; return *this; }
 
-inline mat3& mat3::operator /= ( const double d )
+inline mat3& mat3::operator /= ( const REAL d )
 { v[0] /= d; v[1] /= d; v[2] /= d; return *this; }
 
 inline vec3& mat3::operator [] ( int i) {
@@ -1046,13 +1055,13 @@ inline mat3 operator * (const mat3& a, const mat3& b) {
     #undef ROWCOL // (i, j)
 }
 
-inline mat3 operator * (const mat3& a, const double d)
+inline mat3 operator * (const mat3& a, const REAL d)
 { return mat3(a.v[0] * d, a.v[1] * d, a.v[2] * d); }
 
-inline mat3 operator * (const double d, const mat3& a)
+inline mat3 operator * (const REAL d, const mat3& a)
 { return a*d; }
 
-inline mat3 operator / (const mat3& a, const double d)
+inline mat3 operator / (const mat3& a, const REAL d)
 { return mat3(a.v[0] / d, a.v[1] / d, a.v[2] / d); }
 
 inline int operator == (const mat3& a, const mat3& b)
@@ -1062,10 +1071,10 @@ inline int operator != (const mat3& a, const mat3& b)
 { return !(a == b); }
 
 #ifdef ALGEBRA3IOSTREAMS
-inline ostream& operator << (ostream& s, const mat3& m)
+inline std::ostream& operator << (std::ostream& s, const mat3& m)
 { return s << m.v[VX] << '\n' << m.v[VY] << '\n' << m.v[VZ]; }
 
-inline istream& operator >> (istream& s, mat3& m) {
+inline std::istream& operator >> (std::istream& s, mat3& m) {
     mat3    m_tmp;
 
     s >> m_tmp[VX] >> m_tmp[VY] >> m_tmp[VZ];
@@ -1092,7 +1101,7 @@ inline mat4::mat4() {}
 inline mat4::mat4(const vec4& v0, const vec4& v1, const vec4& v2, const vec4& v3)
 { v[0] = v0; v[1] = v1; v[2] = v2; v[3] = v3; }
 
-inline mat4::mat4(const double d)
+inline mat4::mat4(const REAL d)
 { v[0] = v[1] = v[2] = v[3] = vec4(d); }
 
 inline mat4::mat4(const mat4& m)
@@ -1113,10 +1122,10 @@ inline mat4& mat4::operator -= ( const mat4& m )
 { v[0] -= m.v[0]; v[1] -= m.v[1]; v[2] -= m.v[2]; v[3] -= m.v[3];
 return *this; }
 
-inline mat4& mat4::operator *= ( const double d )
+inline mat4& mat4::operator *= ( const REAL d )
 { v[0] *= d; v[1] *= d; v[2] *= d; v[3] *= d; return *this; }
 
-inline mat4& mat4::operator /= ( const double d )
+inline mat4& mat4::operator /= ( const REAL d )
 { v[0] /= d; v[1] /= d; v[2] /= d; v[3] /= d; return *this; }
 
 inline vec4& mat4::operator [] ( int i) {
@@ -1201,13 +1210,13 @@ inline mat4 operator * (const mat4& a, const mat4& b) {
 	#undef ROWCOL
 }
 
-inline mat4 operator * (const mat4& a, const double d)
+inline mat4 operator * (const mat4& a, const REAL d)
 { return mat4(a.v[0] * d, a.v[1] * d, a.v[2] * d, a.v[3] * d); }
 
-inline mat4 operator * (const double d, const mat4& a)
+inline mat4 operator * (const REAL d, const mat4& a)
 { return a*d; }
 
-inline mat4 operator / (const mat4& a, const double d)
+inline mat4 operator / (const mat4& a, const REAL d)
 { return mat4(a.v[0] / d, a.v[1] / d, a.v[2] / d, a.v[3] / d); }
 
 inline int operator == (const mat4& a, const mat4& b)
@@ -1218,10 +1227,10 @@ inline int operator != (const mat4& a, const mat4& b)
 { return !(a == b); }
 
 #ifdef ALGEBRA3IOSTREAMS
-inline ostream& operator << (ostream& s, const mat4& m)
+inline std::ostream& operator << (std::ostream& s, const mat4& m)
 { return s << m.v[VX] << '\n' << m.v[VY] << '\n' << m.v[VZ] << '\n' << m.v[VW]; }
 
-inline istream& operator >> (istream& s, mat4& m)
+inline std::istream& operator >> (std::istream& s, mat4& m)
 {
     mat4    m_tmp;
 
@@ -1252,8 +1261,8 @@ inline mat3 translation2D(const vec2& v)
 		vec3(0.0, 1.0, v[VY]),
 		vec3(0.0, 0.0, 1.0)); }
 
-inline mat3 rotation2D(const vec2& Center, const double angleDeg) {
-    double  angleRad = angleDeg * M_PI / 180.0,
+inline mat3 rotation2D(const vec2& Center, const REAL angleDeg) {
+    REAL  angleRad = angleDeg * M_PI / 180.0,
 	    c = cos(angleRad),
 	    s = sin(angleRad);
 
@@ -1279,8 +1288,8 @@ inline mat4 translation3D(const vec3& v)
 		vec4(0.0, 0.0, 1.0, v[VZ]),
 		vec4(0.0, 0.0, 0.0, 1.0)); }
 
-inline mat4 rotation3D(vec3 Axis, const double angleDeg) {
-    double  angleRad = angleDeg * M_PI / 180.0,
+inline mat4 rotation3D(vec3 Axis, const REAL angleDeg) {
+    REAL  angleRad = angleDeg * M_PI / 180.0,
 	    c = cos(angleRad),
 	    s = sin(angleRad),
 	    t = 1.0 - c;
@@ -1307,12 +1316,13 @@ inline mat4 scaling3D(const vec3& scaleVector)
 		vec4(0.0, 0.0, scaleVector[VZ], 0.0),
 		vec4(0.0, 0.0, 0.0, 1.0)); }
 
-inline mat4 perspective3D(const double d)
+inline mat4 perspective3D(const REAL d)
 {   return mat4(vec4(1.0, 0.0, 0.0, 0.0),
 		vec4(0.0, 1.0, 0.0, 0.0),
 		vec4(0.0, 0.0, 1.0, 0.0),
 		vec4(0.0, 0.0, 1.0/d, 0.0)); }
 
+} // j.c. namespace alg3
 
 #endif // ALGEBRA3H
 
