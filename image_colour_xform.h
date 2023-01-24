@@ -25,6 +25,9 @@ public:
 
   colour get_colour(int u, int v) const override;
 
+  void set_mult(const alg3::vec4& mult) { m_mult = mult; }
+  void set_add(const colour& add) { m_add = add; }
+
 protected:
   colour m_add = { 0, 0, 0, 0 };
   alg3::vec4 m_mult = { 1.f, 1.f, 1.f, 1.f };
