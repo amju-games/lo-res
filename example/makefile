@@ -25,6 +25,7 @@ SOURCES=main.cpp \
 ../image_8.cpp \
 ../image_32.cpp \
 ../image_filter.cpp \
+../image_colour_xform.cpp \
 ../image_uv_xform.cpp \
 ../third_party/lodepng.cpp \
 ../palette.cpp \
