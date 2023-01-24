@@ -18,6 +18,7 @@ public:
   }
 
   void set_cell_range(int min_cell, int max_cell);
+  void set_cell(int cell) { m_cell = cell; }
 
   void set_cell_dir(int dir) { m_cell_dir = dir; }
 
