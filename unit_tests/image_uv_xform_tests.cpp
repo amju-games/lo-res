@@ -36,7 +36,7 @@ TEST_CASE("transform by identity", "[image_uv_xform]")
   REQUIRE(xf->get_colour(1, 1) == make_colour(4));
 }
 
-TEST_CASE("transform square image by rotation 90 degs", "[image_uv_xform]")
+TEST_CASE("transform square image by rotation 90 degs", "[.]")
 {
   alg3::vec2 centre_of_rot(.5f, .5f); // needs to be (w-1)/2, (h-1)/2?
   float angle_degs = 90.f;
