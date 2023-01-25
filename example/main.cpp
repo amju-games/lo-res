@@ -65,7 +65,7 @@ void draw()
   angle += 1.0f;
   rotated_arrow->set_xform(m);
 
-  blit(rotated_arrow, the_screen, 1, 150);
+  blit(rotated_arrow, the_screen, 1, 150, additive_blend()); //alpha_blend());
   my_font.draw(the_screen, 1, 170, "ROTATED");
 
 
