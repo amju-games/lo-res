@@ -3,12 +3,17 @@
 
 #pragma once
 
+#include "blit.h"
 #include "sprite_sheet.h"
 
 class sprite : public sprite_sheet
 {
 public:
-  void draw(ref_image dest, int dest_x, int dest_y) const;
+  template<class BLENDER>
+  void draw(ref_image dest, int dest_x, int dest_y) const
+  {
+    draw_cell<BLENDER>(dest, m_cell, dest_x, dest_y);
+  }
 
   void update(float dt);
 

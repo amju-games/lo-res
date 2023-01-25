@@ -14,13 +14,6 @@ struct colour
   colour(uint8_t r_, uint8_t g_, uint8_t b_, uint8_t a_ = 0xff) : 
     r(r_), g(g_), b(b_), a(a_) {}
 
-  // This is how we're defining transparent pixels, which are not blitted, and 
-  //  are ignored for collision detection.
-  bool is_transparent() const
-  {
-    return a == 0;
-  }
-
   bool operator==(const colour& c) const
   {
     return r == c.r && g == c.g && b == c.b && a == c.a;

@@ -29,8 +29,7 @@ pixel_intersect_tests.cpp \
 ../image_uv_xform.cpp \
 ../third_party/lodepng.cpp \
 ../palette.cpp \
-../sprite.cpp \
-../sprite_sheet.cpp
+../sprite.cpp
 
 OBJECTS=$(SOURCES:.cpp=.o)
 EXECUTABLE=lores_tests

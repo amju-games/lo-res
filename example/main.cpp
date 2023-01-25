@@ -52,11 +52,11 @@ void draw()
 
   the_screen->clear(CLEAR_COLOUR); 
 
-  blit(arrow2, the_screen, 1, 64);
-  my_font.draw(the_screen, 1, 130, "BLUR THEN SCALE");
+  blit<mask_zero_alpha>(arrow2, the_screen, 1, 64);
+  my_font.draw<mask_zero_alpha>(the_screen, 1, 130, "BLUR THEN SCALE");
 
-  spr.draw(the_screen, 80, 64);
-  my_font.draw(the_screen, 80, 130, "SCALE THEN BLUR");
+  spr.draw<overwrite>(the_screen, 80, 64);
+  my_font.draw<mask_zero_alpha>(the_screen, 80, 130, "SCALE THEN BLUR");
 
 
   static float angle = 0.f;
@@ -65,11 +65,11 @@ void draw()
   angle += 1.0f;
   rotated_arrow->set_xform(m);
 
-  blit(rotated_arrow, the_screen, 1, 150, additive_blend()); //alpha_blend());
-  my_font.draw(the_screen, 1, 170, "ROTATED");
+  blit<additive_blend>(rotated_arrow, the_screen, 1, 150);
+  my_font.draw<mask_zero_alpha>(the_screen, 1, 170, "ROTATED");
 
 
-  my_font.draw(the_screen, 5, 5, "HELLO\n1234567890!@^&*()_+-=<>,.?/\"':;");
+  my_font.draw<mask_zero_alpha>(the_screen, 5, 5, "HELLO\n1234567890!@^&*()_+-=<>,.?/\"':;");
 
   // Draw screen array to actual GL surface
   render_image_32_opengl(the_screen);

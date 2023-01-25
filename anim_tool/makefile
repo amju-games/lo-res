@@ -26,7 +26,6 @@ SOURCES=anim_tool.cpp \
 ../palette.cpp \
 ../render_image_opengl.cpp \
 ../sprite.cpp \
-../sprite_sheet.cpp \
 ../third_party/lodepng.cpp
 
 OBJECTS=$(SOURCES:.cpp=.o)

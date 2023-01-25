@@ -1,16 +1,14 @@
 // "LO RES" Game Prototype
 // (c) Juliet Colman 2017-2022
 
-#include <cassert>
-#include <iostream>
-#include "sprite.h"
-
 //#define SPRITE_DEBUG
 
-void sprite::draw(ref_image dest, int dest_x, int dest_y) const
-{
-  draw_cell(dest, m_cell, dest_x, dest_y);
-}
+#ifdef SPRITE_DEBUG
+#include <iostream>
+#endif
+
+#include <cassert>
+#include "sprite.h"
 
 void sprite::set_cell_range(int min_cell, int max_cell)
 {

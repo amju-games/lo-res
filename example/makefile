@@ -20,7 +20,6 @@ CFLAGS=-c $(WARNINGS) $(INCLUDES) -std=c++2a -DMACOSX -O0 -g
 LDFLAGS=-framework OpenGL -framework GLUT
 
 SOURCES=main.cpp \
-../font.cpp \
 ../image_8.cpp \
 ../image_32.cpp \
 ../image_filter.cpp \
@@ -29,8 +28,7 @@ SOURCES=main.cpp \
 ../third_party/lodepng.cpp \
 ../palette.cpp \
 ../render_image_opengl.cpp \
-../sprite.cpp \
-../sprite_sheet.cpp
+../sprite.cpp
 
 OBJECTS=$(SOURCES:.cpp=.o)
 EXECUTABLE=lores_example
