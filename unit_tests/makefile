@@ -25,7 +25,6 @@ blit_tests.cpp \
 catch_test_main.cpp \
 image_uv_xform_tests.cpp \
 pixel_intersect_tests.cpp \
-../blit.cpp \
 ../image_8.cpp \
 ../image_uv_xform.cpp \
 ../third_party/lodepng.cpp \
