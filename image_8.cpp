@@ -18,6 +18,7 @@ palette& image_8::get_palette()
 
 bool image_8::load(const std::string& png_file_name)
 {
+  m_data.clear();
   std::vector<unsigned char> data;
   unsigned int w = 0;
   unsigned int h = 0;
