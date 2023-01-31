@@ -25,8 +25,6 @@
 #include <assert.h>
 #include <math.h>
 
-#define ALGEBRA3IOSTREAMS
-
 #ifdef ALGEBRA3IOSTREAMS
 #include <iostream>
 #endif
