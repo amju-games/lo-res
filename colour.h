@@ -23,6 +23,15 @@ struct colour
 };
 
 
+inline colour colour_from_floats(float r, float g, float b, float a = 1.f)
+{
+  return colour(
+    static_cast<uint8_t>(r * 255.f), 
+    static_cast<uint8_t>(g * 255.f), 
+    static_cast<uint8_t>(b * 255.f), 
+    static_cast<uint8_t>(a * 255.f));
+}
+
 
 // High value colours: allows us to e.g. add colours without overflowing.
 
