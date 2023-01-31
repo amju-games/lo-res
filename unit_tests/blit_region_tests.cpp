@@ -55,7 +55,7 @@ TEST_CASE("blit region test, no clip", "[image]")
   setup(dest, src);
 
   // Blit 2x2 src region to the middle of 4x4 dest
-  blit_region(src, dest, 1, 1,  1, 1, 2, 2); 
+  blit_region<overwrite>(src, dest, 1, 1,  1, 1, 2, 2); 
 
   // Expected:
   // 0  0  0  0
@@ -85,7 +85,7 @@ TEST_CASE("blit region test, clip left", "[image]")
   setup(dest, src);
 
   // Blit 2x2 region to the left
-  blit_region(src, dest, -1, 1,  1, 1, 2, 2); 
+  blit_region<overwrite>(src, dest, -1, 1,  1, 1, 2, 2); 
 
   // Expected:
   // 0  0  0  0
@@ -115,7 +115,7 @@ TEST_CASE("blit region test, clip top", "[image]")
   setup(dest, src);
 
   // Blit 2x2 src above dest
-  blit_region(src, dest, 1, -1,  1, 1, 2, 2); 
+  blit_region<overwrite>(src, dest, 1, -1,  1, 1, 2, 2); 
 
   // Expected:
   // 0  10 11 0
@@ -145,7 +145,7 @@ TEST_CASE("blit region test, clip right", "[image]")
   setup(dest, src);
 
   // Blit 2x2 src to the right
-  blit_region(src, dest, 3, 1,  1, 1, 2, 2); 
+  blit_region<overwrite>(src, dest, 3, 1,  1, 1, 2, 2); 
 
   // Expected:
   // 0  0  0  0
@@ -175,7 +175,7 @@ TEST_CASE("blit region test, clip bottom", "[image]")
   setup(dest, src);
  
   // Blit 2x2 src below dest
-  blit_region(src, dest, 1, 3,  1, 1, 2, 2); 
+  blit_region<overwrite>(src, dest, 1, 3,  1, 1, 2, 2); 
 
   // Expected:
   // 0  0  0  0
