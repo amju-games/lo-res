@@ -15,7 +15,7 @@ INCLUDES=\
   -I..\
   -I../third_party
 
-CFLAGS=-c $(WARNINGS) $(INCLUDES) -std=c++2a  -DALGEBRA3IOSTREAMS -DMACOSX -O0 -g
+CFLAGS=-c $(WARNINGS) $(INCLUDES) -std=c++2a -DUNIT_TEST -DMACOSX -O0 -g
 
 LDFLAGS=-framework OpenGL -framework GLUT
 

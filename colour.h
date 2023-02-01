@@ -3,6 +3,16 @@
 
 #pragma once
 
+#ifdef UNIT_TEST
+#ifndef COLOUR_DEBUG
+#define COLOUR_DEBUG
+#endif
+#endif
+
+#ifdef COLOUR_DEBUG
+#include <iostream>
+#endif
+
 #include <algorithm>
 #include <cstdint>
 
@@ -31,6 +41,19 @@ inline colour colour_from_floats(float r, float g, float b, float a = 1.f)
     static_cast<uint8_t>(b * 255.f), 
     static_cast<uint8_t>(a * 255.f));
 }
+
+
+#ifdef COLOUR_DEBUG
+inline std::ostream& operator<<(std::ostream& os, const colour& c)
+{
+  return os 
+    << "(" 
+    << c.r << ", " 
+    << c.g << ", "
+    << c.b << ", " 
+    << c.a << ")";
+}
+#endif
 
 
 // High value colours: allows us to e.g. add colours without overflowing.
