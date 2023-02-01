@@ -19,7 +19,11 @@ public:
     float x1 = n[alg3::VX] * .5f + .5f;
     float y1 = n[alg3::VY] * .5f + .5f;
     const auto& im = m_children[1];
-    return im->get_colour(x1 * im->get_width(), y1 * im->get_height()); 
+    int w = im->get_width();
+    int h = im->get_height();
+    int x_clamped = std::clamp(static_cast<int>(x1 * w), 0, w - 1);
+    int y_clamped = std::clamp(static_cast<int>(y1 * h), 0, h - 1);
+    return im->get_colour(x_clamped, y_clamped);
   }
 };
 
