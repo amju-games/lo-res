@@ -165,7 +165,7 @@ int main(int argc, char** argv)
   sphere_map_example = std::make_shared<image_sphere_map>();
   sphere_map_example->add_child(normal_map);
   p_image fruit_32 = std::make_shared<image_32>();
-  fruit_32->load("assets/fruit_salad_32.png");
+  fruit_32->load("assets/fruit_salad_64.png");
   sphere_map_example->add_child(fruit_32);
 
   glutMainLoop();

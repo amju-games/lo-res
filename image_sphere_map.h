@@ -8,7 +8,7 @@
 class image_sphere_map : public image_composite
 {
 public:
-  image_sphere_map() { m_active_child = 1; }
+  image_sphere_map() { m_active_child = 0; }
 
   colour get_colour(int x, int y) const override
   {
