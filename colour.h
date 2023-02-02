@@ -48,10 +48,10 @@ inline std::ostream& operator<<(std::ostream& os, const colour& c)
 {
   return os 
     << "(" 
-    << c.r << ", " 
-    << c.g << ", "
-    << c.b << ", " 
-    << c.a << ")";
+    << static_cast<int>(c.r) << ", " 
+    << static_cast<int>(c.g) << ", "
+    << static_cast<int>(c.b) << ", " 
+    << static_cast<int>(c.a) << ")";
 }
 #endif
 
