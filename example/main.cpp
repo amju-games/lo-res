@@ -171,6 +171,8 @@ int main(int argc, char** argv)
 
   lighting_example = std::make_shared<image_lighting>(normal_map);
   lighting_example->set_light_dir({1.f, 1.f, 2.f}); 
+  lighting_example->set_diffuse_colour({0xff, 0, 0 });
+  lighting_example->set_specular_power(50.f);
 
   sphere_map_example = std::make_shared<image_sphere_map>();
   sphere_map_example->add_child(normal_map);

@@ -33,15 +33,80 @@ struct colour
 };
 
 
-inline colour colour_from_floats(float r, float g, float b, float a = 1.f)
+// Floating point colour type, used in lighting calculations etc.
+struct f_colour
 {
-  return colour(
-    static_cast<uint8_t>(r * 255.f), 
-    static_cast<uint8_t>(g * 255.f), 
-    static_cast<uint8_t>(b * 255.f), 
-    static_cast<uint8_t>(a * 255.f));
+  f_colour() = default;
+  f_colour(float r_, float g_, float b_, float a_ = 1.f) : 
+    r(r_), g(g_), b(b_), a(a_) {}
+
+  f_colour(const colour& c) : 
+    r(static_cast<float>(c.r) / 255.f), 
+    g(static_cast<float>(c.g) / 255.f), 
+    b(static_cast<float>(c.b) / 255.f), 
+    a(static_cast<float>(c.a) / 255.f)
+  {
+  }
+
+  colour to_colour() const 
+  {
+    return colour(
+      static_cast<uint8_t>(std::clamp(static_cast<int>(r * 255.f), 0, 0xff)),
+      static_cast<uint8_t>(std::clamp(static_cast<int>(g * 255.f), 0, 0xff)),
+      static_cast<uint8_t>(std::clamp(static_cast<int>(b * 255.f), 0, 0xff)),
+      static_cast<uint8_t>(std::clamp(static_cast<int>(a * 255.f), 0, 0xff)));
+  }
+
+  f_colour& operator+=(const f_colour& f)
+  {
+    r += f.r;
+    g += f.g;
+    b += f.b;
+    a += f.a;
+    return *this;
+  }
+
+  f_colour& operator*=(const f_colour& f)
+  {
+    r *= f.r;
+    g *= f.g;
+    b *= f.b;
+    a *= f.a;
+    return *this;
+  }
+
+  f_colour& operator*=(float f)
+  {
+    r *= f;
+    g *= f;
+    b *= f;
+    a *= f;
+    return *this;
+  }
+
+  float r = 0, g = 0, b = 0, a = 1.f;
+};
+
+inline f_colour operator+(const f_colour& f1, const f_colour& f2)
+{
+  f_colour f(f1);
+  f += f2;
+  return f;
 }
 
+inline f_colour operator*(const f_colour& f1, const f_colour& f2)
+{
+  f_colour f(f1);
+  f *= f2;
+  return f;
+}
+
+inline f_colour operator*(const f_colour& f1, float f)
+{
+  f_colour ff(f1);
+  ff *= f;
+  return ff;
+}
 
 #ifdef COLOUR_DEBUG
 inline std::ostream& operator<<(std::ostream& os, const colour& c)
@@ -57,7 +122,6 @@ inline std::ostream& operator<<(std::ostream& os, const colour& c)
 
 
 // High value colours: allows us to e.g. add colours without overflowing.
-
 struct h_colour
 {
   h_colour() = default;

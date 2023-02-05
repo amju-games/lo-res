@@ -16,7 +16,7 @@ TEST_CASE("1-pixel image gives dot product of colour-as-normal", "[image_lightin
 
   colour expected(0xff, 0xff, 0xff);
   colour c = lighting->get_colour(0, 0);
-  std::cout << "Lighting result: " << c << "\n";
+  //std::cout << "Lighting result: " << c << "\n";
 
   // TODO result is 2/256 off - where are we losing precision?
   REQUIRE(approx_equal(c, expected, 3));
