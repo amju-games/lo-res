@@ -1,10 +1,10 @@
-all:anim_tool_exe
+all:rotate_helper_exe
 
 clean:
-	rm animtool *.o ../*.o 
+	rm rotate_helper *.o ../*.o 
 
 run:
-	./animtool -i walk-2.png -cx 8 -cy 1 -t 0.4
+	./rotate_helper -n sphere_normal_map_32.png -cx 4 -cy 4
 
 
 CC=clang++
@@ -19,18 +19,15 @@ CFLAGS=-c $(WARNINGS) $(INCLUDES) -std=c++2a -DMACOSX
 
 LDFLAGS=-framework OpenGL -framework GLUT
 
-SOURCES=anim_tool.cpp \
-../image_8.cpp \
+SOURCES=rotate_helper.cpp \
 ../image_32.cpp \
-../palette.cpp \
-../render_image_opengl.cpp \
-../sprite.cpp \
+../image_uv_xform.cpp \
 ../third_party/lodepng.cpp
 
 OBJECTS=$(SOURCES:.cpp=.o)
-EXECUTABLE=animtool
+EXECUTABLE=rotate_helper
 
-anim_tool_exe: $(SOURCES) $(EXECUTABLE)
+rotate_helper_exe: $(SOURCES) $(EXECUTABLE)
 
 $(EXECUTABLE): $(OBJECTS)
 	$(CC) $(LDFLAGS) $(OBJECTS) -o $@

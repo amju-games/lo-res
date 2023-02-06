@@ -30,7 +30,7 @@ void setup(ref_image dest, ref_image src)
 void blit_middle(ref_image src, ref_image dest)
 {
   // Blit 2x2 src to the middle of 4x4 dest
-  blit(src, dest, 1, 1); 
+  blit<overwrite>(src, dest, 1, 1); 
 
   // Expected:
   // 0  0  0  0
@@ -68,7 +68,7 @@ TEST_CASE("blit test, clip left", "[image_8]")
   setup(dest, src);
 
   // Blit 2x2 src to the left
-  blit(src, dest, -1, 1); 
+  blit<overwrite>(src, dest, -1, 1); 
 
   // Expected:
   // 0  0  0  0
@@ -98,7 +98,7 @@ TEST_CASE("blit test, clip top", "[image_8]")
   setup(dest, src);
 
   // Blit 2x2 src above dest
-  blit(src, dest, 1, -1); 
+  blit<overwrite>(src, dest, 1, -1); 
 
   // Expected:
   // 0  3  4  0
@@ -128,7 +128,7 @@ TEST_CASE("blit test, clip right", "[image_8]")
   setup(dest, src);
 
   // Blit 2x2 src to the right
-  blit(src, dest, 3, 1); 
+  blit<overwrite>(src, dest, 3, 1); 
 
   // Expected:
   // 0  0  0  0
@@ -158,7 +158,7 @@ TEST_CASE("blit test, clip bottom", "[image_8]")
   setup(dest, src);
 
   // Blit 2x2 src below dest
-  blit(src, dest, 1, 3); 
+  blit<overwrite>(src, dest, 1, 3); 
 
   // Expected:
   // 0  0  0  0

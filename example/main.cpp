@@ -14,6 +14,9 @@
 #include "image_8.h"
 #include "image_32.h"
 #include "image_filter.h"
+#include "image_lighting.h"
+#include "image_normal_map.h"
+#include "image_sphere_map.h"
 #include "image_uv_xform.h"
 #include "palette.h"
 #include "render_image_opengl.h"
@@ -24,12 +27,16 @@ const int WINDOW_W = 500;
 const int WINDOW_H = 500;
 
 // Size in virtual pixels of pretent lo-res screen
-const int VIRTUAL_W = 256;
-const int VIRTUAL_H = 256;
+const int VIRTUAL_W = 64;
+const int VIRTUAL_H = 64;
 
 const colour CLEAR_COLOUR = colour(0xff, 0xc0, 0);
 
 using IMAGE_T = image_32;
+
+std::shared_ptr<image_lighting> lighting_example;
+std::shared_ptr<image_sphere_map> sphere_map_example;
+std::shared_ptr<image_normal_map> normal_map;
 
 p_image fruit;
 p_image arrow1;
@@ -52,6 +59,10 @@ void draw()
 
   the_screen->clear(CLEAR_COLOUR); 
 
+  static float angle = 0.f;
+  angle += 1.0f;
+
+/*
   blit<mask_zero_alpha>(arrow2, the_screen, 1, 64);
   my_font.draw<mask_zero_alpha>(the_screen, 1, 130, "BLUR THEN SCALE");
 
@@ -59,10 +70,8 @@ void draw()
   my_font.draw<mask_zero_alpha>(the_screen, 80, 130, "SCALE THEN BLUR");
 
 
-  static float angle = 0.f;
   alg3::vec2 centre_of_rot((fruit->get_width() - 1) / 2.f, (fruit->get_height() - 1) / 2.f); 
   alg3::mat3 m = rotation2D(centre_of_rot, angle);
-  angle += 1.0f;
   rotated_arrow->set_xform(m);
 
   blit<additive_blend>(rotated_arrow, the_screen, 1, 150);
@@ -70,7 +79,14 @@ void draw()
 
 
   my_font.draw<mask_zero_alpha>(the_screen, 5, 5, "HELLO\n1234567890!@^&*()_+-=<>,.?/\"':;");
+*/
 
+  // Rotate normal map
+  normal_map->set_rotation(alg3::rotation2D(alg3::vec2(0, 0), angle));
+
+  blit<mask_zero_alpha>(lighting_example, the_screen, 0, 0);
+  blit<mask_zero_alpha>(sphere_map_example, the_screen, 32, 0);
+  
   // Draw screen array to actual GL surface
   render_image_32_opengl(the_screen);
 
@@ -146,7 +162,25 @@ int main(int argc, char** argv)
   im2->load("assets/font_4x4.png");
   my_font.set_image(im2); //std::make_shared<image_scale>(im2, 2.f));
   my_font.set_num_cells(16, 4);
+
+  // Lighting example
+  p_image normal_map_img = std::make_shared<image_32>();
+  normal_map_img->load("assets/sphere_normal_map_32.png");
+  // Decorate image so we can rotate it
+  normal_map = std::make_shared<image_normal_map>(normal_map_img);
+
+  lighting_example = std::make_shared<image_lighting>(normal_map);
+  lighting_example->set_light_dir({1.f, 1.f, 2.f}); 
+  lighting_example->set_diffuse_colour({0xff, 0, 0 });
+  lighting_example->set_specular_power(50.f);
+
+  sphere_map_example = std::make_shared<image_sphere_map>();
+  sphere_map_example->add_child(normal_map);
+  p_image fruit_32 = std::make_shared<image_32>();
+  fruit_32->load("assets/fruit_salad_64.png");
+  sphere_map_example->add_child(fruit_32);
+
   glutMainLoop();
 }
 
-
+ 

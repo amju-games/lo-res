@@ -72,16 +72,16 @@ TEST_CASE_METHOD(pixel_fixture, "pixel test - disjoint in x", "[sprite_sheet]")
 {
   int x = 13, y = 17; // some arbitrary position
   
-  REQUIRE(pixel_intersect(ss1, 0, x, y, ss2, 0, x + 2, y) == 
+  REQUIRE(pixel_intersect<zero_alpha>(ss1, 0, x, y, ss2, 0, x + 2, y) == 
     pix_int_result::NO_AND_DISJOINT);
 
-  REQUIRE(pixel_intersect(ss1, 0, x, y, ss2, 0, x - 2, y) == 
+  REQUIRE(pixel_intersect<zero_alpha>(ss1, 0, x, y, ss2, 0, x - 2, y) == 
     pix_int_result::NO_AND_DISJOINT);
 
-  REQUIRE(pixel_intersect(ss1, 0, x + 2, y, ss2, 0, x, y) == 
+  REQUIRE(pixel_intersect<zero_alpha>(ss1, 0, x + 2, y, ss2, 0, x, y) == 
     pix_int_result::NO_AND_DISJOINT);
 
-  REQUIRE(pixel_intersect(ss1, 0, x - 2, y, ss2, 0, x, y) == 
+  REQUIRE(pixel_intersect<zero_alpha>(ss1, 0, x - 2, y, ss2, 0, x, y) == 
     pix_int_result::NO_AND_DISJOINT);
 }
 
@@ -89,16 +89,16 @@ TEST_CASE_METHOD(pixel_fixture, "pixel test - disjoint in y", "[sprite_sheet]")
 {
   int x = -13, y = 17; // some arbitrary position
   
-  REQUIRE(pixel_intersect(ss1, 0, x, y, ss2, 0, x, y + 2) == 
+  REQUIRE(pixel_intersect<zero_alpha>(ss1, 0, x, y, ss2, 0, x, y + 2) == 
     pix_int_result::NO_AND_DISJOINT);
 
-  REQUIRE(pixel_intersect(ss1, 0, x, y, ss2, 0, x, y - 2) == 
+  REQUIRE(pixel_intersect<zero_alpha>(ss1, 0, x, y, ss2, 0, x, y - 2) == 
     pix_int_result::NO_AND_DISJOINT);
 
-  REQUIRE(pixel_intersect(ss1, 0, x, y + 2, ss2, 0, x, y) == 
+  REQUIRE(pixel_intersect<zero_alpha>(ss1, 0, x, y + 2, ss2, 0, x, y) == 
     pix_int_result::NO_AND_DISJOINT);
 
-  REQUIRE(pixel_intersect(ss1, 0, x, y - 2, ss2, 0, x, y) == 
+  REQUIRE(pixel_intersect<zero_alpha>(ss1, 0, x, y - 2, ss2, 0, x, y) == 
     pix_int_result::NO_AND_DISJOINT);
 }
 
@@ -106,31 +106,31 @@ void pixel_fixture::test_overlap_transparent(int c1, int c2) const
 {
   int x = 13, y = -17; // some arbitrary position
   
-  REQUIRE(pixel_intersect(ss1, c1, x, y, ss2, c2, x + 1, y) == 
+  REQUIRE(pixel_intersect<zero_alpha>(ss1, c1, x, y, ss2, c2, x + 1, y) == 
     pix_int_result::NO_AND_NOT_DISJOINT);
 
-  REQUIRE(pixel_intersect(ss1, c1, x, y, ss2, c2, x - 1, y) == 
+  REQUIRE(pixel_intersect<zero_alpha>(ss1, c1, x, y, ss2, c2, x - 1, y) == 
     pix_int_result::NO_AND_NOT_DISJOINT);
 
-  REQUIRE(pixel_intersect(ss1, c1, x, y, ss2, c2, x, y) == 
+  REQUIRE(pixel_intersect<zero_alpha>(ss1, c1, x, y, ss2, c2, x, y) == 
     pix_int_result::NO_AND_NOT_DISJOINT);
 
-  REQUIRE(pixel_intersect(ss1, c1, x, y, ss2, c2, x, y + 1) == 
+  REQUIRE(pixel_intersect<zero_alpha>(ss1, c1, x, y, ss2, c2, x, y + 1) == 
     pix_int_result::NO_AND_NOT_DISJOINT);
 
-  REQUIRE(pixel_intersect(ss1, c1, x, y, ss2, c2, x, y - 1) == 
+  REQUIRE(pixel_intersect<zero_alpha>(ss1, c1, x, y, ss2, c2, x, y - 1) == 
     pix_int_result::NO_AND_NOT_DISJOINT);
 
-  REQUIRE(pixel_intersect(ss1, c1, x + 1, y, ss2, c2, x, y) == 
+  REQUIRE(pixel_intersect<zero_alpha>(ss1, c1, x + 1, y, ss2, c2, x, y) == 
     pix_int_result::NO_AND_NOT_DISJOINT);
 
-  REQUIRE(pixel_intersect(ss1, c1, x - 1, y, ss2, c2, x, y) == 
+  REQUIRE(pixel_intersect<zero_alpha>(ss1, c1, x - 1, y, ss2, c2, x, y) == 
     pix_int_result::NO_AND_NOT_DISJOINT);
 
-  REQUIRE(pixel_intersect(ss1, c1, x, y + 1, ss2, c2, x, y) == 
+  REQUIRE(pixel_intersect<zero_alpha>(ss1, c1, x, y + 1, ss2, c2, x, y) == 
     pix_int_result::NO_AND_NOT_DISJOINT);
 
-  REQUIRE(pixel_intersect(ss1, c1, x, y - 1, ss2, c2, x, y) == 
+  REQUIRE(pixel_intersect<zero_alpha>(ss1, c1, x, y - 1, ss2, c2, x, y) == 
     pix_int_result::NO_AND_NOT_DISJOINT);
 }
 

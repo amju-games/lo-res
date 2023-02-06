@@ -25,7 +25,12 @@
 #include <assert.h>
 #include <math.h>
 
+// j.c.
+#ifdef UNIT_TEST
+#ifndef ALGEBRA3IOSTREAMS
 #define ALGEBRA3IOSTREAMS
+#endif
+#endif
 
 #ifdef ALGEBRA3IOSTREAMS
 #include <iostream>
