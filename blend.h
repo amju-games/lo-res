@@ -76,6 +76,28 @@ struct additive_blend
 };
 
 
+struct multiply
+{
+  colour calc_multiply_blend(const colour& src, const colour& dest)
+  {
+    return (f_colour(src) * f_colour(dest)).to_colour();
+  }
+
+  void operator()(
+    const_ref_image src,
+    ref_image dest,
+    int x, int y,
+    int src_x, int src_y,
+    int dest_x, int dest_y)
+  {
+    auto src_col = src->get_colour(x + src_x, y + src_y);
+    auto dest_col = dest->get_colour(x + dest_x, y + dest_y);
+    auto result = calc_multiply_blend(src_col, dest_col);
+    dest->set_colour(x + dest_x, y + dest_y, result);
+  }
+};
+
+
 struct alpha_blend
 {
   colour calc_alpha_blend(const colour& src, const colour& dest)
