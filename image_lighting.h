@@ -15,10 +15,18 @@ public:
     const colour& c = m_child->get_colour(x, y);
     alg3::vec3 n = colour_to_normal(c);
     float dot = n * m_light_dir;
+
     f_colour diffuse_col = m_diffuse_colour * dot;
+//    diffuse_col.a = c.a; // * dot?
+
     f_colour spec_col = m_specular_colour * powf(dot, m_spec_power);
+//    spec_col.a = c.a; // right?
+
     f_colour final = m_ambient_colour + diffuse_col + spec_col;
-    return final.to_colour();
+
+    colour result = final.to_colour();
+    result.a = c.a; // riiight?????
+    return result;
   }
 
   void set_light_dir(const alg3::vec3& light_dir) { m_light_dir = light_dir; m_light_dir.normalize(); }
