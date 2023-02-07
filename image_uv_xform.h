@@ -11,6 +11,12 @@ class image_uv_xform : public image_decorator
 {
 public:
   image_uv_xform() = default;
+  image_uv_xform(p_image child) 
+  {
+    m_child = child;
+    set_xform(alg3::identity2D());
+  }
+
   image_uv_xform(p_image child, const alg3::mat3& matrix_)
   {
     m_child = child;
