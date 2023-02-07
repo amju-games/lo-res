@@ -4,7 +4,7 @@ clean:
 	rm rotate_helper *.o ../*.o 
 
 run:
-	./rotate_helper -n sphere_normal_map_32.png -cx 4 -cy 4
+	./rotate_helper -n rock_normal_0.png -m rock_outline_0.png -cx 4 -cy 4
 
 
 CC=clang++
