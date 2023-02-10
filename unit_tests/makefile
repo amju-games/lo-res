@@ -24,6 +24,7 @@ blit_region_tests.cpp \
 blit_tests.cpp \
 catch_test_main.cpp \
 colour_to_normal_tests.cpp \
+filler_tests.cpp \
 image_lighting_tests.cpp \
 image_region_tests.cpp \
 image_uv_xform_tests.cpp \

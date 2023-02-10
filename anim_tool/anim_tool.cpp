@@ -9,6 +9,7 @@
 #include <iostream>
 #include <GLUT/glut.h>
 #include "colour.h"
+#include "filler.h"
 #include "font.h"
 #include "image_8.h"
 #include "image_32.h"
@@ -37,8 +38,9 @@ void draw()
     the_screen->set_size(VIRTUAL_W, VIRTUAL_H);
   }
 
-  the_screen->clear(colour(0, 0, 0x80, 0xff));
-  spr.draw(the_screen, 2, 2);
+  fill(the_screen, solid_colour({0xff, 0xa0, 0}));
+//  the_screen->clear(colour(0, 0, 0x80, 0xff));
+  spr.draw<mask_zero_alpha>(the_screen, 2, 2);
 
   // Draw screen array to actual GL surface
   render_image_32_opengl(the_screen);
@@ -113,7 +115,7 @@ int main(int argc, char** argv)
 
   image_8::get_palette().add_colour(colour(0, 0, 0));
 
-  p_image im1 = std::make_shared<image_8>();
+  p_image im1 = std::make_shared<image_32>();
   im1->load(image_filename);
   spr.set_image(im1);
   spr.set_num_cells(cells_in_x, cells_in_y);

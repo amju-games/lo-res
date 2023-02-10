@@ -23,7 +23,9 @@ public:
     int h = im->get_height();
     int x_clamped = std::clamp(static_cast<int>(x1 * w), 0, w - 1);
     int y_clamped = std::clamp(static_cast<int>(y1 * h), 0, h - 1);
-    return im->get_colour(x_clamped, y_clamped);
+    colour res = im->get_colour(x_clamped, y_clamped);
+    res.a = c.a;
+    return res;
   }
 };
 
