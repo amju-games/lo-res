@@ -6,10 +6,10 @@
 colour image_colour_xform::get_colour(int u, int v) const 
 {
   h_colour c = m_child->get_colour(u, v);
-  c.r *= m_mult[0];
-  c.g *= m_mult[1];  
-  c.b *= m_mult[2];  
-  c.a *= m_mult[3];
+  c.r *= m_mult.r;
+  c.g *= m_mult.g;  
+  c.b *= m_mult.b;  
+  c.a *= m_mult.a;
   c += m_add;
   return c.to_colour();  
 }

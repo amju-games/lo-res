@@ -3,7 +3,6 @@
 
 #pragma once
 
-#include "algebra3.h"
 #include "colour.h"
 #include "image_decorator.h"
 
@@ -17,26 +16,31 @@ class image_colour_xform : public image_decorator
 public:
   image_colour_xform() = default;
 
-  image_colour_xform(p_image child, const colour& add, const alg3::vec4& mult)
+  image_colour_xform(p_image child, const colour& add, const f_colour& mult)
   {
     m_child = child;
     m_add = add;
     m_mult = mult;
   }
 
-  image_colour_xform(p_image child, const alg3::vec4& mult)
+  image_colour_xform(p_image child, const f_colour& mult)
   {
     m_child = child;
     m_mult = mult;
   }
 
+  image_colour_xform(p_image child)
+  {
+    m_child = child;
+  }
+
   colour get_colour(int u, int v) const override;
 
-  void set_mult(const alg3::vec4& mult) { m_mult = mult; }
+  void set_mult(const f_colour& mult) { m_mult = mult; }
   void set_add(const colour& add) { m_add = add; }
 
 protected:
   colour m_add = { 0, 0, 0, 0 };
-  alg3::vec4 m_mult = { 1.f, 1.f, 1.f, 1.f };
+  f_colour m_mult = { 1.f, 1.f, 1.f, 1.f };
 };
 
