@@ -6,7 +6,7 @@
 #include "blit.h"
 #include "sprite_sheet.h"
 
-class sprite : public sprite_sheet
+class sprite : public sprite_sheet // TODO This is not right!!
 {
 public:
   template<class BLENDER>
