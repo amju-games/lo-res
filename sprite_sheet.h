@@ -40,6 +40,11 @@ public:
 
     m_cells_x = x;
     m_cells_y = y;
+    recalc_cell_size();
+  }
+
+  void recalc_cell_size()
+  {
     m_cell_w = m_image->get_width() / m_cells_x;
     m_cell_h = m_image->get_height() / m_cells_y;
   }
