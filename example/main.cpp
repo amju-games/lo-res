@@ -10,6 +10,8 @@
 #include <GLUT/glut.h>
 #include "blit.h"
 #include "colour.h"
+#include "draw_ellipse.h"
+#include "draw_line.h"
 #include "font.h"
 #include "image_8.h"
 #include "image_32.h"
@@ -86,7 +88,11 @@ void draw()
 
   blit<mask_zero_alpha>(lighting_example, the_screen, 0, 0);
   blit<mask_zero_alpha>(sphere_map_example, the_screen, 32, 0);
-  
+ 
+  draw_ellipse_solid(the_screen, 30, 30, 30, 20, colour(0xff, 0, 0));
+  draw_line(the_screen, 5, 5, 60, 70, colour(0, 0xff, 0x40));
+
+ 
   // Draw screen array to actual GL surface
   render_image_32_opengl(the_screen);
 
