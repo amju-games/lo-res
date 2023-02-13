@@ -28,6 +28,7 @@ SOURCES=main.cpp \
 ../image_colour_xform.cpp \
 ../image_scale.cpp \
 ../image_uv_xform.cpp \
+../make_sphere_normals.cpp \
 ../third_party/lodepng.cpp \
 ../palette.cpp \
 ../render_image_opengl.cpp \

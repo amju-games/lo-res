@@ -12,6 +12,7 @@
 #include "colour.h"
 #include "draw_ellipse.h"
 #include "draw_line.h"
+#include "filler.h"
 #include "font.h"
 #include "image_8.h"
 #include "image_32.h"
@@ -20,6 +21,7 @@
 #include "image_normal_map.h"
 #include "image_sphere_map.h"
 #include "image_uv_xform.h"
+#include "make_sphere_normals.h"
 #include "palette.h"
 #include "render_image_opengl.h"
 #include "sprite.h"
@@ -39,7 +41,8 @@ using IMAGE_T = image_32;
 std::shared_ptr<image_lighting> lighting_example;
 std::shared_ptr<image_sphere_map> sphere_map_example;
 std::shared_ptr<image_normal_map> normal_map;
-
+p_image generated_normal_map;
+p_image normal_map_img; // loaded from file
 p_image fruit;
 p_image arrow1;
 p_image arrow2;
@@ -88,10 +91,13 @@ void draw()
 
   blit<mask_zero_alpha>(lighting_example, the_screen, 0, 0);
   blit<mask_zero_alpha>(sphere_map_example, the_screen, 32, 0);
+  blit<overwrite>(normal_map_img, the_screen, 0, 32);
+  blit<overwrite>(generated_normal_map, the_screen, 32, 32);
  
-  draw_ellipse_solid(the_screen, 30, 30, 30, 20, colour(0xff, 0, 0));
-  draw_line(the_screen, 5, 5, 60, 70, colour(0, 0xff, 0x40));
+  //draw_ellipse_solid(the_screen, 30, 30, 30, 20, colour(0xff, 0, 0));
+  //draw_line(the_screen, 5, 5, 60, 70, colour(0, 0xff, 0x40));
 
+  //make_sphere_normals(the_screen);
  
   // Draw screen array to actual GL surface
   render_image_32_opengl(the_screen);
@@ -170,12 +176,23 @@ int main(int argc, char** argv)
   my_font.set_num_cells(16, 4);
 
   // Lighting example
-  p_image normal_map_img = std::make_shared<image_32>();
+  normal_map_img = std::make_shared<image_32>();
   normal_map_img->load("assets/sphere_normal_map_32.png");
   // Decorate image so we can rotate it
   normal_map = std::make_shared<image_normal_map>(normal_map_img);
 
-  lighting_example = std::make_shared<image_lighting>(normal_map);
+  generated_normal_map = std::make_shared<image_32>();
+  generated_normal_map->set_size(32, 32);
+  make_sphere_normals(generated_normal_map);
+  //p_image mask = std::make_shared<image_32>();
+  //mask->set_size(32, 32);
+  //fill(mask, solid_colour(colour(0, 0, 0, 0)));
+  //draw_ellipse_solid(mask, 16, 16, 16, 16, colour(0xff, 0xff, 0xff, 0xff));
+  // TODO Mask off outside circle
+ 
+  //lighting_example = std::make_shared<image_lighting>(normal_map_img); 
+  lighting_example = std::make_shared<image_lighting>(generated_normal_map);
+
   lighting_example->set_light_dir({1.f, 1.f, 2.f}); 
   lighting_example->set_diffuse_colour({0xff, 0, 0 });
   lighting_example->set_specular_power(50.f);
