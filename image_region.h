@@ -11,6 +11,17 @@ public:
     set_region(0, 0, child->get_width(), child->get_height());
   }
 
+  image_region(p_image child, int x, int y, int w, int h) : image_decorator(child)
+  {
+    set_region(x, y, w, h);
+  }
+
+  void set_region(int x, int y)
+  {
+    m_x = x;
+    m_y = y;
+  }
+
   void set_region(int x, int y, int w, int h)
   {
     m_x = x;

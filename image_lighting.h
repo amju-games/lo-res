@@ -15,17 +15,19 @@ public:
     const colour& c = m_child->get_colour(x, y);
     alg3::vec3 n = colour_to_normal(c);
     float dot = n * m_light_dir;
+    dot = std::clamp(dot, 0.f, 1.f);
 
     f_colour diffuse_col = m_diffuse_colour * dot;
-//    diffuse_col.a = c.a; // * dot?
+    diffuse_col.a = m_diffuse_colour.a; //c.a; // * dot?
 
-    f_colour spec_col = m_specular_colour * powf(dot, m_spec_power);
-//    spec_col.a = c.a; // right?
+    float sp = std::clamp(powf(dot, m_spec_power), 0.f, 1.f);
+    f_colour spec_col = m_specular_colour * sp;
+    spec_col.a = m_specular_colour.a * sp; //c.a; // right?
 
     f_colour final = m_ambient_colour + diffuse_col + spec_col;
-
+    final.a *= static_cast<float>(c.a) / 255.f;
     colour result = final.to_colour();
-    result.a = c.a; // riiight?????
+    ////result.a *= c.a; // riiight?????
     return result;
   }
 

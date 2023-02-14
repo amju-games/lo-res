@@ -49,18 +49,36 @@ struct mask
 
 using mask_zero_alpha = mask<zero_alpha>;
 
+// Calculation functions, used by blender types below and can be
+//  passed as functors to image_combine
+using blend_func = std::function<colour(const colour&, const colour&)>;
+
+colour calc_additive_blend(const colour& src, const colour& dest)
+{
+  h_colour hc = h_colour(src) + h_colour(dest);
+  colour result = hc.to_colour();
+  return result;
+}
+
+colour calc_multiply_blend(const colour& src, const colour& dest)
+{
+  return (f_colour(src) * f_colour(dest)).to_colour();
+}
+
+colour calc_alpha_blend(const colour& src, const colour& dest)
+{
+  // Like (SRC_ALPHA, ONE_MINUS_SRC_ALPHA)
+  h_colour hc =
+    h_colour(src) * static_cast<float>(src.a) * (1.f/255.f) +
+    h_colour(dest) * (1.f - static_cast<float>(src.a) * (1.f/255.f));
+  colour result = hc.to_colour();
+  //??? result.a = 0xff;
+  return result;
+}
+
 
 struct additive_blend
 {
-  colour calc_additive_blend(const colour& src, const colour& dest)
-  {
-    // TODO Should use alpha here?
-    h_colour hc = h_colour(src) + h_colour(dest);
-    colour result = hc.to_colour();
-    result.a = 0xff;
-    return result;
-  }
-
   void operator()(
     const_ref_image src,
     ref_image dest,
@@ -78,11 +96,6 @@ struct additive_blend
 
 struct multiply
 {
-  colour calc_multiply_blend(const colour& src, const colour& dest)
-  {
-    return (f_colour(src) * f_colour(dest)).to_colour();
-  }
-
   void operator()(
     const_ref_image src,
     ref_image dest,
@@ -100,17 +113,6 @@ struct multiply
 
 struct alpha_blend
 {
-  colour calc_alpha_blend(const colour& src, const colour& dest)
-  {
-    // Like (SRC_ALPHA, ONE_MINUS_SRC_ALPHA)
-    h_colour hc =
-      h_colour(src) * static_cast<float>(src.a) * (1.f/255.f) +
-      h_colour(dest) * (1.f - static_cast<float>(src.a) * (1.f/255.f));
-    colour result = hc.to_colour();
-    result.a = 0xff;
-    return result;
-  }
-
   void operator()(
     const_ref_image src,
     ref_image dest,

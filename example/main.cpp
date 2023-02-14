@@ -16,10 +16,14 @@
 #include "font.h"
 #include "image_8.h"
 #include "image_32.h"
+#include "image_colour_xform.h"
+#include "image_combine.h"
 #include "image_filter.h"
 #include "image_lighting.h"
 #include "image_mask.h"
 #include "image_normal_map.h"
+#include "image_region.h"
+#include "image_scale.h"
 #include "image_sphere_map.h"
 #include "image_uv_xform.h"
 #include "make_sphere_normals.h"
@@ -56,6 +60,118 @@ public:
 int page_num = 0;
 std::vector<page> pages = 
 {
+page([]()
+{
+  draw_ellipse_outline(the_screen, 
+    60, 60,
+    20, 30,
+    f_colour(.2f, .5f, 1, 1).to_colour());
+
+  draw_ellipse_outline(the_screen, 
+    100, 100,
+    30, 20,
+    f_colour(1, 1, 1, 1).to_colour());
+
+  my_font.draw<mask_zero_alpha>(the_screen, 1, 1, "ELLIPSE");
+}),
+
+page([]()
+{
+  static p_image fruit;
+  static p_image bubble_img;
+  static std::shared_ptr<image_scale> bubble;
+  static p_image sphere_map;
+  static std::shared_ptr<image_region> sphere_map_region;
+  static float bub_size = 50;
+
+  do_once
+  {
+    fruit = std::make_shared<image_32>();
+    fruit->load("assets/fruit_salad_128.png");
+ 
+    bubble_img = std::make_shared<image_32>();
+    bubble_img->set_size(bub_size, bub_size);
+    fill(bubble_img, solid_colour(colour(0, 0, 0, 0)));
+
+    draw_ellipse_outline(bubble_img, 
+      bub_size / 2.f, 
+      bub_size / 2.f, 
+      bub_size / 2.f - 2, 
+      bub_size / 2.f - 2, 
+      f_colour(1, 1, 1, .5).to_colour());
+
+    p_image gen_normal_map = std::make_shared<image_32>();
+    gen_normal_map->set_size(bub_size, bub_size);
+    make_sphere_normals(gen_normal_map);
+
+    p_image mask = std::make_shared<image_32>();
+    mask->set_size(bub_size, bub_size);
+    fill(mask, solid_colour(colour(0, 0, 0, 0)));
+    draw_ellipse_solid(mask, 
+      bub_size / 2.f, 
+      bub_size / 2.f, 
+      bub_size / 2.f - 2, 
+      bub_size / 2.f - 2, 
+      colour(0xff, 0xff, 0xff, 0xff));
+    // Mask off outside circle
+    auto masker = std::make_shared<image_mask<>>(gen_normal_map, mask);
+    // Destructive, read from and write to generated_normal_map
+    blit<overwrite>(masker, gen_normal_map, 0, 0);
+
+    std::shared_ptr<image_lighting> light = std::make_shared<image_lighting>(gen_normal_map);
+    light->set_ambient_colour(f_colour(.4f, .4f, .6f, .4f).to_colour());
+    light->set_diffuse_colour(f_colour(.2f, .2f, .4f, .5f).to_colour());
+    light->set_specular_colour(f_colour(1, 1, 1, .99f).to_colour());
+    light->set_specular_power(80.f);
+    light->set_light_dir({1.f, 1.f, 2.f}); 
+
+    sphere_map_region = std::make_shared<image_region>(fruit, 0, 0, bub_size, bub_size);
+    
+    sphere_map = std::make_shared<image_colour_xform>(
+      std::make_shared<image_sphere_map>(gen_normal_map, sphere_map_region),
+      f_colour(1, 1, 1, 0.99f));
+
+    std::shared_ptr combiner = std::make_shared<image_combine>(
+          calc_alpha_blend);
+    combiner->add_child(light);
+    combiner->add_child(sphere_map); 
+
+    std::shared_ptr combiner2 = std::make_shared<image_combine>(
+      combiner,
+      bubble_img,
+      calc_additive_blend);
+
+    bubble = std::make_shared<image_scale>(combiner2);
+  }
+
+  int w = bubble->get_width();
+  int h = bubble->get_height();
+  static float x = 60;
+  static float y = 20;
+  static float dx = .7f;
+  static float dy = .7f;
+  static float wobble = 0;
+  wobble += .1f;
+  bubble->set_scale(
+    .9f + .1f * cosf(wobble), 
+    .9f + .1f * sinf(wobble)); 
+  x += dx;
+  y += dy;
+  dy += .001f;
+  if (x < 0) dx = -dx;
+  if (y < 0) dy = -dy;
+  if ((x + w) > VIRTUAL_W) dx = -dx;
+  if ((y + h) > VIRTUAL_H) dy = -dy;
+  blit<overwrite>(fruit, the_screen, 0, 0);
+
+  // sphere map is subregion of background, which moves with bubble
+  sphere_map_region->set_region(x, y);
+
+  blit<alpha_blend>(bubble, the_screen, x, y);
+
+  my_font.draw<mask_zero_alpha>(the_screen, 1, 1, "WATER BUBBLE");
+}),
+
 page([]()
 {
   static p_image fruit;
@@ -185,11 +301,6 @@ void draw()
 
   pages[page_num].draw();
 
-  //draw_ellipse_solid(the_screen, 30, 30, 30, 20, colour(0xff, 0, 0));
-  //draw_line(the_screen, 5, 5, 60, 70, colour(0, 0xff, 0x40));
-
-  //make_sphere_normals(the_screen);
- 
   // Draw screen array to actual GL surface
   render_image_32_opengl(the_screen);
 
@@ -224,8 +335,8 @@ int main(int argc, char** argv)
 
   // Load a font
   p_image im2 = std::make_shared<image_32>();
-  im2->load("assets/font_4x4.png");
-  my_font.set_image(im2); //std::make_shared<image_scale>(im2, 2.f));
+  im2->load("assets/font_3x5.png");
+  my_font.set_image(im2); 
   my_font.set_num_cells(16, 4);
 
   glutMainLoop();
