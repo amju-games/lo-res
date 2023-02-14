@@ -18,6 +18,7 @@
 #include "image_32.h"
 #include "image_filter.h"
 #include "image_lighting.h"
+#include "image_mask.h"
 #include "image_normal_map.h"
 #include "image_sphere_map.h"
 #include "image_uv_xform.h"
@@ -184,11 +185,14 @@ int main(int argc, char** argv)
   generated_normal_map = std::make_shared<image_32>();
   generated_normal_map->set_size(32, 32);
   make_sphere_normals(generated_normal_map);
-  //p_image mask = std::make_shared<image_32>();
-  //mask->set_size(32, 32);
-  //fill(mask, solid_colour(colour(0, 0, 0, 0)));
-  //draw_ellipse_solid(mask, 16, 16, 16, 16, colour(0xff, 0xff, 0xff, 0xff));
-  // TODO Mask off outside circle
+  p_image mask = std::make_shared<image_32>();
+  mask->set_size(32, 32);
+  fill(mask, solid_colour(colour(0, 0, 0, 0)));
+  draw_ellipse_solid(mask, 16, 16, 14, 12, colour(0xff, 0xff, 0xff, 0xff));
+  // Mask off outside circle
+  auto masker = std::make_shared<image_mask<>>(generated_normal_map, mask);
+  // Destructive, read from and write to generated_normal_map
+  blit<overwrite>(masker, generated_normal_map, 0, 0);
  
   //lighting_example = std::make_shared<image_lighting>(normal_map_img); 
   lighting_example = std::make_shared<image_lighting>(generated_normal_map);
