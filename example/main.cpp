@@ -83,6 +83,7 @@ page([]()
   static p_image sphere_map;
   static std::shared_ptr<image_region> sphere_map_region;
   static float bub_size = 50;
+  static std::shared_ptr<image_lighting> light;
 
   do_once
   {
@@ -118,7 +119,7 @@ page([]()
     // Destructive, read from and write to generated_normal_map
     blit<overwrite>(masker, gen_normal_map, 0, 0);
 
-    std::shared_ptr<image_lighting> light = std::make_shared<image_lighting>(gen_normal_map);
+    light = std::make_shared<image_lighting>(gen_normal_map);
     light->set_ambient_colour(f_colour(.4f, .4f, .6f, .4f).to_colour());
     light->set_diffuse_colour(f_colour(.2f, .2f, .4f, .5f).to_colour());
     light->set_specular_colour(f_colour(1, 1, 1, .99f).to_colour());
@@ -147,9 +148,9 @@ page([]()
   int w = bubble->get_width();
   int h = bubble->get_height();
   static float x = 60;
-  static float y = 20;
-  static float dx = .7f;
-  static float dy = .7f;
+  static float y = 10;
+  static float dx = .4f;
+  static float dy = .4f;
   static float wobble = 0;
   wobble += .1f;
   bubble->set_scale(
@@ -162,6 +163,11 @@ page([]()
   if (y < 0) dy = -dy;
   if ((x + w) > VIRTUAL_W) dx = -dx;
   if ((y + h) > VIRTUAL_H) dy = -dy;
+
+  float w2 = VIRTUAL_W / 2.f;
+  float h2 = VIRTUAL_H / 2.f; 
+  light->set_light_dir({(x - w2)/w2, (y - h2)/h2, 2.f}); 
+
   blit<overwrite>(fruit, the_screen, 0, 0);
 
   // sphere map is subregion of background, which moves with bubble
