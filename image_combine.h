@@ -21,7 +21,8 @@ public:
   colour get_colour(int x, int y) const override
   {
     colour c1 = m_children[0]->get_colour(x, y);
-    for (int i = 1; i < m_children.size(); i++)
+    int size = static_cast<int>(m_children.size());
+    for (int i = 1; i < size; i++)
     {
       const colour& c2 = m_children[i]->get_colour(x, y);
       c1 = m_blend_func(c1, c2);
