@@ -8,7 +8,7 @@ colour image_scale::get_colour(int u, int v) const
 {
   float su = static_cast<float>(u) / m_scale_x;
   float sv = static_cast<float>(v) / m_scale_y;
-  return m_child->get_colour(static_cast<int>(su + .5f), static_cast<int>(sv + .5f));
+  return m_child->get_colour(static_cast<int>(su), static_cast<int>(sv));
 }
 
 int image_scale::get_width() const 
