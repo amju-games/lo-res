@@ -4,6 +4,7 @@
 #include "blit.h"
 #include "catch.hpp"
 #include "image_8.h"
+#include "image_32.h"
 
 // Test blitting, especially clipping.
 
@@ -180,4 +181,21 @@ TEST_CASE("blit test, clip bottom", "[image_8]")
   REQUIRE(dest->get_colour(2, 3) == make_colour(2));
   REQUIRE(dest->get_colour(3, 3) == make_colour(0));
 }
+
+TEST_CASE("blit with subtract", "[blit]")
+{
+  p_image src = std::make_shared<image_32>();
+  p_image dest = std::make_shared<image_32>();
+  src->set_size(1, 1);
+  src->set_colour(0, 0, colour(6, 5, 4, 3));
+  dest->set_size(1, 1);
+  dest->set_colour(0, 0, colour(5, 7, 1, 2));
+  
+  // dest = src - dest
+  blit<sub_blend>(src, dest, 0, 0);
+  colour result = dest->get_colour(0, 0);
+  REQUIRE(result == colour(1, 0, 3, 1));
+}
+
+
 

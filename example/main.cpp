@@ -62,6 +62,25 @@ std::vector<page> pages =
 {
 page([]()
 {
+  static sprite spr;
+
+  do_once
+  {
+    p_image outer = std::make_shared<image_32>();
+    outer->set_size(64, 64);
+    outer->clear(colour(0, 0, 0, 0));
+    //draw_ellipse_solid(outer, 32, 32, 30, 30, colour(0xff, 0x00, 0x00));
+    spr.set_image(outer);
+    spr.set_num_cells(1, 1); 
+  }
+
+  spr.draw<sub_blend>(the_screen, 33, 33);
+
+  my_font.draw<mask_zero_alpha>(the_screen, 1, 1, "SUBTRACT TEST");
+}),
+
+page([]()
+{
   draw_ellipse_outline(the_screen, 
     60, 60,
     20, 30,
@@ -140,7 +159,7 @@ page([]()
     std::shared_ptr combiner2 = std::make_shared<image_combine>(
       combiner,
       bubble_img,
-      calc_additive_blend);
+      calc_add_blend);
 
     bubble = std::make_shared<image_scale>(combiner2);
   }
@@ -235,7 +254,7 @@ page([]()
   alg3::mat3 m = rotation2D(centre_of_rot, angle);
   rotated_arrow->set_xform(m);
 
-  blit<additive_blend>(rotated_arrow, the_screen, 1, 150);
+  blit<add_blend>(rotated_arrow, the_screen, 1, 150);
   my_font.draw<mask_zero_alpha>(the_screen, 1, 170, "ROTATED");
 
   my_font.draw<mask_zero_alpha>(the_screen, 5, 5, "HELLO\n1234567890!@^&*()_+-=<>,.?/\"':;");

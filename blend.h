@@ -53,14 +53,21 @@ using mask_zero_alpha = mask<zero_alpha>;
 //  passed as functors to image_combine
 using blend_func = std::function<colour(const colour&, const colour&)>;
 
-inline colour calc_additive_blend(const colour& src, const colour& dest)
+inline colour calc_add_blend(const colour& src, const colour& dest)
 {
   h_colour hc = h_colour(src) + h_colour(dest);
   colour result = hc.to_colour();
   return result;
 }
 
-inline colour calc_multiply_blend(const colour& src, const colour& dest)
+inline colour calc_sub_blend(const colour& src, const colour& dest)
+{
+  h_colour hc = h_colour(src) - h_colour(dest);
+  colour result = hc.to_colour();
+  return result;
+}
+
+inline colour calc_mult_blend(const colour& src, const colour& dest)
 {
   return (f_colour(src) * f_colour(dest)).to_colour();
 }
@@ -76,7 +83,7 @@ inline colour calc_alpha_blend(const colour& src, const colour& dest)
 }
 
 
-struct additive_blend
+struct add_blend
 {
   void operator()(
     const_ref_image src,
@@ -87,13 +94,13 @@ struct additive_blend
   {
     auto src_col = src->get_colour(x + src_x, y + src_y);
     auto dest_col = dest->get_colour(x + dest_x, y + dest_y);
-    auto result = calc_additive_blend(src_col, dest_col);
+    auto result = calc_add_blend(src_col, dest_col);
     dest->set_colour(x + dest_x, y + dest_y, result);
   }
 };
 
 
-struct multiply
+struct sub_blend
 {
   void operator()(
     const_ref_image src,
@@ -104,7 +111,24 @@ struct multiply
   {
     auto src_col = src->get_colour(x + src_x, y + src_y);
     auto dest_col = dest->get_colour(x + dest_x, y + dest_y);
-    auto result = calc_multiply_blend(src_col, dest_col);
+    auto result = calc_sub_blend(src_col, dest_col);
+    dest->set_colour(x + dest_x, y + dest_y, result);
+  }
+};
+
+
+struct mult_blend
+{
+  void operator()(
+    const_ref_image src,
+    ref_image dest,
+    int x, int y,
+    int src_x, int src_y,
+    int dest_x, int dest_y)
+  {
+    auto src_col = src->get_colour(x + src_x, y + src_y);
+    auto dest_col = dest->get_colour(x + dest_x, y + dest_y);
+    auto result = calc_mult_blend(src_col, dest_col);
     dest->set_colour(x + dest_x, y + dest_y, result);
   }
 };

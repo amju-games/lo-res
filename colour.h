@@ -66,6 +66,15 @@ struct f_colour
     return *this;
   }
 
+  f_colour& operator-=(const f_colour& f)
+  {
+    r -= f.r;
+    g -= f.g;
+    b -= f.b;
+    a -= f.a;
+    return *this;
+  }
+
   f_colour& operator*=(const f_colour& f)
   {
     r *= f.r;
@@ -91,6 +100,13 @@ inline f_colour operator+(const f_colour& f1, const f_colour& f2)
 {
   f_colour f(f1);
   f += f2;
+  return f;
+}
+
+inline f_colour operator-(const f_colour& f1, const f_colour& f2)
+{
+  f_colour f(f1);
+  f -= f2;
   return f;
 }
 
@@ -146,6 +162,15 @@ struct h_colour
     return *this;
   }
 
+  h_colour& operator-=(const h_colour& h)
+  {
+    r -= h.r;
+    g -= h.g;
+    b -= h.b;
+    a -= h.a;
+    return *this;
+  }
+
   h_colour& operator*=(const h_colour& h)
   {
     r *= h.r;
@@ -171,6 +196,13 @@ inline h_colour operator+(const h_colour& h1, const h_colour& h2)
 {
   h_colour h(h1);
   h += h2;
+  return h;
+}
+
+inline h_colour operator-(const h_colour& h1, const h_colour& h2)
+{
+  h_colour h(h1);
+  h -= h2;
   return h;
 }
 

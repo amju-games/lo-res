@@ -12,7 +12,6 @@
 
 // * blit_region *
 // Blit a rectangular region of the source image to the destination.
-// Transparent pixels are not copied.
 template<class BLENDER>
 void blit_region(
   const_ref_image src,
