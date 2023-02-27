@@ -9,7 +9,6 @@
 // Useful blend operations to use as BLENDER type in blit functions
 
 // Just overwrites the dest with what's in the src. Like blending is disabled.
-
 struct overwrite
 {
   void operator()(
@@ -26,7 +25,6 @@ struct overwrite
 
 
 // Pixel mask: src pixels satisfying the transparency test are not copied to dest. 
-
 template<class IS_TRANSPARENT>
 struct mask
 {
@@ -83,6 +81,7 @@ inline colour calc_alpha_blend(const colour& src, const colour& dest)
 }
 
 
+// Dest = dest + src
 struct add_blend
 {
   void operator()(
@@ -100,6 +99,7 @@ struct add_blend
 };
 
 
+// Dest = dest - src
 struct sub_blend
 {
   void operator()(
@@ -111,12 +111,15 @@ struct sub_blend
   {
     auto src_col = src->get_colour(x + src_x, y + src_y);
     auto dest_col = dest->get_colour(x + dest_x, y + dest_y);
-    auto result = calc_sub_blend(src_col, dest_col);
+    // We want 'dest = dest - src' behaviour, so we have the params to 
+    //  calc_sub_blend as this.
+    auto result = calc_sub_blend(dest_col, src_col);
     dest->set_colour(x + dest_x, y + dest_y, result);
   }
 };
 
 
+// Dest = dest * src
 struct mult_blend
 {
   void operator()(

@@ -69,7 +69,7 @@ page([]()
     p_image outer = std::make_shared<image_32>();
     outer->set_size(64, 64);
     outer->clear(colour(0, 0, 0, 0));
-    //draw_ellipse_solid(outer, 32, 32, 30, 30, colour(0xff, 0x00, 0x00));
+    draw_ellipse_solid(outer, 32, 32, 30, 30, colour(0xff, 0x00, 0x00));
     spr.set_image(outer);
     spr.set_num_cells(1, 1); 
   }
