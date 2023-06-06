@@ -491,7 +491,9 @@ inline vec2& vec2::operator *= ( const REAL d )
 { n[VX] *= d; n[VY] *= d; return *this; }
 
 inline vec2& vec2::operator /= ( const REAL d )
-{ REAL d_inv = 1./d; n[VX] *= d_inv; n[VY] *= d_inv; return *this; }
+{
+    REAL d_inv = REAL{ 1. } / d; n[VX] *= d_inv; n[VY] *= d_inv; return *this;
+}
 
 inline REAL& vec2::operator [] ( int i) {
     assert(!(i < VX || i > VY));		// subscript check
@@ -507,7 +509,7 @@ inline REAL vec2::operator [] ( int i) const {
 // SPECIAL FUNCTIONS
 
 inline REAL vec2::length() const
-{ return sqrt(length2()); }
+{ return static_cast<REAL>(sqrt(length2())); }
 
 inline REAL vec2::length2() const
 { return n[VX]*n[VX] + n[VY]*n[VY]; }
@@ -552,7 +554,9 @@ inline REAL operator * (const vec2& a, const vec2& b)
 { return (a.n[VX]*b.n[VX] + a.n[VY]*b.n[VY]); }
 
 inline vec2 operator / (const vec2& a, const REAL d)
-{ REAL d_inv = 1./d; return vec2(a.n[VX]*d_inv, a.n[VY]*d_inv); }
+{
+    REAL d_inv = REAL{ 1. } / d; return vec2(a.n[VX] * d_inv, a.n[VY] * d_inv);
+}
 
 inline vec3 operator ^ (const vec2& a, const vec2& b)
 { return vec3(0.0, 0.0, a.n[VX] * b.n[VY] - b.n[VX] * a.n[VY]); }
@@ -655,7 +659,8 @@ inline vec3& vec3::operator *= ( const REAL d )
 { n[VX] *= d; n[VY] *= d; n[VZ] *= d; return *this; }
 
 inline vec3& vec3::operator /= ( const REAL d )
-{ REAL d_inv = 1./d; n[VX] *= d_inv; n[VY] *= d_inv; n[VZ] *= d_inv;
+{
+    REAL d_inv = REAL{ 1. } / d; n[VX] *= d_inv; n[VY] *= d_inv; n[VZ] *= d_inv;
   return *this; }
 
 inline REAL& vec3::operator [] ( int i) {
@@ -672,7 +677,7 @@ inline REAL vec3::operator [] ( int i) const {
 // SPECIAL FUNCTIONS
 
 inline REAL vec3::length() const
-{  return sqrt(length2()); }
+{  return static_cast<REAL>(sqrt(length2())); }
 
 inline REAL vec3::length2() const
 {  return n[VX]*n[VX] + n[VY]*n[VY] + n[VZ]*n[VZ]; }
@@ -719,7 +724,8 @@ inline REAL operator * (const vec3& a, const vec3& b)
 { return (a.n[VX]*b.n[VX] + a.n[VY]*b.n[VY] + a.n[VZ]*b.n[VZ]); }
 
 inline vec3 operator / (const vec3& a, const REAL d)
-{ REAL d_inv = 1./d; return vec3(a.n[VX]*d_inv, a.n[VY]*d_inv,
+{
+    REAL d_inv = REAL{ 1. } / d; return vec3(a.n[VX] * d_inv, a.n[VY] * d_inv,
   a.n[VZ]*d_inv); }
 
 inline vec3 operator ^ (const vec3& a, const vec3& b) {
@@ -827,7 +833,8 @@ inline vec4& vec4::operator *= ( const REAL d )
 { n[VX] *= d; n[VY] *= d; n[VZ] *= d; n[VW] *= d; return *this; }
 
 inline vec4& vec4::operator /= ( const REAL d )
-{ REAL d_inv = 1./d; n[VX] *= d_inv; n[VY] *= d_inv; n[VZ] *= d_inv;
+{
+    REAL d_inv = REAL{ 1. } / d; n[VX] *= d_inv; n[VY] *= d_inv; n[VZ] *= d_inv;
   n[VW] *= d_inv; return *this; }
 
 inline REAL& vec4::operator [] ( int i) {
@@ -843,7 +850,7 @@ inline REAL vec4::operator [] ( int i) const {
 // SPECIAL FUNCTIONS
 
 inline REAL vec4::length() const
-{ return sqrt(length2()); }
+{ return static_cast<REAL>(sqrt(length2())); }
 
 inline REAL vec4::length2() const
 { return n[VX]*n[VX] + n[VY]*n[VY] + n[VZ]*n[VZ] + n[VW]*n[VW]; }
@@ -890,7 +897,8 @@ inline REAL operator * (const vec4& a, const vec4& b)
   a.n[VW]*b.n[VW]); }
 
 inline vec4 operator / (const vec4& a, const REAL d)
-{ REAL d_inv = 1./d; return vec4(a.n[VX]*d_inv, a.n[VY]*d_inv, a.n[VZ]*d_inv,
+{
+    REAL d_inv = REAL{ 1. } / d; return vec4(a.n[VX] * d_inv, a.n[VY] * d_inv, a.n[VZ] * d_inv,
   a.n[VW]*d_inv); }
 
 inline int operator == (const vec4& a, const vec4& b)
@@ -1267,12 +1275,12 @@ inline mat3 translation2D(const vec2& v)
 		vec3(0.0, 0.0, 1.0)); }
 
 inline mat3 rotation2D(const vec2& Center, const REAL angleDeg) {
-    REAL  angleRad = angleDeg * M_PI / 180.0,
-	    c = cos(angleRad),
-	    s = sin(angleRad);
+    REAL  angleRad = angleDeg * M_PI / REAL{ 180.0 },
+	    c = static_cast<REAL>(cos(angleRad)),
+	    s = static_cast<REAL>(sin(angleRad));
 
-    return mat3(vec3(c, -s, Center[VX] * (1.0-c) + Center[VY] * s),
-		vec3(s, c, Center[VY] * (1.0-c) - Center[VX] * s),
+    return mat3(vec3(c, -s, Center[VX] * (REAL{ 1.0 } - c) + Center[VY] * s),
+        vec3(s, c, Center[VY] * (REAL{ 1.0 } - c) - Center[VX] * s),
 		vec3(0.0, 0.0, 1.0));
 }
 
@@ -1294,10 +1302,10 @@ inline mat4 translation3D(const vec3& v)
 		vec4(0.0, 0.0, 0.0, 1.0)); }
 
 inline mat4 rotation3D(vec3 Axis, const REAL angleDeg) {
-    REAL  angleRad = angleDeg * M_PI / 180.0,
-	    c = cos(angleRad),
-	    s = sin(angleRad),
-	    t = 1.0 - c;
+    REAL  angleRad = angleDeg * M_PI / REAL{ 180.0 },
+	    c = static_cast<REAL>(cos(angleRad)),
+	    s = static_cast<REAL>(sin(angleRad)),
+        t = REAL{ 1.0 } - c;
 
     Axis.normalize();
     return mat4(vec4(t * Axis[VX] * Axis[VX] + c,
@@ -1325,7 +1333,8 @@ inline mat4 perspective3D(const REAL d)
 {   return mat4(vec4(1.0, 0.0, 0.0, 0.0),
 		vec4(0.0, 1.0, 0.0, 0.0),
 		vec4(0.0, 0.0, 1.0, 0.0),
-		vec4(0.0, 0.0, 1.0/d, 0.0)); }
+    vec4(0.0, 0.0, REAL{ 1.0 } / d, 0.0));
+}
 
 } // j.c. namespace alg3
 

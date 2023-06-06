@@ -35,12 +35,12 @@ std::shared_ptr<image_uv_xform> make_rotate_xform(float angle_degs)
 
 colour image_uv_xform::get_colour(int u, int v) const
 {
-  const float w = m_child->get_width();
-  const float h = m_child->get_height();
+  const float w = static_cast<float>(m_child->get_width());
+  const float h = static_cast<float>(m_child->get_height());
 
   const float Z = 1.0f;
 
-  alg3::vec3 vec = m_inverse * alg3::vec3(u, v, Z);
+  alg3::vec3 vec = m_inverse * alg3::vec3(static_cast<float>(u), static_cast<float>(v), Z);
 
 #ifdef XF_DEBUG
 std::cout << "get_colour: input uv: " << alg3::vec3(u, v, Z) << " -> ";
@@ -71,8 +71,8 @@ std::cout << "  colour: " << (int)c.r << "\n";
 
 int image_uv_xform::get_width() const 
 {
-  float w = m_child->get_width();
-  float h = m_child->get_height();
+  float w = static_cast<float>(m_child->get_width());
+  float h = static_cast<float>(m_child->get_height());
   float w1 = m_matrix[0][0] * w;
   float w2 = m_matrix[0][1] * h;
   float ret = fabs(w1) + fabs(w2);
@@ -80,13 +80,13 @@ int image_uv_xform::get_width() const
 std::cout << "w: " << w << " h: " << h << " w1: " << w1 << " w2: " << w2 << " ret: " << ret << "\n";
 #endif
 
-  return ret;
+  return static_cast<int>(ret);
 }
 
 int image_uv_xform::get_height() const 
 {
-  float w = m_child->get_width();
-  float h = m_child->get_height();
+  float w = static_cast<float>(m_child->get_width());
+  float h = static_cast<float>(m_child->get_height());
   float h1 = m_matrix[1][0] * w;
   float h2 = m_matrix[1][1] * h;
   float ret = fabs(h1) + fabs(h2);
