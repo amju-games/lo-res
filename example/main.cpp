@@ -55,7 +55,7 @@ public:
   std::function<void()> m_draw_func;
 };
 
-#define do_once static int once = 1; if (once-- > 0)
+#define do_once static int once = 1; if (once > 0 && once-- > 0)
 
 int page_num = 0;
 std::vector<page> pages = 
