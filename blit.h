@@ -9,7 +9,6 @@
 #include "blend.h"
 #include "image.h"
 
-
 // * blit_region *
 // Blit a rectangular region of the source image to the destination.
 template<class BLENDER>
@@ -34,15 +33,16 @@ void blit_region(
 
   // Blit the region of the src image which intersects the destination
   //  image.
-  for (int x = x_min; x < x_max; x++)
+
+  // NB we scan horizontally for cache-friendliness!
+  for (int y = y_min; y < y_max; y++)
   {
-    for (int y = y_min; y < y_max; y++)
+    for (int x = x_min; x < x_max; x++)
     {
       blender(src, dest, x, y, src_x, src_y, dest_x, dest_y);
     }
   }
 }
-
 
 template<class BLENDER>
 void blit(const_ref_image src, ref_image dest, int dest_x, int dest_y)
