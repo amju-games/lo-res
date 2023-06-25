@@ -1,13 +1,6 @@
 #include <cmath>
 #include "draw_line.h"
-
-void plot(ref_image dest, int x, int y, const colour& c)
-{
-  if (x >= 0 && x < dest->get_width() && y >= 0 && y < dest->get_height())
-  {
-    dest->set_colour(x, y, c);
-  }
-}
+#include "draw_point.h"
 
 // Bresenham's line algorithm
 // https://rosettacode.org/wiki/Bitmap/Bresenham%27s_line_algorithm#C.2B.2B
@@ -39,11 +32,11 @@ void draw_line(ref_image dest, int x1, int y1, int x2, int y2, const colour& col
   {
     if(steep)
     {
-        plot(dest, y, x, col);
+        draw_point(dest, y, x, col);
     }
     else
     {
-        plot(dest, x, y, col);
+        draw_point(dest, x, y, col);
     }
  
     error -= dy;

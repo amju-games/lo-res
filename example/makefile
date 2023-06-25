@@ -23,6 +23,7 @@ SOURCES=main.cpp \
 ../draw_edge.cpp \
 ../draw_ellipse.cpp \
 ../draw_line.cpp \
+../draw_point.cpp \
 ../image_8.cpp \
 ../image_32.cpp \
 ../image_filter.cpp \
