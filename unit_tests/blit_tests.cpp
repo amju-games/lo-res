@@ -191,10 +191,10 @@ TEST_CASE("blit with subtract", "[blit]")
   dest->set_size(1, 1);
   dest->set_colour(0, 0, colour(5, 7, 1, 2));
   
-  // dest = src - dest
+  // dest = dest - src
   blit<sub_blend>(src, dest, 0, 0);
   colour result = dest->get_colour(0, 0);
-  REQUIRE(result == colour(1, 0, 3, 1));
+  REQUIRE(result == colour(0, 2, 0, 0));
 }
 
 
