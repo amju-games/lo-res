@@ -10,6 +10,7 @@
 #include <GLUT/glut.h>
 #include "blit.h"
 #include "colour.h"
+#include "draw_edge.h"
 #include "draw_ellipse.h"
 #include "draw_line.h"
 #include "filler.h"
@@ -60,6 +61,26 @@ public:
 int page_num = 0;
 std::vector<page> pages = 
 {
+page([]()
+{
+  static p_image src = std::make_shared<image_32>();
+  static p_image dest = std::make_shared<image_32>();
+  do_once
+  {
+    //src->load("assets/arrow-in-box.png");
+    // TODO TEMP TEST
+    src->load("../../jammy/village/assets/rotating_rock_0.png");
+    dest->set_size(src->get_width(), src->get_height());
+    dest->clear({0xff, 0xff, 0});
+    draw_edge(src, dest, {0, 0, 0xff});
+  }
+
+  blit<overwrite>(src, the_screen, 0, 10);
+  blit<overwrite>(dest, the_screen, 64, 10);
+
+  my_font.draw<mask_zero_alpha>(the_screen, 1, 1, "DRAW EDGE");
+}),
+
 page([]()
 {
   static sprite spr;

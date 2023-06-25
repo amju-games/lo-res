@@ -20,6 +20,7 @@ CFLAGS=-c $(WARNINGS) $(INCLUDES) -std=c++2a -DALGEBRA3IOSTREAMS -DMACOSX -O0 -g
 LDFLAGS=-framework OpenGL -framework GLUT
 
 SOURCES=main.cpp \
+../draw_edge.cpp \
 ../draw_ellipse.cpp \
 ../draw_line.cpp \
 ../image_8.cpp \
