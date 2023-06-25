@@ -6,7 +6,7 @@
 
 inline alg3::vec3 colour_to_normal(const colour& c)
 {
-  return alg3::vec3(c.r / 128.f - 1.f, c.g / 128.f - 1.f, c.b / 128.f - 1.f); 
+  return alg3::vec3(c.r / 127.5f - 1.f, c.g / 127.5f - 1.f, c.b / 127.5f - 1.f); 
 }
 
 inline colour normal_to_colour(const alg3::vec3& n)
