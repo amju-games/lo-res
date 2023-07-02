@@ -17,6 +17,7 @@ class image_filter : public image_decorator
 {
 public:
   image_filter() = default;
+  image_filter(const filter& filter_) : image_decorator(nullptr), m_filter(filter_) {}
   image_filter(p_image child, const filter& filter_ = {}) : image_decorator(child), m_filter(filter_) {}
 
   // Get mean of all filter elements applied to (x, y) on child image
