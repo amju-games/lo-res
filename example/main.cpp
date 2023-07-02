@@ -63,6 +63,58 @@ std::vector<page> pages =
 {
 page([]()
 {
+  static p_image noise_image_greyscale = std::make_shared<image_32>();
+  static p_image noise_image_colour = std::make_shared<image_32>();
+  do_once
+  {
+    noise_image_greyscale->set_size(64, 64);
+    noise_image_colour->set_size(64, 64);
+    fill(noise_image_greyscale, noise_greyscale());
+    fill(noise_image_colour, noise_colour());
+  }
+  blit<overwrite>(noise_image_greyscale, the_screen, 0, 10);
+  blit<overwrite>(noise_image_colour, the_screen, 64, 10);
+
+  my_font.draw<mask_zero_alpha>(the_screen, 1, 1, "NOISE");
+}),
+
+page([]()
+{
+  static p_image src[2] = {
+     std::make_shared<image_32>(),
+     std::make_shared<image_32>()
+  };
+  static auto bottom = std::make_shared<image_region>();
+  static auto fire_filter = std::vector<std::pair<uv, float>>{
+    {{-1, 0}, 1},              {{1, 0}, 1},
+    {{-1, 1}, 1}, {{0, 1}, 1}, {{1, 1}, 1},
+    {{-1, 2}, 1}, {{0, 2}, 1}, {{1, 2}, 1}
+  };
+  static auto filter = std::make_shared<image_filter>(fire_filter);
+  static int front = 0;
+  int back = 1 - front;
+
+  do_once
+  {
+    int size = 32;
+    src[front]->set_size(size, size);
+    src[back]->set_size(size, size);
+    src[back]->clear({0, 0, 0});
+    bottom->set_region(size / 4, size - 1, size / 2, 1);
+  }
+
+  bottom->set_child(src[back]);
+  fill(bottom, noise_greyscale());
+  filter->set_child(src[back]);
+  blit<overwrite>(filter, src[front], 0, 0);
+  blit<overwrite>(src[front], the_screen, 0, 10);
+  front = back;
+
+  my_font.draw<mask_zero_alpha>(the_screen, 1, 1, "FIRE");
+}),
+
+page([]()
+{
   static p_image src = std::make_shared<image_32>();
   static p_image dest = std::make_shared<image_32>();
   do_once
@@ -311,18 +363,20 @@ page([]()
 }),
 
 page([]() 
-{
+{ 
+  static const int size = 64;
   static p_image generated_normal_map;
   static std::shared_ptr<image_lighting> lighting_example;
   do_once
   {
     generated_normal_map = std::make_shared<image_32>();
-    generated_normal_map->set_size(32, 32);
-    make_sphere_normals(generated_normal_map);
+    generated_normal_map->set_size(size, size);
+    const bool convex = true;
+    make_sphere_normals(generated_normal_map, convex);
     p_image mask = std::make_shared<image_32>();
-    mask->set_size(32, 32);
+    mask->set_size(size, size);
     fill(mask, solid_colour(colour(0, 0, 0, 0)));
-    draw_ellipse_solid(mask, 16, 16, 14, 12, colour(0xff, 0xff, 0xff, 0xff));
+    draw_ellipse_solid(mask, size/2, size/2, size/2-2, size/2-4, colour(0xff, 0xff, 0xff, 0xff));
     // Mask off outside circle
     auto masker = std::make_shared<image_mask<>>(generated_normal_map, mask);
     // Destructive, read from and write to generated_normal_map
@@ -336,7 +390,7 @@ page([]()
   }
   my_font.draw<mask_zero_alpha>(the_screen, 1, 1, "GENERATED NORMAL MAP AND LIGHTING");
   blit<overwrite>(generated_normal_map, the_screen, 0, 10);
-  blit<mask_zero_alpha>(lighting_example, the_screen, 32, 10);
+  blit<mask_zero_alpha>(lighting_example, the_screen, size, 10);
 }) 
 
 };
