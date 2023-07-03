@@ -63,12 +63,10 @@ std::vector<page> pages =
 {
 page([]()
 {
-  static p_image noise_image_greyscale = std::make_shared<image_32>();
-  static p_image noise_image_colour = std::make_shared<image_32>();
+  static p_image noise_image_greyscale = std::make_shared<image_32>(64, 64);
+  static p_image noise_image_colour = std::make_shared<image_32>(64, 64);
   do_once
   {
-    noise_image_greyscale->set_size(64, 64);
-    noise_image_colour->set_size(64, 64);
     fill(noise_image_greyscale, noise_greyscale());
     fill(noise_image_colour, noise_colour());
   }
@@ -80,9 +78,10 @@ page([]()
 
 page([]()
 {
+  static constexpr int size = 32;
   static p_image src[2] = {
-     std::make_shared<image_32>(),
-     std::make_shared<image_32>()
+     std::make_shared<image_32>(size, size),
+     std::make_shared<image_32>(size, size)
   };
   static auto bottom = std::make_shared<image_region>();
   static auto fire_filter = std::vector<std::pair<uv, float>>{
@@ -96,9 +95,6 @@ page([]()
 
   do_once
   {
-    int size = 32;
-    src[front]->set_size(size, size);
-    src[back]->set_size(size, size);
     src[back]->clear({0, 0, 0});
     bottom->set_region(size / 4, size - 1, size / 2, 1);
   }
@@ -139,8 +135,7 @@ page([]()
 
   do_once
   {
-    p_image outer = std::make_shared<image_32>();
-    outer->set_size(64, 64);
+    p_image outer = std::make_shared<image_32>(64, 64);
     outer->clear(colour(0, 0, 0, 0));
     draw_ellipse_solid(outer, 32, 32, 30, 30, colour(0xff, 0x00, 0x00));
     spr.set_image(outer);
@@ -369,12 +364,10 @@ page([]()
   static std::shared_ptr<image_lighting> lighting_example;
   do_once
   {
-    generated_normal_map = std::make_shared<image_32>();
-    generated_normal_map->set_size(size, size);
+    generated_normal_map = std::make_shared<image_32>(size, size);
     const bool convex = true;
     make_sphere_normals(generated_normal_map, convex);
-    p_image mask = std::make_shared<image_32>();
-    mask->set_size(size, size);
+    p_image mask = std::make_shared<image_32>(size, size);
     fill(mask, solid_colour(colour(0, 0, 0, 0)));
     draw_ellipse_solid(mask, size/2, size/2, size/2-2, size/2-4, colour(0xff, 0xff, 0xff, 0xff));
     // Mask off outside circle

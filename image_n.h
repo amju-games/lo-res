@@ -18,6 +18,13 @@ template<int N>
 class image_n : public image
 {
 public:
+  image_n() = default;
+
+  image_n(int w, int h)
+  {
+    set_size(w, h);
+  }
+
   // * set_size *
   // As an alternative to loading an image from a file, set the size
   //  and then you can set pixel colours.

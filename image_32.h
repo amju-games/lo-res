@@ -11,6 +11,10 @@
 class image_32 : public image_n<4>
 {
 public:
+  image_32() = default;
+
+  image_32(int w, int h) : image_n(w, h) {}
+
   // * load *
   // Load a png image.
   bool load(const std::string& png_file_name) override;
