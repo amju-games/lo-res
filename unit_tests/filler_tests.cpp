@@ -22,7 +22,7 @@ TEST_CASE("fill with noise", "[filler]")
 {
   p_image im = std::make_shared<image_32>();
   im->set_size(1, 1);
-  fill(im, noise());
+  fill(im, noise_colour {});
 
   // How to test!?
   //REQUIRE(im->get_colour(0, 0) == colour(0xff, 0, 0));
