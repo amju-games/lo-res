@@ -26,7 +26,7 @@ LDFLAGS=-framework OpenGL -framework GLUT
 
 SOURCES=rotate_helper.cpp \
 ../image_32.cpp \
-../image_uv_xform.cpp \
+../image_uv_transform.cpp \
 ../third_party/lodepng.cpp
 
 OBJECTS=$(SOURCES:.cpp=.o)

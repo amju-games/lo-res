@@ -21,7 +21,6 @@
 const int WINDOW_W = 800;
 const int WINDOW_H = 600;
 
-// TODO Currently need these to be powers of 2 for render function
 const int VIRTUAL_W = 128;
 const int VIRTUAL_H = 96;
 
@@ -38,15 +37,16 @@ void draw()
     the_screen->set_size(VIRTUAL_W, VIRTUAL_H);
   }
 
+  // Clear the screen
   fill(the_screen, solid_colour({0xff, 0xa0, 0}));
-//  the_screen->clear(colour(0, 0, 0x80, 0xff));
-  spr.draw<mask_zero_alpha>(the_screen, 2, 2);
+
+  // Draw the sprite 
+  const int DEST_X = 2;
+  const int DEST_Y = 2;
+  spr.draw<mask_zero_alpha>(the_screen, DEST_X, DEST_Y);
 
   // Draw screen array to actual GL surface
   render_image_32_opengl(the_screen);
-
-  // Requires: gluOrtho2D(0, VIRTUAL_W, 0, VIRTUAL_H);
-  //render_image_8_opengl_multiple_rects(the_screen);
 
   glutSwapBuffers();
   glutPostRedisplay();
@@ -54,7 +54,7 @@ void draw()
 
 void update()
 {
-  float dt = 0.0166f;
+  const float dt = 0.0166f;
 
   spr.update(dt);
 }
@@ -73,6 +73,15 @@ int main(int argc, char** argv)
   int cells_in_x = 1;
   int cells_in_y = 1;
   float frame_time = 0.1f;
+
+  if (argc == 1)
+  {
+    std::cout << "Animates cells on a sprite sheet.\n" 
+      <<  argv[0] 
+      << " -i <filename> -cx <cells in x> -cy <cells in y> -t <frame time seconds>\n"
+      << "E.g.: " << argv[0] << " -i player_walk_1.png -cx 8 -cy 1 -t 0.15\n";
+      return 1;
+  }
 
   int arg = 1;
   while (arg < argc)
@@ -117,10 +126,15 @@ int main(int argc, char** argv)
 
   p_image im1 = std::make_shared<image_32>();
   im1->load(image_filename);
-  spr.set_image(im1);
-  spr.set_num_cells(cells_in_x, cells_in_y);
+
+  sprite_sheet ss;
+  ss.set_image(im1);
+  ss.set_num_cells(cells_in_x, cells_in_y);
+
+  spr.set_sprite_sheet(ss);
   spr.set_cell_time(frame_time);
   spr.set_cell_range(0, cells_in_x * cells_in_y - 1);
+
   glutMainLoop();
 }
 

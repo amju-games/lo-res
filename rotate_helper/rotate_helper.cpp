@@ -5,7 +5,7 @@
 #include "image_32.h"
 #include "image_lighting.h"
 #include "image_normal_map.h"
-#include "image_uv_xform.h"
+#include "image_uv_transform.h"
 #include "lodepng.h"
 
 std::shared_ptr<image_32> normal_map_image;
@@ -24,9 +24,9 @@ int main(int argc, char** argv)
   int cells_in_y = 1;
   int cell_w = 0;
   int cell_h = 0;
-  std::shared_ptr<image_uv_xform> rotating_normal_map;
+  std::shared_ptr<image_uv_transform> rotating_normal_map;
   std::shared_ptr<image_lighting> lighting;
-  std::shared_ptr<image_uv_xform> rotating_mult_image;
+  std::shared_ptr<image_uv_transform> rotating_mult_image;
 
   int arg = 1;
   while (arg < argc)
@@ -81,12 +81,12 @@ int main(int argc, char** argv)
     }
     cell_w = mult_image->get_width();
     cell_h = mult_image->get_height();
-    rotating_mult_image = std::make_shared<image_uv_xform>(mult_image);
+    rotating_mult_image = std::make_shared<image_uv_transform>(mult_image);
   }
 
   if (normal_map)
   {
-    rotating_normal_map = std::make_shared<image_uv_xform>(normal_map);
+    rotating_normal_map = std::make_shared<image_uv_transform>(normal_map);
     lighting = std::make_shared<image_lighting>(rotating_normal_map);
     lighting->set_specular_power(200.f);
     lighting->set_diffuse_colour(f_colour(.6f, .6f, 1.f).to_colour());
@@ -116,7 +116,7 @@ int main(int argc, char** argv)
       alg3::mat3 m = rotation2D(centre_of_rot, -degs);
       if (normal_map)
       {
-        rotating_normal_map->set_xform(m); 
+        rotating_normal_map->set_transform(m); 
       
         normal_map->set_rotation(alg3::rotation2D(alg3::vec2(0, 0), degs));
         //blit<overwrite>(rotating_normal_map, out_image, x, y);
@@ -125,8 +125,8 @@ int main(int argc, char** argv)
 
       if (rotating_mult_image)
       {
-        rotating_mult_image->set_xform(m); 
-        blit<additive>(rotating_mult_image, out_image, x, y);
+        rotating_mult_image->set_transform(m); 
+        blit<add_blend>(rotating_mult_image, out_image, x, y);
       }
 
       degs += degs_per_frame;
