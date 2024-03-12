@@ -36,8 +36,6 @@ const colour CLEAR_COLOUR = colour(0xff, 0xc0, 0);
 p_image the_screen;
 font my_font;
 
-#define do_once static int once = 1; if (once > 0 && once-- > 0)
-
 static char last_key_down = 0;
 static void set_key_down(char c) { last_key_down = c; } 
 #define do_on_key_down   char lkd = last_key_down; last_key_down = 0; if (lkd)
@@ -105,6 +103,5 @@ int main(int argc, char** argv)
   glutMainLoop();
 }
 
- 
 #endif // LO_RES_USE_OPENGL
 

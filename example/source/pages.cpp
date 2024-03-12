@@ -5,7 +5,6 @@
 #include <array>
 #include <cassert>
 #include <iostream>
-#include <GLUT/glut.h>
 #include "blit.h"
 #include "colour.h"
 #include "double_buffer.h"

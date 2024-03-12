@@ -38,7 +38,8 @@ else ifeq ($(OS), Windows_NT) # Windows
     # Add Windows-specific flags or configurations if needed
 else ifneq ("$(wildcard /proc/device-tree/model)","") # Raspberry Pi
     # Add Raspberry Pi-specific flags or configurations if needed
-    CXXFLAGS += -DRASPBERRY_PI
+    LDFLAGS=-L../build -llores
+    CXXFLAGS += -DRASPBERRY_PI -DLO_RES_USE_FRAMEBUFFER
     CXX := g++
 endif
 
@@ -46,7 +47,7 @@ endif
 all: $(TARGET)
 
 $(TARGET): $(OBJS)
-	$(CXX) $(LDFLAGS) $(CXXFLAGS) -o $@ $^
+	$(CXX) $(CXXFLAGS) -o $@ $^ $(LDFLAGS)
 
 
 # Rule to compile source files into object files
