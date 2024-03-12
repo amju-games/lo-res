@@ -1,7 +1,12 @@
 // "LO RES" Game Prototype
 // (c) Juliet Colman 2017-2022
 
-#include <GLUT/GLUT.h> // Mac
+#ifdef LO_RES_USE_OPENGL
+
+#ifdef MACOSX
+#include <GLUT/GLUT.h> 
+#endif // MACOSX
+
 #include "image_8.h"
 #include "image_32.h"
 #include "palette.h"
@@ -144,4 +149,6 @@ void render_image_8_opengl_multiple_rects(const_ref_image im)
     }   
   }
 }
+
+#endif // LO_RES_USE_OPENGL
 
