@@ -4,35 +4,35 @@
 # Source files directory
 SRCDIR := source
 # Thirdparty source dir
-THIRD_DIR := source/third_party
+THIRD_PARTY_SRCDIR := source/third_party
 TESTDIR := unit_tests
 BUILDDIR := build
 OBJDIR := $(BUILDDIR)/obj
-OBJTHDIR := $(OBJDIR)/third_party
 DEPDIR := $(BUILDDIR)/dep
 
-# Target executable name
+# Target library name
 TARGET := $(BUILDDIR)/liblores.a
+# Unit test exe
 TEST_EXE := lores_tests_exe
-TEST_TARGET := $(TESTDIR)/$(TEST_EXE)
+TEST_TARGET := $(BUILDDIR)/$(TEST_EXE)
 
 # Include dir for unit tests
 TESTS_INCLUDE := -I$(SRCDIR)
 
 # Third party includes
-TH_INCLUDE := -I$(THIRD_DIR)
+THIRD_PARTY_INCLUDE := -I$(THIRD_PARTY_SRCDIR)
 
 # Flags for compiling
-CXXFLAGS := -std=c++20 -Wall $(TH_INCLUDE) $(TESTS_INCLUDE)
+CXXFLAGS := -std=c++20 -Wall $(THIRD_PARTY_INCLUDE) $(TESTS_INCLUDE)
 
 # Source files
 SRCS := $(wildcard $(SRCDIR)/*.cpp)
-THIRD_PARTY_SRCS := $(wildcard $(SRCDIR)/third_party/*.cpp)
+THIRD_PARTY_SRCS := $(wildcard $(THIRD_PARTY_SRCDIR)/*.cpp)
 TEST_SRCS := $(wildcard $(TESTDIR)/*.cpp)
 
 # Object files
 OBJS := $(patsubst $(SRCDIR)/%.cpp,$(OBJDIR)/%.o,$(SRCS))
-THIRD_PARTY_OBJS := $(patsubst $(SRCDIR)/third_party/%.cpp,$(OBJDIR)/%.o,$(THIRD_PARTY_SRCS))
+THIRD_PARTY_OBJS := $(patsubst $(THIRD_PARTY_SRCDIR)/%.cpp,$(OBJDIR)/%.o,$(THIRD_PARTY_SRCS))
 TEST_OBJS := $(patsubst $(TESTDIR)/%.cpp,$(OBJDIR)/%.o,$(TEST_SRCS))
 
 # Dependencies
@@ -64,11 +64,12 @@ $(TARGET): $(OBJS) $(THIRD_PARTY_OBJS)
 $(TEST_TARGET): $(TEST_OBJS) $(THIRD_PARTY_OBJS) $(filter-out $(OBJDIR)/main.o,$(OBJS))
 	$(CXX) $(LDFLAGS) $(CXXFLAGS) -o $@ $^
 
+
 # Rule to compile source files into object files
 $(OBJDIR)/%.o: $(SRCDIR)/%.cpp | $(OBJDIR) $(DEPDIR)
 	$(CXX) $(CXXFLAGS) -MMD -MP -c -o $@ $<
 
-$(OBJDIR)/%.o: $(SRCDIR)/third_party/%.cpp | $(OBJDIR)
+$(OBJDIR)/%.o: $(THIRD_PARTY_SRCDIR)/%.cpp | $(OBJDIR)
 	$(CXX) $(CXXFLAGS) -c -o $@ $<
 
 $(OBJDIR)/%.o: $(TESTDIR)/%.cpp | $(OBJDIR) $(DEPDIR)
@@ -81,7 +82,7 @@ clean:
 	@rm -rf $(TARGET) $(TEST_TARGET) $(BUILDDIR)
 
 runtests:
-	cd $(TESTDIR); ./$(TEST_EXE); cd ..
+	cd $(BUILDDIR); ./$(TEST_EXE); cd ..
 
 -include $(DEPS)
 

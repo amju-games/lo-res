@@ -1,5 +1,5 @@
 *.o
-lores_tests
+build
 lores_example
 animtool
 *.jbf
