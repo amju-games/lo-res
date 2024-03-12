@@ -11,25 +11,25 @@
 //  component.
 // TODO Should we pre- or post-multiply? Should we offer both?
 
-class image_colour_xform : public image_decorator
+class image_colour_transform : public image_decorator
 {
 public:
-  image_colour_xform() = default;
+  image_colour_transform() = default;
 
-  image_colour_xform(p_image child, const colour& add, const f_colour& mult)
+  image_colour_transform(p_image child, const colour& add, const f_colour& mult)
   {
     m_child = child;
     m_add = add;
     m_mult = mult;
   }
 
-  image_colour_xform(p_image child, const f_colour& mult)
+  image_colour_transform(p_image child, const f_colour& mult)
   {
     m_child = child;
     m_mult = mult;
   }
 
-  image_colour_xform(p_image child)
+  image_colour_transform(p_image child)
   {
     m_child = child;
   }

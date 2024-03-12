@@ -1,6 +1,6 @@
 #include "catch.hpp"
 #include "image_8.h"
-#include "image_uv_xform.h"
+#include "image_uv_transform.h"
 
 namespace
 {
@@ -23,10 +23,10 @@ p_image make_sq_image()
 }
 }
 
-TEST_CASE("transform by identity", "[image_uv_xform]")
+TEST_CASE("transform by identity", "[image_uv_transform]")
 {
   p_image im = make_sq_image();
-  p_image xf = std::make_shared<image_uv_xform>(im, alg3::identity2D());
+  p_image xf = std::make_shared<image_uv_transform>(im, alg3::identity2D());
 
   REQUIRE(xf->get_width() == im->get_width());
   REQUIRE(xf->get_height() == im->get_height());
@@ -43,7 +43,7 @@ TEST_CASE("transform square image by rotation 90 degs", "[.]")
   alg3::mat3 m = rotation2D(centre_of_rot, angle_degs);
 
   p_image im = make_sq_image();
-  p_image xf = std::make_shared<image_uv_xform>(im, m);
+  p_image xf = std::make_shared<image_uv_transform>(im, m);
 
   REQUIRE(im->get_width() == 2);
   REQUIRE(xf->get_width() == im->get_width()); // same because rotating a square

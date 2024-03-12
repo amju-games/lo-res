@@ -6,16 +6,23 @@
 #include "blit.h"
 #include "sprite_sheet.h"
 
-class sprite : public sprite_sheet // TODO This is not right!!
+class sprite
 {
 public:
   template<class BLENDER>
   void draw(ref_image dest, int dest_x, int dest_y) const
   {
-    draw_cell<BLENDER>(dest, m_cell, dest_x, dest_y);
+    m_sprite_sheet.draw_cell<BLENDER>(dest, m_cell, dest_x, dest_y);
   }
 
   void update(float dt);
+
+  void set_sprite_sheet(const sprite_sheet& ss)
+  {
+    m_sprite_sheet = ss;
+  }
+
+  const sprite_sheet& get_sprite_sheet() const { return m_sprite_sheet; }
 
   void set_cell_time(float t)
   {
@@ -33,6 +40,7 @@ public:
   void set_bounce_mode(bool bm) { m_bounce_mode = bm; }
 
 protected:
+  sprite_sheet m_sprite_sheet;
   int m_cell = 0;
   float m_cell_max_time = .1f;
   float m_cell_time = 0.f;

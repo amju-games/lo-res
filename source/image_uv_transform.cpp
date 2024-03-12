@@ -7,33 +7,38 @@
 #include <iostream>
 #endif
 
-#include "image_uv_xform.h"
+#include "image_uv_transform.h"
 
-
-std::shared_ptr<image_uv_xform> make_scale_xform(float uniform_scale)
+/*
+std::shared_ptr<image_uv_transform> make_scale_transform(float uniform_scale)
 {
-  return make_scale_xform(uniform_scale, uniform_scale);
+  return make_scale_transform(uniform_scale, uniform_scale);
 }
 
-std::shared_ptr<image_uv_xform> make_scale_xform(float scale_x, float scale_y)
+std::shared_ptr<image_uv_transform> make_scale_transform(float scale_x, float scale_y)
 {
   alg3::mat3 m = scaling2D(alg3::vec2(scale_x, scale_y));
-  auto xf = std::make_shared<image_uv_xform>();
-  xf->set_xform(m);
+  auto xf = std::make_shared<image_uv_transform>();
+  xf->set_transform(m);
   return xf;
 }
+*/
 
-std::shared_ptr<image_uv_xform> make_rotate_xform(float angle_degs)
+alg3::mat3 make_rot_around_centre_matrix(const p_image im, float angle_degs)
 {
-  alg3::vec2 centre_of_rot(.5f, .5f); // needs to be (w-1)/2, (h-1)/2?
-  alg3::mat3 m = rotation2D(centre_of_rot, angle_degs);
+  alg3::vec2 centre_of_rot(im->get_width() / 2, im->get_height() / 2);
+  return rotation2D(centre_of_rot, angle_degs);
+}
 
-  auto xf = std::make_shared<image_uv_xform>();
-  xf->set_xform(m);
+std::shared_ptr<image_uv_transform> make_rotate_transform(p_image im, float angle_degs)
+{
+  auto xf = std::make_shared<image_uv_transform>();
+  xf->set_transform(make_rot_around_centre_matrix(im, angle_degs));
+  xf->set_child(im);
   return xf;
 }
 
-colour image_uv_xform::get_colour(int u, int v) const
+colour image_uv_transform::get_colour(int u, int v) const
 {
   const float w = static_cast<float>(m_child->get_width());
   const float h = static_cast<float>(m_child->get_height());
@@ -44,7 +49,7 @@ colour image_uv_xform::get_colour(int u, int v) const
 
 #ifdef XF_DEBUG
 std::cout << "get_colour: input uv: " << alg3::vec3(u, v, Z) << " -> ";
-std::cout << "output uv: " << vec ;
+std::cout << "output uv: " << vec << "\n";
 #endif
 
   int u1 = static_cast<int>(vec[0]); // round down
@@ -69,7 +74,7 @@ std::cout << "  colour: " << (int)c.r << "\n";
   return c;
 }
 
-int image_uv_xform::get_width() const 
+int image_uv_transform::get_width() const 
 {
   float w = static_cast<float>(m_child->get_width());
   float h = static_cast<float>(m_child->get_height());
@@ -83,7 +88,7 @@ std::cout << "w: " << w << " h: " << h << " w1: " << w1 << " w2: " << w2 << " re
   return static_cast<int>(ret);
 }
 
-int image_uv_xform::get_height() const 
+int image_uv_transform::get_height() const 
 {
   float w = static_cast<float>(m_child->get_width());
   float h = static_cast<float>(m_child->get_height());

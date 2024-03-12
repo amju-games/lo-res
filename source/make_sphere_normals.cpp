@@ -28,13 +28,19 @@ void make_sphere_normals(ref_image im, bool convex)
       // =>  z = sqrt(1 - x^2 - y^2)
       float z = sqrtf(1 - u * u - v * v);
       alg3::vec3 n(u, v, z);
-      n.normalize(); // shouldn't make any difference to the circle, but masks the edges
+//      n.normalize(); // shouldn't make any difference to the circle, but masks the edges
       n *= 0.5f;
       n += alg3::vec3(.5f, .5f, .5f);  
 
-      colour c2 = f_colour(n[0], n[1], n[2]).to_colour();
+      colour col = f_colour(n[0], n[1], n[2]).to_colour();
+      // mask off outside of circle
+      col.a = (u*u + v*v >= .99f ? 0 : 0xff);
+      if (u*u + v*v > .5f)
+      {
+//        col = {0xff, 0, 0, 0};
+      }
 
-      im->set_colour(x, y, c2);
+      im->set_colour(x, y, col);
     }
   }
 }
