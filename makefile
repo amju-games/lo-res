@@ -58,6 +58,8 @@ endif
 # Default rule
 all: $(TARGET) $(TEST_TARGET)
 
+tests: $(TEST_TARGET)
+
 $(TARGET): $(OBJS) $(THIRD_PARTY_OBJS)
 	ar rcs $@ $^
 

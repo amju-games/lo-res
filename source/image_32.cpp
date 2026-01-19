@@ -6,6 +6,22 @@
 #include "lodepng.h"
 #include "image_32.h"
 
+bool image_32::save(const std::string& png_file_name)
+{
+  std::vector<unsigned char> png;
+  unsigned int error = lodepng::encode(png, m_data, m_width, m_height);
+
+  if (error) 
+  {
+    std::cout << "PNG encoding error " << error << ": " << lodepng_error_text(error) << std::endl;
+    return false;
+  }
+
+  lodepng::save_file(png, png_file_name);
+
+  return true;
+}
+
 bool image_32::load(const std::string& png_file_name)
 {
   std::vector<unsigned char> data;
