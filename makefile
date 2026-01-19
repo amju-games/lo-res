@@ -3,6 +3,7 @@
 
 # Source files directory
 SRCDIR := source
+INCDIR := include
 # Thirdparty source dir
 THIRD_PARTY_SRCDIR := source/third_party
 TESTDIR := unit_tests
@@ -23,7 +24,7 @@ TESTS_INCLUDE := -I$(SRCDIR)
 THIRD_PARTY_INCLUDE := -I$(THIRD_PARTY_SRCDIR)
 
 # Flags for compiling
-CXXFLAGS := -std=c++20 -Wall $(THIRD_PARTY_INCLUDE) $(TESTS_INCLUDE)
+CXXFLAGS := -std=c++20 -Wall -I$(INCDIR) $(THIRD_PARTY_INCLUDE) $(TESTS_INCLUDE)
 
 # Source files
 SRCS := $(wildcard $(SRCDIR)/*.cpp)

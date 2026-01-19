@@ -12,7 +12,7 @@ EXE := lores_example_exe
 TARGET := $(BUILDDIR)/$(EXE)
 
 # Include dir 
-INCLUDE := -I../source -I../source/third_party
+INCLUDE := -I../include -I../source/third_party
 
 # Flags for compiling
 CXXFLAGS := -std=c++20 -Wall $(INCLUDE)
