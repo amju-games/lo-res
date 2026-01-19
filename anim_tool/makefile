@@ -13,20 +13,21 @@ CC=clang++
 WARNINGS=-Wall -Wno-deprecated-declarations
 
 INCLUDES=\
-  -I..\
-  -I../third_party
+  -I../include\
+  -I../source/third_party
 
 CFLAGS=-c $(WARNINGS) $(INCLUDES) -std=c++2a -DMACOSX
 
 LDFLAGS=-framework OpenGL -framework GLUT
 
+SRCDIR=../source
 SOURCES=anim_tool.cpp \
-../image_8.cpp \
-../image_32.cpp \
-../palette.cpp \
-../render_image_opengl.cpp \
-../sprite.cpp \
-../third_party/lodepng.cpp
+$(SRCDIR)/image_8.cpp \
+$(SRCDIR)/image_32.cpp \
+$(SRCDIR)/palette.cpp \
+$(SRCDIR)/render_image_opengl.cpp \
+$(SRCDIR)/sprite.cpp \
+$(SRCDIR)/third_party/lodepng.cpp
 
 OBJECTS=$(SOURCES:.cpp=.o)
 EXECUTABLE=animtool
