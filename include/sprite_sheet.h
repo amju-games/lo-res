@@ -25,13 +25,25 @@ public:
   template<class BLENDER>
   void draw_cell(ref_image dest, int cell, int dest_x, int dest_y) const
   {
-    // Get top left of current cell
+    // Get top left of cell
     assert(cell < m_cells_x * m_cells_y);
     int cell_x = cell % m_cells_x * m_cell_w;
     int cell_y = cell / m_cells_x * m_cell_h;
 
     blit_region<BLENDER>(std::const_pointer_cast<const image>(m_image), dest, dest_x, dest_y,
       cell_x, cell_y, m_cell_w, m_cell_h);
+  }
+
+  // Draw from the src image into the given cell on this sprite sheet.
+  template<class BLENDER>
+  void draw_into_cell(ref_image src, int cell)
+  {
+    // Get top left of cell
+    assert(cell < m_cells_x * m_cells_y);
+    int cell_x = cell % m_cells_x * m_cell_w;
+    int cell_y = cell / m_cells_x * m_cell_h;
+
+    blit_region<BLENDER>(src, m_image, cell_x, cell_y, 0, 0, m_cell_w, m_cell_h);
   }
 
   void set_num_cells(int x, int y)
