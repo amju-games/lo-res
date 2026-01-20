@@ -1,0 +1,64 @@
+# lores - NMake version with proper object directory
+# Copyright (C) 2024 Juliet Colman 
+
+!IF EXIST(sources.inc)
+!INCLUDE sources.inc
+!ELSE
+!MESSAGE sources.inc not found. Run gen_sources.bat first.
+!ENDIF
+
+# --- Directories ---
+SRCDIR = source
+THIRD_PARTY_SRCDIR = source\third_party
+TESTDIR = unit_tests
+BUILDDIR = build
+OBJDIR = $(BUILDDIR)\obj
+INCDIR = include
+
+# --- Targets ---
+TARGET = $(BUILDDIR)\lores.lib
+TEST_EXE = lores_tests_exe.exe
+TEST_TARGET = $(BUILDDIR)\$(TEST_EXE)
+
+# --- Compiler & Flags ---
+CXX = cl
+LIB_TOOL = lib
+CXXFLAGS = /nologo /EHsc /std:c++20 /W4 /I$(INCDIR) /I$(THIRD_PARTY_SRCDIR) /I$(SRCDIR) /D_CRT_SECURE_NO_WARNINGS
+
+# --- Rules ---
+
+all: setup $(TARGET) $(TEST_TARGET)
+
+setup:
+	@if not exist $(BUILDDIR) mkdir $(BUILDDIR)
+	@if not exist $(OBJDIR) mkdir $(OBJDIR)
+
+$(TARGET): $(OBJS) $(THIRD_PARTY_OBJS)
+	$(LIB_TOOL) /nologo /OUT:$@ $**
+
+# Note: We link all objects except main.obj from the core lib for the tests
+$(TEST_TARGET): $(TEST_OBJS) $(THIRD_PARTY_OBJS) $(OBJS)
+	$(CXX) $(CXXFLAGS) /Fe$@ $** /link /SUBSYSTEM:CONSOLE
+
+# --- Directory-Specific Inference Rules ---
+
+# How to build obj from source/
+{$(SRCDIR)}.cpp{$(OBJDIR)}.obj:
+	$(CXX) $(CXXFLAGS) /c /Fo$@ $<
+
+# How to build obj from source/third_party/
+{$(THIRD_PARTY_SRCDIR)}.cpp{$(OBJDIR)}.obj:
+	$(CXX) $(CXXFLAGS) /c /Fo$@ $<
+
+# How to build obj from unit_tests/
+{$(TESTDIR)}.cpp{$(OBJDIR)}.obj:
+	$(CXX) $(CXXFLAGS) /c /Fo$@ $<
+
+clean:
+	@if exist $(BUILDDIR) rmdir /s /q $(BUILDDIR)
+	@if exist sources.inc del sources.inc
+
+runtests:
+	cd $(BUILDDIR) && $(TEST_EXE) && cd ..
+
+.PHONY: all clean setup runtests
